@@ -153,15 +153,15 @@ exports.Formats = [
 		ruleset: ['Team Preview']
 	},
 	
-	// Server themed Metagames
+	// Themed Metagames
 	////////////////////////////////////////////////////////////////////
 	
 	name: "Lotad's Dad"
-	section: "Server themed Metagames"
+	section: "Themed Metagames"
 	
-	gameType: 'singles',
+	gameType: 'triples',
 		maxForcedLevel: 5,
-		ruleset: ['Pokemon', 'Standard GBU'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
 			for (var i = 0; i < team.length; i++) {
 				if (Tools.getTemplate(team[i]).species === 'Lotad') return;
