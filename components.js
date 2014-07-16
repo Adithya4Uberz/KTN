@@ -172,7 +172,7 @@ var components = exports.components = {
     setabout: 'about',
     about: function (target, room, user) {
         if (!target) return this.parse('/help about');
-        if (target.length > 30) return this.sendReply('About cannot be over 30 characters.');
+        if (target.length > 55) return this.sendReply('About cannot be over 55 characters.');
 
         var now = Date.now();
 
