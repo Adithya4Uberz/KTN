@@ -1951,6 +1951,10 @@ var components = exports.components = {
             this.sendReply('Reloading SysopAccess...');
             CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
             SysopAccess = require(path.join(__dirname, './', './core.js'));
+            
+            this.sendReply('Reloading TrainerCards...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
+            TrainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
 
             return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
         } catch (e) {
