@@ -161,7 +161,7 @@ exports.Formats = [
 	
 	gameType: 'singles',
 		maxForcedLevel: 5,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		ruleset: ['Pokemon', 'Standard GBU'],
 		validateTeam: function (team, format) {
 			for (var i = 0; i < team.length; i++) {
 				if (Tools.getTemplate(team[i]).species === 'Lotad') return;
