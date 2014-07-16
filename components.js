@@ -35,12 +35,14 @@ var components = exports.components = {
         this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a>.</ul>');
     },
 
+    staff: 'stafflist',
     stafflist: function (target, room, user) {
         var buffer = {
             admins: [],
             leaders: [],
             mods: [],
             drivers: [],
+            ops: [],
             voices: []
         };
 
@@ -64,6 +66,9 @@ var components = exports.components = {
             if (staff[1] === '%') {
                 buffer.drivers.push(staff[0]);
             }
+            if (staff[1] === '±') {
+            	buffer.ops.push(staff[0]);
+            }
             if (staff[1] === '+') {
                 buffer.voices.push(staff[0]);
             }
@@ -73,9 +78,10 @@ var components = exports.components = {
         buffer.leaders = buffer.leaders.join(', ');
         buffer.mods = buffer.mods.join(', ');
         buffer.drivers = buffer.drivers.join(', ');
+        buffer.ops = buffer.ops.join(', ');
         buffer.voices = buffer.voices.join(', ');
 
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.ops + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
     },
 
     regdate: function (target, room, user, connection) {
