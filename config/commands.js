@@ -195,6 +195,24 @@ var commands = exports.commands = {
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
 		}
+		if (targetUser.name === 'naten2006') {
+			this.sendReply("(Lotus Community Founder)");
+		}
+		if (targetUser.name === 'brittlewind') {
+			this.sendReply("(Lotus CSS Manager)");
+		}
+		if (targetUser.name === 'freelancermac') {
+			this.sendReply("(Lotus Server Sponsor)");
+		}
+		if (targetUser.name === 'twamble') {
+			this.sendReply("(Lotus Graphic Designer)");
+		}
+		if (targetUser.name === 'macrarazy') {
+			this.sendReply("(Lotus Code Leader)");
+		}
+		if (targetUser.name === 'blakjack') {
+			this.sendReply("(Lotus Server Host)");
+		}
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
@@ -916,11 +934,13 @@ var commands = exports.commands = {
 	},
 
 	showtan: function (target, room, user) {
-		if (!user.name === 'macrarazy') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
+		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
+		if (!this.can('showtan', room)) return;
 		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply('/showtan User ' + targetUser.name + ' not found.');
+		if (!this.targetUser) return this.sendReply('user not found');
+		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
 		this.targetUser.avatar = '#showtan';
-		this.sendReply('/showtan - '+user.name+' applied showtan to affected area of '+this.targetUser.name+'.');
+		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
 	},
 
 	introduction: 'intro',
@@ -977,24 +997,6 @@ var commands = exports.commands = {
 			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-120689854\">Zergo vs Mr Weegle Snarf</a><br />" +
 			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-130756055\">NickMP vs Khalogie</a>"
 		);
-	},
-	
-	hex: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		if(!target){
-			this.sendReplyBox('<center><b>Your name\'s hexcode is:<font color="'+hashColor(''+toId(user.name)+'')+'"> '+hashColor(''+toId(user.name)+''));
-			return;
-		};
-		if(target.indexOf('#') < 0){
-			this.sendReplyBox('Please include the \'#\' symbol');
-			return false;
-		};
-		var verify = /^#[0-9A-F]{6}$/i;
-		if(verify.test(target)){
-			this.sendReplyBox('<center><b><font size="5" color="' + target + '">' + target + '</font></b></center>');
-		}else{
-			this.sendReplyBox('Could not find a valid color to match your hex code');
-		};
 	},
 
 	om: 'othermetas',
