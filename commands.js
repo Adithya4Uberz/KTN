@@ -151,7 +151,7 @@ var commands = exports.commands = {
 	},
 
 	makechatroom: function (target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('declare')) return;
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
@@ -162,7 +162,7 @@ var commands = exports.commands = {
 	},
 
 	deregisterchatroom: function (target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('declare')) return;
 		var id = toId(target);
 		if (!id) return this.parse('/help deregisterchatroom');
 		var targetRoom = Rooms.get(id);
@@ -177,7 +177,7 @@ var commands = exports.commands = {
 	},
 
 	privateroom: function (target, room, user) {
-		if (!this.can('privateroom', room)) return;
+		if (!this.can('declare', room)) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -196,7 +196,7 @@ var commands = exports.commands = {
 	},
 
 	modjoin: function (target, room, user) {
-		if (!this.can('privateroom', room)) return;
+		if (!this.can('declare', room)) return;
 		if (target === 'off') {
 			delete room.modjoin;
 			this.addModCommand("" + user.name + " turned off modjoin.");
@@ -216,7 +216,7 @@ var commands = exports.commands = {
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('declare')) return;
 		if (!room.chatRoomData) {
 			return this.sendReply("/officialroom - This room can't be made official");
 		}
@@ -241,7 +241,7 @@ var commands = exports.commands = {
 			this.sendReplyBox("The room description is: " + room.desc.replace(re, '<a href="$1">$1</a>'));
 			return;
 		}
-		if (!this.can('roomdesc', room)) return false;
+		if (!this.can('declare', room)) return false;
 		if (target.length > 80) return this.sendReply("Error: Room description is too long (must be at most 80 characters).");
 
 		room.desc = target;
@@ -265,7 +265,7 @@ var commands = exports.commands = {
 			}
 			return;
 		}
-		if (!this.can('roomintro', room)) return false;
+		if (!this.can('declare', room)) return false;
 		if (!this.canHTML(target)) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
@@ -352,24 +352,73 @@ var commands = exports.commands = {
 
 	roomauth: function (target, room, user, connection) {
 		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
-
-		var rankLists = {};
-		for (var u in room.auth) {
-			if (!rankLists[room.auth[u]]) rankLists[room.auth[u]] = [];
-			rankLists[room.auth[u]].push(u);
-		}
-
 		var buffer = [];
-		Object.keys(rankLists).sort(function (a, b) {
-			return Config.groups.bySymbol[b].rank - Config.groups.bySymbol[a].rank;
-		}).forEach(function (r) {
-			buffer.push(Config.groups.bySymbol[r].name + "s (" + r + "):\n" + rankLists[r].sort().join(", "));
-		});
+		var owners = [];
+		var mods = [];
+		var drivers = [];
+		//var ops = [];
+		var voices = [];
 
-		if (!buffer.length) {
-			buffer = "This room has no auth.";
+		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; /*room.ops = '';*/ room.voices = ''; 
+		for (var u in room.auth) { 
+			if (room.auth[u] == '#') { 
+				room.owners = room.owners +u+',';
+			} 
+			if (room.auth[u] == '@') { 
+				room.mods = room.mods +u+',';
+			} 
+			if (room.auth[u] == '%') { 
+				room.drivers = room.drivers +u+',';
+			} 
+			//if (room.auth[u] == '±') {
+				//room.ops = room.ops +u+',';
+			//}
+			if (room.auth[u] == '+') { 
+				room.voices = room.voices +u+',';
+			} 
 		}
-		connection.popup(buffer.join("\n\n"));
+
+		if (!room.founder) founder = '';
+		if (room.founder) founder = room.founder;
+
+		room.owners = room.owners.split(',');
+		room.mods = room.mods.split(',');
+		room.drivers = room.drivers.split(',');
+		//room.ops = room.ops.split(',');
+		room.voices = room.voices.split(',');
+
+		for (var u in room.owners) {
+			if (room.owners[u] != '') owners.push(room.owners[u]);
+		}
+
+		for (var u in room.mods) {
+			if (room.mods[u] != '') mods.push(room.mods[u]);
+		}
+		for (var u in room.drivers) {
+			if (room.drivers[u] != '') drivers.push(room.drivers[u]);
+		}
+		//for (var u in room.ops) {
+			//if (room.ops[u] != '') ops.push(room.ops[u]);
+		//}
+		for (var u in room.voices) {
+			if (room.voices[u] != '') voices.push(room.voices[u]);
+		}
+		if (owners.length > 0) {
+			owners = owners.join(', ');
+		} 
+		if (mods.length > 0) {
+			mods = mods.join(', ');
+		}
+		if (drivers.length > 0) {
+			drivers = drivers.join(', ');
+		}
+		//if (ops.length > 0) {
+			//ops = ops.join(', ');
+		//}
+		if (voices.length > 0) {
+			voices = voices.join(', ');
+		}
+		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\n'/*Operators: \n'+ops+'\n*/'Voices: \n'+voices);
 	},
 
 	rb: 'roomban',
