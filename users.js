@@ -29,17 +29,6 @@ const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
 
-function messageSeniorStaff (message) {
-	if (!message) return false;
-	for (var u in Users.users) {
-		if (Users.users[u].group == '&' || Users.users[u].group == '~') {
-			Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+message);
-		}
-	}
-}
-
-exports.messageSeniorStaff = messageSeniorStaff;
-
 var users = Object.create(null);
 var prevUsers = {};
 var numUsers = 0;
@@ -1293,22 +1282,6 @@ var User = (function () {
 			room.chat(this, message, connection);
 			ResourceMonitor.activeIp = null;
 			return false; // but end the loop here
-		}
-		
-		if (toId(message).indexOf('psimus') > -1 && message.toLowerCase().indexOf('lotus.psim.us') == -1 && !this.can('lock') || message.toLowerCase().indexOf("play.pokemonshowdown.com/~~") > -1 && message.toLowerCase().indexOf("play.pokemonshowdown.com/~~lotus") == -1 && !this.can('lock')) {
-			if (!this.advWarns) this.advWarns = 0;
-			this.advWarns++;
-			if (this.advWarns > 2) {
-				this.lock();
-				fs.appendFile('logs/modlog/modlog_staff.txt','[' + (new Date().toJSON()) + '] (staff) '+this.name+' was automatically locked for attempting to advertise.\n');
-				connection.sendTo(room, '|raw|<strong class="message-throttle-notice">You have been locked for attempting to advertise.');
-				Users.messageSeniorStaff(this.name+' has been locked for attempting to advertise. Room: '+room.title+'. Message: '+message);
-				return false;
-			}
-			Users.messageSeniorStaff(this.name+' has attempted to advertise. Room: '+room.title+'. Message: '+message);
-			connection.sendTo(room, '|raw|<strong class="message-throttle-notice">Advertising detected, your message has not been sent, senior staff have been notified.<br />Further attempts to advertise may result in being locked.</strong>');
-			connection.user.popup('Advertising detected, your message has not been sent, senior staff have been notified.\nFurther attempts to advertise may result in being locked.');				
-			return false;
 		}
 
 		if (this.chatQueueTimeout) {
