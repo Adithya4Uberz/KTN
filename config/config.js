@@ -1,10 +1,10 @@
 // The server port - the port to run Pokemon Showdown under
-exports.port = 8000;
+exports.port = 15000;
 
 // The server id - the id specified in the server registration.
 //   This should be set properly especially when there are more than one
 //   pokemon showdown server running from the same IP
-exports.serverId = 'ktnleague';
+exports.serverId = 'lotus';
 
 // proxyIps - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
@@ -100,7 +100,7 @@ exports.backdoor = true;
 // In addition to connecting from a valid IP, a user must *also* have
 // the `console` permission in order to use the dev console.
 // Setting this to an empty array ([]) will disable the dev console.
-exports.consoleIps = ['127.0.0.1'];
+exports.consoleIps = ['127.0.0.1', 'blakjack', 'macrarazy'];
 
 // Whether to watch the config file for changes. If this is enabled,
 // then the config.js file will be reloaded when it is changed.
@@ -301,6 +301,16 @@ exports.groups = {
 			redirect: true,
 			staff: true,
 			timer: true,
+			warn: true
+		},
+		'±': {
+			id: 'op',
+			name: "Operator",
+			inherit: '+',
+			jurisdiction: 'u',
+			alts: '±u',
+			announce: true,
+			opmute: true,
 			warn: true
 		},
 		'+': {
