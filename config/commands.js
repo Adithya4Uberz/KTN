@@ -199,7 +199,7 @@ var commands = exports.commands = {
 			this.sendReply("(Lotus Founder)");
 		}
 		if (targetUser.name === 'ToxicPoison') {
-			this.sendReply("(Lotus Co-Owner)")
+			this.sendReply("(Lotus Co-Owner)");
 		}
 		if (targetUser.name === 'BrittleWind') {
 			this.sendReply("(Lotus CSS Manager)");
