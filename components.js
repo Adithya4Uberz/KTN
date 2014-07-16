@@ -128,7 +128,7 @@ var components = exports.components = {
     atm: 'profile',
     profile: function (target, room, user, connection, cmd) {
         if (!this.canBroadcast()) return;
-        if (cmd === 'atm') return this.sendReply('Use /profile instead.');
+        if (cmd === 'atm') return this.sendReply(+targetUser.name+ ' has ' +Core.profile.money(targetUser.userid)+ '.');
         if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
         var targetUser = this.targetUserOrSelf(target);
