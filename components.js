@@ -167,6 +167,8 @@ var components = exports.components = {
         return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
     },
 
+    setstatus: 'about',
+    status: 'about',
     setabout: 'about',
     about: function (target, room, user) {
         if (!target) return this.parse('/help about');
