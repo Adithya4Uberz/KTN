@@ -170,7 +170,7 @@ exports.Formats = [
 		},
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
-			if (!template.evos || template.evos.length === 0 && Tools.getTemplate(team[i]).species === 'Ludicolo') {
+			if (!template.evos || template.evos.length === 0) {
 				return [set.species + " is banned as it cannot evolve."];
 			}
 		}
