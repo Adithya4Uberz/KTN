@@ -7,83 +7,296 @@
  * other words, you can use this facility to introduce a custom theme for
  * your server.
  */
- #header{background:url("http://slowbuddy.com/wp-content/gallery/plain-background/plasma_ab.jpg")}
  
- body{background-image:url("http://i.imgur.com/KZjNkXd.jpg");background-repeat:no-repeat;background-position:center}
- 
- .chat-log{font-size:10pt;background: url("http://i.imgur.com/563NKNl.png") no-repeat scroll right bottom;background:#ff895c;color:#000;overflow:auto;}
- 
- .menugroup .button{
- background:#08298A;
- font-size:10px;
- }
- 
- .maintabbarbottom {
- 	background: url(http://fc03.deviantart.net/fs71/i/2011/309/1/d/dark_blue_texture_by_carlbert-d4f8fa2.jpg);
- }
- .menugroup {
- text-align: center;
- font-size:10px;
- }
- 
- .chat-log-add{
- background: url(http://fc03.deviantart.net/fs71/i/2011/309/1/d/dark_blue_texture_by_carlbert-d4f8fa2.jpg);
- }
- .button:hover{background:#08298A;}
- 
- .userlist {
- border-left: 1px solid #D5DDE4;
- background: url(http://fc03.deviantart.net/fs71/i/2011/309/1/d/dark_blue_texture_by_carlbert-d4f8fa2.jpg);
- }
- 
- .tabbar a.button.cur, .tabbar a.button.cur:hover {
- background: url(http://fc03.deviantart.net/fs71/i/2011/309/1/d/dark_blue_texture_by_carlbert-d4f8fa2.jpg);
- color:white;
- }
- 
-.tabbar a.button: {
-	background: url(http://fc03.deviantart.net/fs71/i/2011/309/1/d/dark_blue_texture_by_carlbert-d4f8fa2.jpg);
- color:white;
- }
-.pm-window.focused h3:hover {
-	background-color:##000000; 
-	border-color:##000000;
-}
-.ps-room.ps-room-opaque{
-background: url("http://i.imgur.com/Q8vHT0Y.png");
-}
 
-.ps-room.ps-room-light{
-opacity:0.9;
+.chat-log{
+    /*background: url('http://i.imgur.com/MK1U1Zq.png?1') top right no-repeat;*/
+    background: url('http://i.imgur.com/d5eRwZB.png');
+    /*background: url('http://i.imgur.com/1DwA7IV.png);*/
+    opacity: 1 !important;
 }
-
-
-.pm-window.focused h3 {
-	background-color:##000000;
-	border-color:##000000;
+body{
+        background: url('http://i.imgur.com/nsHwcC2.jpg') !important;
+        background-size: contain;
 }
-
+.menugroup .button{
+  background:url('http://i.imgur.com/ccjnsrM.png') !important;
+  color: #e2f3d1;
+  border: solid 1px  #437610;
+  opacity: .9 !important;
+}
+.menugroup .button:hover{
+  background: url('http://i.imgur.com/Mk3O2K2.png') !important;
+  border: solid 1px  #437610;
+  color: #e2f3d1;
+ 
+}
+.select{
+  background: url('http://i.imgur.com/vJSmvR4.png') !important;
+  opacity: .7;
+  border: none;
+}
+.menugroup button.big {
+width: 230px;
+padding: 6px 7px 6px 7px;
+font-size: 14pt;
+}
+.menugroup .button.disabled{
+background: white !important;
+}
+.label{
+        color: #c1ad98;
+}
+.challenge{
+       background: url('http://i.imgur.com/hotChHL.png');
+      border: 1px solid #437610;
+}
+/*.moveselect{
+text-align: center;
+}
+.moveselect button{
+  background: -webkit-linear-gradient(#4cffa6, #00cc66) !important;
+  background: -o-linear-gradient(#4cffa6, #00cc66) !important;
+  background: -moz-linear-gradient(#4cffa6, #00cc66) !important;
+  background: linear-gradient(#7fffbf, #00cc66) !important;
+  height: 2em;
+  width: 7em;
+  bottom: 5px;
+  border: .2em solid #00994c;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: auto;
+  padding-bottom: auto;
+  text-align: vertical center;
+  line-height: 1em;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  border-radius: 1.5em;
+  color: #006633;
+}*/
+.whatdo{
+  padding-left: auto;
+  padding-right: auto;
+}
+.tabbar a.button.cur, .tabbar a.button.cur:hover{
+  background: url('http://i.imgur.com/xkzpVn8.png') !important;
+  color: black;
+  border: 1px solid #c8af86 !important;
+}
+.maintabbarbottom{
+  background: #e4caa1;
+}
+.tabbar a.button{
+  background: url('http://i.imgur.com/dH9EtTs.png') !important;
+  border: 1px solid #c8af86 !important;
+}
+.tabbar a.button:hover{
+  background: url('http://i.imgur.com/2jMHoaC.png') !important;
+  border: 1px solid #c8af86 !important;
+}
+.tabbar a.button:active{
+  background: url('http://i.imgur.com/9Jw7LSq.png') !important;
+  border: 1px solid #c8af86 !important;
+}
+.header .logo{
+ background: url('http://i.imgur.com/ugAHtUR.png?2');
+ width: 146px;
+ height: 44px;
+ content:"";
+ float: left;
+ position: relative;
+ top: 1px;
+ 
+}
+ 
+/*.roomlist{
+background: url('http://i.imgur.com/Jhy8yMr.png') left top no-repeat,
+                url('http://i.imgur.com/Jhy8yMr.png') right top no-repeat;
+}
+.roomlist a.ilink{
+        background: url('http://i.imgur.com/054wCXb.png');
+}*/
+ 
+.chat-log-add {
+background-image: url('http://i.imgur.com/HPPxGaN.png');
+position: absolute;
+bottom: 0;
+left: 0;
+right: 0;
+min-height: 36px;
+padding: 3px 4px 0 4px;
+    border-top: 1px solid #AAAAAA;}
+  .roomlist a.ilink:hover {
+background-image: url('http://i.imgur.com/LObytel.png');
+border: 1px solid #8899AA;
+background: #F1F4F9;
+color: #224466;
+text-decoration: none;
+}
+.menugroup {
+background: rgba(66, 122, 70, 0);
+text-align: center;
+}
+  .header {
+position: relative;
+height: 50px;
+background: url('http://i.imgur.com/meuOOCd.png?1?9417') repeat-x left top scroll;
+}
+  .ps-room.ps-room-light {
+background: url('http://i.imgur.com/d5eRwZB.png');
+color: #437610;
+}
+.roomlist a.ilink {
+display: block;
+margin: 2px 7px 4px 7px;
+padding: 1px 4px 2px 4px;
+border: 1px solid #BBCCDD;
+background: url('http://i.imgur.com/LObytel.png');
+border-radius: 4px;
+text-decoration: none;
+color: #336699;
+text-shadow: #ffffff 0px -1px 0;
+box-shadow: 1px 1px 1px #D5D5D5;
+cursor: pointer;
+font-size: 10pt;
+overflow: hidden;
+  white-space: nowrap;
+}
+.pm-log {
+min-height: 100px;
+max-height: 300px;
+background: rgba(195, 231, 181, 0.925);
+color: black;
+word-wrap: break-word;
+border: 1px solid #AAAAAA;
+border-top: 0;
+border-bottom: 0;
+overflow: auto;
+}
 .pm-window h3 {
-	background-color:#58ACFA;
-	border-color:black;
+background: rgba(182, 161, 111, 0.8);
+color: #FFFFFF;
+margin: 0;
+padding: 2px 5px;
+font-size: 11pt;
+border: 1px solid #3A2801;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+cursor: pointer;
 }
-.pm-window.focused h3, .pm-window.focused h3:hover {
-background: #58ACFA;
-border-color: black;
+.userbar {
+background: #F5E4B8;
+padding: 5px;
+margin: -9px;
+border: 2px solid #756335;
 }
-
-
-
-.pm-window h3 small  {
-color:#58ACFA;        
-border-color:black;
+.userlist, .userlist li {
+background: url('http://i.imgur.com/xE5OXWD.png');
+display: block;
+list-style-type: none;
+margin: 0;
+padding: 0;
+text-align: left;
 }
-.pm-log-add {
-	background-color:#013770;
-	border-color:black;
+.chatbox label {
+float: left;
+margin-left: -78px;
+padding-top: 2px;
+width: 73px;
+text-align: right;
+overflow: hidden;
+white-space: pre;
+font-weight: bold;
+font-size: 8pt;
+background: #DDCFA9;
 }
-
-.pm-log-add.focused {
-	background-color:#00e1ff;
-	border-color:#00e1ff;
+.backdrop {
+    background: url('http://i.imgur.com/zw9FfeX.png?4?2403')!important;}
+    .pm-log-add {
+border: 1px solid #AAAAAA;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+background: rgba(195, 231, 181, 0.925);
+}
+.battle-log {
+position: absolute;
+text-align: left;
+border: 1px solid #AAAAAA;
+background: #DDCFA9;
+color: black;
+top: 9px;
+left: 640px;
+right: -1px;
+height: 360px;
+font-family: Verdana,sans-serif;
+font-size: 10pt;
+overflow: auto;
+overflow-y: scroll;
+}
+.battle-log-add {
+position: absolute;
+text-align: left;
+border: 1px solid #AAAAAA;
+background: #DDCFA9;
+color: black;
+top: 369px;
+left: 640px;
+right: -1px;
+font-family: Verdana,sans-serif;
+font-size: 10pt;
+}
+.battle-log h2 {
+margin: 0.5em -8px;
+padding: 4px 8px;
+border: 1px solid #AAAAAA;
+background: #968A69;
+border-left: 0;
+border-right: 0;
+font-family: Verdana,sans-serif;
+font-size: 13pt;
+}
+.ps-room.ps-room-opaque {
+background: #DDCFA9;
+color: black;
+}
+.pm-window.focused h3:hover {
+        background: #59d7ea;
+        color: #FFFFFF;
+        cursor: default;
+}
+.pm-window.focused h3 {
+        background: #59d7ea;
+        color: #FFFFFF;
+        cursor: default;
+}
+ .pm-window h3:hover {
+        background: #59d7ea;
+        color: #FFFFFF;
+        cursor: default;
+ }
+.tabbar a.button.notifying {
+border-color: #38C6D3;
+background: url('http://i.imgur.com/rsgKBXU.png?1?4462')!important;
+}
+.highlighted {
+background: #A9FFFC;
+}
+.pm-window h3 small {
+color: #FFFFFF;
+font-weight: normal;
+vertical-align: 1px;
+}
+.closebutton, .minimizebutton {
+text-decoration: none;
+font-size: 14px;
+color: #FFFFFF;
+text-shadow: none;
+border: 0;
+padding: 0;
+margin: 0;
+background: transparent;
+cursor: pointer;
+}
+.icon-user:before {
+content: url('http://i.imgur.com/97flsJB.png?1?7655');
 }
