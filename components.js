@@ -675,7 +675,7 @@ var components = exports.components = {
         this.sendReplyBox(official.join(' ') + nonOfficial.join(' ') + privateRoom.join(' '));
     },
 
-    sudo: function (target, room, user) {
+    /*sudo: function (target, room, user) {
         if (!user.can('sudo')) return;
         var parts = target.split(',');
         if (parts.length < 2) return this.parse('/help sudo');
@@ -696,7 +696,7 @@ var components = exports.components = {
         }
         CommandParser.parse(cmd, room, Users.get(targetUser), Users.get(targetUser).connections[0]);
         this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
-    },
+    },*/
 
     poll: function (target, room, user) {
         if (!this.can('broadcast')) return;
