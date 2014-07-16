@@ -153,6 +153,29 @@ exports.Formats = [
 		ruleset: ['Team Preview']
 	},
 	
+	// Server themed Metagames
+	////////////////////////////////////////////////////////////////////
+	
+	name: "Lotad's Dad"
+	section: "Server themed Metagames"
+	
+	gameType: 'singles',
+		maxForcedLevel: 5,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		validateTeam: function (team, format) {
+			for (var i = 0; i < team.length; i++) {
+				if (Tools.getTemplate(team[i]).species === 'Lotad') return;
+			}
+			return ['Your team must have Lotad.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 && Tools.getTemplate(team[i]).species === 'Ludicolo') {
+				return [set.species + " is banned as it cannot evolve."];
+			}
+		}
+	},
+	
 	// Monotype
 	///////////////////////////////////////////////////////////////////
 	
