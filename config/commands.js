@@ -198,9 +198,9 @@ var commands = exports.commands = {
 		if (targetUser.name === 'naten2006') {
 			this.sendReply("(Lotus Founder)");
 		}
-		if (targetUser.name === 'toxicpoison') {
+		/*if (targetUser.name === 'toxicpoison') {
 			this.sendReply("(Lotus Co-Owner)");
-		}
+		}*/
 		if (targetUser.name === 'brittlewind') {
 			this.sendReply("(Lotus CSS Manager)");
 		}
