@@ -300,3 +300,31 @@ cursor: pointer;
 .icon-user:before {
 content: url('http://i.imgur.com/97flsJB.png?1?7655');
 }
+.tournament-bracket-tree-node>rect {
+fill: rgba(96, 242, 248, 1);
+stroke: rgba(178,183,191,0.7);
+}
+.tournament-bracket {
+max-height: 200px;
+padding: 10px;
+overflow: hidden;
+font-size: 8pt;
+background: url('http://i.imgur.com/QjIOBPy.png?1?7092');
+}
+.tournament-tools.active {
+display: block;
+border-top: 2px rgb(96, 242, 248) solid;
+border-bottom: 2px rgb(96, 242, 248) solid;
+background: url('http://fc06.deviantart.net/fs70/i/2013/008/9/c/generations___grass_starters_by_raiponi-d5qvjru.png');
+}
+.tournament-title {
+font-weight: bold;
+cursor: pointer;
+background: rgb(195, 231, 181);
+}
+.ps-overlay .ps-popup {
+position: static;
+margin: 80px auto 20px auto;
+max-width: 320px;
+background: url('http://i.imgur.com/GyyscdU.jpg?2?8404');
+}
