@@ -112,11 +112,11 @@ var components = exports.components = {
                         content = content[0].split("</em>");
                         if (content[1]) {
                             regdate = content[1];
-                            data = username + ' was registered on' + regdate + '.';
+                            data = Tools.escapeHTML(username) + ' was registered on' + regdate + '.';
                         }
                     }
                 } else {
-                    data = username + ' is not registered.';
+                    data = Tools.escapeHTML(username) + ' is not registered.';
                 }
                 self.sendReplyBox(data);
                 room.update();
