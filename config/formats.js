@@ -156,7 +156,7 @@ exports.Formats = [
 	// Themed Metagames
 	////////////////////////////////////////////////////////////////////
 	
-	name: "Lotad's Dad"
+	/*name: "Lotad's Dad"
 	section: "Themed Metagames"
 	
 	gameType: 'triples',
@@ -174,7 +174,7 @@ exports.Formats = [
 				return [set.species + " is banned as it cannot evolve."];
 			}
 		}
-	},
+	},*/
 	
 	// Monotype
 	///////////////////////////////////////////////////////////////////
