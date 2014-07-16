@@ -923,9 +923,9 @@ var commands = exports.commands = {
 		);
 	},
 
-	staff: function (target, room, user) {
+	mainstaff: function (target, room, user) {
 	    if (!this.canBroadcast()) return;
-	    this.sendReplyBox("<a href=\"http://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+	    this.sendReplyBox("<a href=\"http://www.smogon.com/sim/staff_list\">Pokemon Showdown! Main Server Staff List</a>");
 	},
 
 	avatars: function (target, room, user) {
@@ -934,13 +934,11 @@ var commands = exports.commands = {
 	},
 
 	showtan: function (target, room, user) {
-		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
-		if (!this.can('showtan', room)) return;
+		if (!user.name === 'macrarazy') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
 		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply('user not found');
-		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
+		if (!this.targetUser) return this.sendReply('/showtan - User ' +targetUser.name+ ' not found.');
 		this.targetUser.avatar = '#showtan';
-		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
+		this.sendReply('You have applied showtan to '+this.targetUser.name+'.');
 	},
 
 	introduction: 'intro',
