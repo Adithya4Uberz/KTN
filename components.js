@@ -32,7 +32,7 @@ var components = exports.components = {
     earnbucks: 'earnmoney',
     earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a>.</ul>');
+        this.sendReplyBox('Sorry! There are no current ways to earn bucks. We will quickly add all possible ways later, just please be patient for this one time!');
     },
 
     staff: 'stafflist',
