@@ -195,25 +195,25 @@ var commands = exports.commands = {
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
 		}
-		if (user.userid !== 'naten2006') {
+		if (target === 'naten2006') {
 			this.sendReply("(Lotus Founder)");
 		}
-		if (user.userid !== 'toxicpoison') {
+		if (target === 'toxicpoison') {
 			this.sendReply("(Lotus Co-Owner)");
 		}
-		if (user.userid !== 'brittlewind') {
+		if (target === 'brittlewind') {
 			this.sendReply("(Lotus CSS Manager)");
 		}
-		if (user.userid !== 'freelancermac') {
+		if (target === 'freelancermac') {
 			this.sendReply("(Lotus Server Sponsor)");
 		}
-		if (user.userid !== 'twamble') {
+		if (target === 'twamble') {
 			this.sendReply("(Lotus Graphic Designer)");
 		}
-		if (user.userid !== 'macrarazy') {
+		if (target === 'macrarazy') {
 			this.sendReply("(Lotus Code Leader)");
 		}
-		if (user.userid !== 'blakjack') {
+		if (target === 'blakjack') {
 			this.sendReply("(Lotus Server Host)");
 		}
 		if (!targetUser.authenticated) {
