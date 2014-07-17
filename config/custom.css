@@ -785,3 +785,10 @@ color: #777777;
         border-radius: 2px;
         z-index: 9999;
 }
+.teambuilder-results .result a {
+border-radius: 4px;
+padding: 1px 1px 1px 5px;
+margin: 0 5px 1px 5px;
+background: rgba(255, 255, 255, .8);
+cursor: pointer;
+}
