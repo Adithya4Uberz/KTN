@@ -1478,7 +1478,7 @@ var commands = exports.commands = {
 	},
 	
 	refresh: function (target, room, user) {
-		user.send('|refresh|');
+		this.send('|refresh|');
 	},
 
 	updateserver: function (target, room, user, connection) {
