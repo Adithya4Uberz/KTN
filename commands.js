@@ -1476,11 +1476,6 @@ var commands = exports.commands = {
 		Rooms.global.send('|refresh|');
 		this.logEntry(user.name + " used /refreshpage");
 	},
-	
-	refresh: function (target, room, user) {
-		if (!this.canTalk()) return this.sendReply('You can\'t use this command while unable to talk.');
-		this.send('|refresh|');
-	},
 
 	updateserver: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
