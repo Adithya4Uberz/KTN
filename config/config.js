@@ -305,7 +305,7 @@ exports.groups = {
 			warn: true
 		},
 		'±': {
-			id: 'op',
+			id: 'operator',
 			name: "Operator",
 			inherit: '+',
 			jurisdiction: 'u',
