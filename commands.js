@@ -598,7 +598,7 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
 		}
-		if (targetRoom.lockedRoom === true) {
+		/*if (targetRoom.lockedRoom === true) {
 			var userGroup = user.group;
 			if (!Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[targetRoom.modchat].rank) return false;
 			connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' is currently locked from joining.");
@@ -606,7 +606,7 @@ var commands = exports.commands = {
 		if (targetRoom.isDereg === true) {
 			if (user.group !== '~') return false;
 			connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-		}
+		}*/
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
 		}
