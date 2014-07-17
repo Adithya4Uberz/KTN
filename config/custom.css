@@ -326,7 +326,9 @@ background: rgb(195, 231, 181);
 position: static;
 margin: 80px auto 20px auto;
 max-width: 320px;
-background: url('http://i.imgur.com/GyyscdU.jpg?2?8404');
+background-image: url('http://i.imgur.com/GyyscdU.jpg?2?8404');
+background-repeat: no-repeat;
+background-color: #2c99b6;
 }
 .setchart {
 border: 1px solid #999999;
