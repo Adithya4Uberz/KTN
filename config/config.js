@@ -283,8 +283,7 @@ exports.groups = {
 			ip: true,
 			modchat: true,
 			roompromote: '+ ',
-			scavengers: true,
-			tournamentsmoderation: true
+			scavengers: true
 		},
 		'%': {
 			id: 'driver',
@@ -312,7 +311,9 @@ exports.groups = {
 			alts: '±u',
 			announce: true,
 			opmute: true,
-			warn: true
+			unmute: true,
+			warn: true,
+			tournamentsmoderation: true
 		},
 		'+': {
 			id: 'voice',
