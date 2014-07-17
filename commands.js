@@ -169,9 +169,8 @@ var commands = exports.commands = {
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
 		if (Rooms.global.deregisterChatRoom(id)) {
-			this.sendReply("The room '" + target + "' was deregistered.");
-			this.sendReply("It will be deleted as of the next server restart.");
-			this.parse("/privateroom on");
+			room.add("This room (" + target + ") is deregistered and will be deleted as of the next Server restart.");
+			room.isPrivate = true;
 			return;
 		}
 		return this.sendReply("The room '" + target + "' isn't registered.");
