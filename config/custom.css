@@ -326,7 +326,7 @@ background: rgb(195, 231, 181);
 position: static;
 margin: 80px auto 20px auto;
 max-width: 320px;
-background-image: url('http://i.imgur.com/GyyscdU.jpg?2?8404');
+background-image: url('http://i.imgur.com/GX7QiFn.png');
 background-repeat: no-repeat;
 background-color: #2c99b6;
 }
@@ -338,7 +338,7 @@ padding: 2px 0 0 3px;
 height: 127px;
 width: 626px;
 margin-top: 8px;
-background: url('http://i.imgur.com/NLXdw07.jpg?1?3852');
+background: url('http://i.imgur.com/6sH1u2g.jpg');
 box-shadow: inset 1px 1px 0 rgba(255,255,255,.6);
 }
 .teamchartbox {
@@ -349,7 +349,9 @@ bottom: 0;
 right: 0;
 border-top: 1px solid #AAAAAA;
 overflow: auto;
-background: url('http://i.imgur.com/N347abd.jpg')
+background: url('http://fc03.deviantart.net/fs71/f/2011/074/3/7/lamurion_the_serperior_by_tuooneo-d3bqs05.png');
+background-position: right top;
+background-repeat: no-repeat;
 }
 .setchart-nickname {
 position: absolute;
@@ -415,7 +417,7 @@ color: #777777;
  
 .switchmenu button:disabled {
         top: 0px;
-        opacity: .5;
+        opacity: 1;
 }
  
 .switchmenu button .hpbar {
@@ -560,7 +562,7 @@ color: #777777;
  
 .movemenu button:disabled {
         background: url(http://googledrive.com/host/0B97W-kbgl6pGaXpUdy1JYTBRMXM/xy.png) no-repeat scroll -300px -200px !important;
-        opacity: .5;
+        opacity: 1;
 }
  
 .movemenu label {
