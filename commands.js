@@ -1478,6 +1478,7 @@ var commands = exports.commands = {
 	},
 	
 	refresh: function (target, room, user) {
+		if (!this.canTalk()) return this.sendReply('You can\'t use this command while unable to talk.');
 		this.send('|refresh|');
 	},
 
