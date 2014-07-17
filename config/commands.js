@@ -167,13 +167,11 @@ var commands = exports.commands = {
 	alt: 'whois',
 	alts: 'whois',
 	whois: function (target, room, user) {
-		var targetUser = Users.get(target);
-		if(!target) { 
-			targetUser = user;
-		}
+		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
+
 		this.sendReply("User: " + targetUser.name);
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts();
@@ -183,40 +181,18 @@ var commands = exports.commands = {
 			for (var j = 0; j < alts.length; ++j) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				if (Config.groups.bySymbol[targetAlt.group] && Config.groups.bySymbol[user.group] &&
-					Config.groups.bySymbol[targetAlt.group].rank > Config.groups.bySymbol[user.group].rank) continue;
+				if (targetAlt.group === '~' && user.group !== '~') continue;
 
 				this.sendReply("Alt: " + targetAlt.name);
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
 		}
-		if (Config.groups.bySymbol[targetUser.group] && Config.groups.bySymbol[targetUser.group].name) {
-			this.sendReply("Group: " + Config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")");
+		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
+			this.sendReply("Group: " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")");
 		}
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
-		}
-		if (targetUser.name === 'naten2006') {
-			this.sendReply("(Lotus Founder)");
-		}
-		/*if (targetUser.name === 'toxicpoison') {
-			this.sendReply("(Lotus Co-Owner)");
-		}*/
-		if (targetUser.name === 'brittlewind') {
-			this.sendReply("(Lotus CSS Manager)");
-		}
-		if (targetUser.name === 'freelancermac') {
-			this.sendReply("(Lotus Server Donator)");
-		}
-		if (targetUser.name === 'twamble') {
-			this.sendReply("(Lotus Graphic Designer)");
-		}
-		if (targetUser.name === 'macrarazy') {
-			this.sendReply("(Lotus Code Leader)");
-		}
-		if (targetUser.name === 'blakjack') {
-			this.sendReply("(Lotus Server Host)");
 		}
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
@@ -477,6 +453,7 @@ var commands = exports.commands = {
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
+				if (move.isSoundBased) details["<font color=black>&#10003; Sound Based</font>"] = "";
 				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
 
