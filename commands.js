@@ -168,6 +168,7 @@ var commands = exports.commands = {
 		var targetRoom = Rooms.get(id);
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
+		room.isDereg = true;
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply("The room '" + target + "' was deregistered.");
 			this.sendReply("It will be deleted as of the next server restart.");
@@ -175,9 +176,27 @@ var commands = exports.commands = {
 		}
 		return this.sendReply("The room '" + target + "' isn't registered.");
 	},
+	
+	leagueroom: function (target, room, user) {
+		if (!this.can('promote')) return;
+		if (!room.chatRoomData) {
+			return this.sendReply('/leagueroom - This room can\'t be marked as a league');
+		}
+		if (target === 'off') {
+			delete room.isLeague;
+			this.addModCommand(user.name+' has made this chat room a normal room.');
+			delete room.chatRoomData.isLeague;
+			Rooms.global.writeChatRoomData();
+		} else {
+			room.isLeague = true;
+			this.addModCommand(user.name+' made this room a league room.');
+			room.chatRoomData.isLeague = true;
+			Rooms.global.writeChatRoomData();
+		}
+	},
 
 	privateroom: function (target, room, user) {
-		if (!this.can('declare', room)) return;
+		if (!this.can('promote', room)) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -196,7 +215,7 @@ var commands = exports.commands = {
 	},
 
 	modjoin: function (target, room, user) {
-		if (!this.can('declare', room)) return;
+		if (!this.can('promote', room)) return;
 		if (target === 'off') {
 			delete room.modjoin;
 			this.addModCommand("" + user.name + " turned off modjoin.");
@@ -216,7 +235,7 @@ var commands = exports.commands = {
 
 	officialchatroom: 'officialroom',
 	officialroom: function (target, room, user) {
-		if (!this.can('declare')) return;
+		if (!this.can('promote')) return;
 		if (!room.chatRoomData) {
 			return this.sendReply("/officialroom - This room can't be made official");
 		}
@@ -251,6 +270,41 @@ var commands = exports.commands = {
 			room.chatRoomData.desc = room.desc;
 			Rooms.global.writeChatRoomData();
 		}
+	},
+	
+	closeleague: 'openleague',
+	openleague: function (target, room, user, connection, cmd) {
+		if (!room.isLeague) return this.sendReply("This is not a league room, if it is, get a Leader or Admin to set the room as a league room.");
+		if (!this.can('roommod', null, room)) return false;
+		if (!room.chatRoomData) {
+			return this.sendReply("This room cannot have a league toggle option.");
+		}
+		if (cmd === 'closeleague') {
+			if (!room.isOpen) return this.sendReply('The league is already marked as closed.');
+			delete room.isOpen;
+			delete room.chatRoomData.isOpen;
+			Rooms.global.writeChatRoomData();
+			return this.sendReply('This league has now been marked as closed.');
+		}
+		else {
+			if (room.isOpen) return this.sendReply('The league is already marked as open.');
+			room.isOpen = true;
+			room.chatRoomData.isOpen = true;
+			Rooms.global.writeChatRoomData();
+			return this.sendReply('This league has now been marked as open.');
+		}
+	},
+
+	leaguestatus: function (target, room, user) {
+		if (!room.isLeague) return this.sendReply("This is not a league room, if it is, get a Leader or Admin to set the room as a league room.");
+		if (!this.canBroadcast()) return;
+		if (room.isOpen) {
+			return this.sendReplyBox(room.title+' is <font color="green"><b>open</b></font> to challengers.');
+		}
+		else if (!room.isOpen) {
+			return this.sendReplyBox(room.title+' is <font color="red"><b>closed</b></font> to challengers.');
+		}
+		else return this.sendReply('This league does not have a status set.');
 	},
 
 	roomintro: function (target, room, user) {
@@ -420,6 +474,30 @@ var commands = exports.commands = {
 		}
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
+	
+	lockroom: function(target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("Only unofficial chatrooms can be locked.");
+		}
+		if (room.auth[user.userid] != '#' && user.group != '~') {
+			return this.sendReply('/lockroom - Access denied.');
+		}
+		room.lockedRoom = true;
+		this.parse('/modchat ~');
+		this.addModCommand(user.name + ' has locked the room.');
+	},
+
+	unlockroom: function(target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("Only unofficial chatrooms can be unlocked.");
+		}
+		if (room.auth[user.userid] != '#' && user.group != '~') {
+			return this.sendReply('/unlockroom - Access denied.');
+		}
+		room.lockedRoom = false;
+		this.parse('/modchat off');
+		this.addModCommand(user.name + ' has unlocked the room.');
+	}
 
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
@@ -519,6 +597,9 @@ var commands = exports.commands = {
 			if (!user.named) {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
+		}
+		if (targetRoom.lockedRoom && Config.groups.bySymbol[userGroup].rank < '&') {
+			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' is currently locked from joining.");
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
@@ -1171,11 +1252,11 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return false;
 
-		this.logEntry(user.name + " used /hotpatch " + target);
+		this.logEntry(user.name + " used /hotpatch " + target + ".");
 
 		if (target === 'chat' || target === 'commands') {
 
-			try {
+			/*try {
 				CommandParser.uncacheTree('./command-parser.js');
 				CommandParser = require('./command-parser.js');
 
@@ -1187,11 +1268,13 @@ var commands = exports.commands = {
 				return this.sendReply("Chat commands have been hot-patched.");
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch chat: \n" + e.stack);
-			}
+			}*/
+			
+			this.sendReply("|raw| <b>HALT!</b> The command you are using is obsolete and not considered. Kindly use the command <b>/reload</b> for this purpose.");
 
 		} else if (target === 'tournaments') {
 
-			try {
+			/*try {
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments/middleend.js');
 				Tournaments = require('./tournaments/middleend.js');
@@ -1199,7 +1282,9 @@ var commands = exports.commands = {
 				return this.sendReply("Tournaments have been hot-patched.");
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
-			}
+			}*/
+			
+			this.sendReply("|raw| <b>HALT!</b> The command you are using is obsolete and not considered. Kindly use the command <b>/reload</b> for this purpose.");
 
 		} else if (target === 'battles') {
 
@@ -1390,6 +1475,10 @@ var commands = exports.commands = {
 		if (!this.can('refreshpage')) return false;
 		Rooms.global.send('|refresh|');
 		this.logEntry(user.name + " used /refreshpage");
+	},
+	
+	refresh: function (target, room, user) {
+		user.send('|refresh|');
 	},
 
 	updateserver: function (target, room, user, connection) {
