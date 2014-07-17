@@ -884,11 +884,15 @@ var commands = exports.commands = {
 
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox(Config.groups.byRank.reduce(function (info, group) {
-			if (!Config.groups.bySymbol[group].name || !Config.groups.bySymbol[group].description)
-				return info;
-			return info + (info ? "<br />" : "") + Tools.escapeHTML(group) + " <strong>" + Tools.escapeHTML(Config.groups.bySymbol[group].name) + "</strong> - " + Tools.escapeHTML(Config.groups.bySymbol[group].description);
-		}, ""));
+		this.sendReplyBox(
+			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
+			"± <b>Operator</b> - They above, and they can warn and mute users. They can also use /announce<br />" +
+			"% <b>Driver</b> - The above, and they can mute upto 60 minutes. Global % can also lock users and check for alts<br />" +
+			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
+			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
+			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
+			"~ <b>Administrator</b> - They can do anything, like change what this message says"
+		);
 	},
 
 	git: 'opensource',
@@ -1090,6 +1094,9 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"The room founder can also use:<br />" +
+			"- /roomowner <em>username</em>: appoint a room owner<br />" +
+			"- /roomdesc <em>message</em> - sets a description for the room<br />" +
 			"</div>"
 		);
 	},
