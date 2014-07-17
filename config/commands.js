@@ -167,11 +167,13 @@ var commands = exports.commands = {
 	alt: 'whois',
 	alts: 'whois',
 	whois: function (target, room, user) {
-		var targetUser = this.targetUserOrSelf(target, user.group === Config.groups.default.global);
+		var targetUser = Users.get(target);
+		if(!target) { 
+			targetUser = user;
+		}
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
-
 		this.sendReply("User: " + targetUser.name);
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts();
