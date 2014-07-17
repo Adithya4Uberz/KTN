@@ -205,7 +205,7 @@ var commands = exports.commands = {
 			this.sendReply("(Lotus CSS Manager)");
 		}
 		if (targetUser.name === 'freelancermac') {
-			this.sendReply("(Lotus Server Sponsor)");
+			this.sendReply("(Lotus Server Donator)");
 		}
 		if (targetUser.name === 'twamble') {
 			this.sendReply("(Lotus Graphic Designer)");
