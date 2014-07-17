@@ -1064,6 +1064,17 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
+	
+	links: 'hlinks',
+	helpful: 'hlinks',
+	helpfullinks: 'hlinks',
+	hlinks: function (target, room, user) {
+		if (!this.canBroadcast()) return false;
+		this.sendReplyBox('<font color=green><b>Helpful links related to the server:</b></font><br />' +
+			'- <a href="http://lotus-server.weebly.com/"><font color=green>Website</font></a><br />' +
+			'- <a href="https://w11.zetaboards.com/PS_Lotus/index/"><font color=orange>Forums</font></a><br />' +
+			'- <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><font color=blue>GitHub</font></a> (server code)');
+	},
 
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
