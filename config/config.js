@@ -262,6 +262,8 @@ exports.groups = {
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
+			tournaments: true,
+			tournamentsmoderation: true,
 			roompromote: 'u'
 		},
 		'\u2605': {
