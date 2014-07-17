@@ -356,10 +356,10 @@ var commands = exports.commands = {
 		var owners = [];
 		var mods = [];
 		var drivers = [];
-		//var ops = [];
+		var operators = [];
 		var voices = [];
 
-		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; /*room.ops = '';*/ room.voices = ''; 
+		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; room.operators = ''; room.voices = ''; 
 		for (var u in room.auth) { 
 			if (room.auth[u] == '#') { 
 				room.owners = room.owners +u+',';
@@ -370,9 +370,9 @@ var commands = exports.commands = {
 			if (room.auth[u] == '%') { 
 				room.drivers = room.drivers +u+',';
 			} 
-			//if (room.auth[u] == '±') {
-				//room.ops = room.ops +u+',';
-			//}
+			if (room.auth[u] == '±') {
+				room.operators = room.operators +u+',';
+			}
 			if (room.auth[u] == '+') { 
 				room.voices = room.voices +u+',';
 			} 
@@ -384,7 +384,7 @@ var commands = exports.commands = {
 		room.owners = room.owners.split(',');
 		room.mods = room.mods.split(',');
 		room.drivers = room.drivers.split(',');
-		//room.ops = room.ops.split(',');
+		room.operators = room.operators.split(',');
 		room.voices = room.voices.split(',');
 
 		for (var u in room.owners) {
@@ -397,9 +397,9 @@ var commands = exports.commands = {
 		for (var u in room.drivers) {
 			if (room.drivers[u] != '') drivers.push(room.drivers[u]);
 		}
-		//for (var u in room.ops) {
-			//if (room.ops[u] != '') ops.push(room.ops[u]);
-		//}
+		for (var u in room.operators) {
+			if (room.operators[u] != '') operators.push(room.operators[u]);
+		}
 		for (var u in room.voices) {
 			if (room.voices[u] != '') voices.push(room.voices[u]);
 		}
@@ -412,13 +412,13 @@ var commands = exports.commands = {
 		if (drivers.length > 0) {
 			drivers = drivers.join(', ');
 		}
-		//if (ops.length > 0) {
-			//ops = ops.join(', ');
-		//}
+		if (operators.length > 0) {
+			operators = operators.join(', ');
+		}
 		if (voices.length > 0) {
 			voices = voices.join(', ');
 		}
-		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\n'/*Operators: \n'+ops+'\n*/'Voices: \n'+voices);
+		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
 
 	rb: 'roomban',
@@ -678,7 +678,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
-		if (!this.can('mute', targetUser, room)) return false;
+		if (!this.can('unmute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
 			return this.sendReply("" + targetUser.name + " is not muted.");
