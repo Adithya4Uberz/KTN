@@ -168,10 +168,10 @@ var commands = exports.commands = {
 		var targetRoom = Rooms.get(id);
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
-		room.isDereg = true;
 		if (Rooms.global.deregisterChatRoom(id)) {
 			this.sendReply("The room '" + target + "' was deregistered.");
 			this.sendReply("It will be deleted as of the next server restart.");
+			this.parse("/privateroom on");
 			return;
 		}
 		return this.sendReply("The room '" + target + "' isn't registered.");
@@ -475,7 +475,7 @@ var commands = exports.commands = {
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
 	
-	lockroom: function(target, room, user) {
+	/*lockroom: function(target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
 		}
@@ -497,7 +497,7 @@ var commands = exports.commands = {
 		room.lockedRoom = false;
 		this.parse('/modchat off');
 		this.addModCommand(user.name + ' has unlocked the room.');
-	}
+	}*/
 
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
@@ -602,10 +602,6 @@ var commands = exports.commands = {
 			var userGroup = user.group;
 			if (!Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[targetRoom.modchat].rank) return false;
 			connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' is currently locked from joining.");
-		}
-		if (targetRoom.isDereg === true) {
-			if (user.group !== '~') return false;
-			connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}*/
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
