@@ -1044,6 +1044,29 @@ var commands = exports.commands = {
 		targetUser.resetName();
 		targetUser.send("|nametaken||" + user.name + " has forced you to change your name. " + target);
 	},
+	
+	flogout: 'forcelogout',
+	forcelogout: function(target, room, user) {
+		if(!user.can('hotpatch')) return;
+		if (!this.canTalk()) return false;
+
+		if (!target) return this.sendReply('/forcelogout [username], [reason] OR /flogout [username], [reason] - You do not have to add a reason');
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+
+		if (targetUser.name === 'macrarazy') return this.sendReply('You cannot force logout another Admin.');
+
+		this.addModCommand(''+targetUser.name+' was forcibly logged out by '+user.name+'.' + (target ? " (" + target + ")" : ""));
+
+		this.logModCommand(user.name+' forcibly logged out '+targetUser.name+ '.');
+
+		targetUser.resetName();
+	},
 
 	modlog: function (target, room, user, connection) {
 		var lines = 0;
