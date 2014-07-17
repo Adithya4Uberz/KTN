@@ -42,7 +42,7 @@ var components = exports.components = {
             leaders: [],
             mods: [],
             drivers: [],
-            ops: [],
+            operators: [],
             voices: []
         };
 
@@ -67,7 +67,7 @@ var components = exports.components = {
                 buffer.drivers.push(staff[0]);
             }
             if (staff[1] === '±') {
-            	buffer.ops.push(staff[0]);
+            	buffer.operators.push(staff[0]);
             }
             if (staff[1] === '+') {
                 buffer.voices.push(staff[0]);
@@ -78,10 +78,10 @@ var components = exports.components = {
         buffer.leaders = buffer.leaders.join(', ');
         buffer.mods = buffer.mods.join(', ');
         buffer.drivers = buffer.drivers.join(', ');
-        buffer.ops = buffer.ops.join(', ');
+        buffer.operators = buffer.operators.join(', ');
         buffer.voices = buffer.voices.join(', ');
 
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.ops + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.operators + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
     },
 
     regdate: function (target, room, user, connection) {
