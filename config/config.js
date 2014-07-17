@@ -248,6 +248,8 @@ exports.groups = {
 			modchatall: true,
 			potd: true,
 			promote: 'u',
+			takemoney: true,
+			givemoney: true,
 			rangeban: true
 		},
 		'#': {
