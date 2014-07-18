@@ -22,8 +22,10 @@ var components = exports.components = {
     away: 'back',
     back: function (target, room, user, connection, cmd) {
         if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
+        if (!user.away && cmd.toLowerCase() === 'away') return this.parse('/nick ' + user.name + ' - Ⓐⓦⓐⓨ'); 
         user.away = !user.away;
         if (!user.away && cmd.toLowerCase() === 'away') return this.sendReply('You are already set as away.');
+        if (!user.away && cmd.toLowerCase() === 'back') return this.parse('/nick ' + user.name);
         this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
         user.updateIdentity();
     },
@@ -133,7 +135,8 @@ var components = exports.components = {
     atm: 'profile',
     profile: function (target, room, user, connection, cmd) {
         if (!this.canBroadcast()) return;
-        if (cmd === 'atm') return this.sendReply(targetUser.name+ ' has ' +Core.profile.money(targetUser.userid)+ '.');
+        if (cmd === 'atm' && !target) return this.sendReply('Kindly use /profile or !profile if broadcasting.');
+        if (cmd === 'atm') return this.sendReply('Kindly use /profile [username] or !profile [username] if broadcasting.');
         if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
         var targetUser = this.targetUserOrSelf(target);
