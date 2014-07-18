@@ -1381,6 +1381,20 @@ var commands = exports.commands = {
 		}
 		this.sendReply("Your hot-patch command was unrecognized.");
 	},
+	
+	reloadcomp: function (target, room, user) {
+		if (!this.can('reloadcomp')) return;
+		
+		try {
+			this.sendReply('Reloading Components...');
+			CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
+			Components = require(path.join(__dirname, './', './components.js'));
+			
+			return this.sendReply("|raw|<font color=green>Component files have been reloaded.</font>");
+		} catch (e) {
+			return this.sendReply("|raw|<font color=red>Something failed while trying to reload files: \n" + e.stack);
+		}
+	},
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
