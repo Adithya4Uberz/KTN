@@ -47,7 +47,7 @@ if(dice[room.id]) return this.sendReply('There is already a dice game in this ro
 
 var target = parseInt(target);
 
-if(user.money < target) return this.sendReply('You cannot bet more than you have fren.');
+if(!user.money >== target) return this.sendReply('You cannot bet more than you have fren.');
 
  var b = 'bucks';
  
