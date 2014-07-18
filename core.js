@@ -68,7 +68,7 @@ var core = exports.core = {
 
         color: '#5130AB',
 
-        avatarurl: 'http://107.161.19.15:8000',
+        avatarurl: 'http://107.155.72.217:15000',
 
         avatar: function (online, user, img) {
             if (online === true) {
@@ -253,9 +253,9 @@ var core = exports.core = {
             ['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
             ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 15],
             ['Who', 'Buys a custom whois bot message for your name.', 25],
-            ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 30],
-            ['Trainer', 'Buys a trainer card which shows information through a command.', 50],
-            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+            ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 20],
+            ['Trainer', 'Buys a trainer card which shows information through a command.', 25],
+            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 50]
         ];
 
         if (showDisplay === false) {
