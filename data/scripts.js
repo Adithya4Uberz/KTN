@@ -44,7 +44,8 @@ exports.BattleScripts = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-		if (this.gen <= 2) this.runEvent('AfterMoveSelf', pokemon, target, move);
+		this.runEvent('AfterMove', target, pokemon, move);
+		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
@@ -106,7 +107,16 @@ exports.BattleScripts = {
 
 		var damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-			damage = this.tryMoveHit(target, pokemon, move);
+			if (move.target === 'all') {
+				damage = this.runEvent('TryHitField', target, pokemon, move);
+			} else {
+				damage = this.runEvent('TryHitSide', target, pokemon, move);
+			}
+			if (!damage) {
+				if (damage === false) this.add('-fail', target);
+				return true;
+			}
+			damage = this.moveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
 			if (move.target === 'allAdjacent') {
@@ -179,34 +189,16 @@ exports.BattleScripts = {
 		return true;
 	},
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
-		if (move.selfdestruct && spreadHit) pokemon.hp = 0;
-
-		this.setActiveMove(move, pokemon, target);
-		var hitResult = true;
-
-		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
-		if (!hitResult) {
-			if (hitResult === false) this.add('-fail', target);
-			return false;
-		}
-		this.runEvent('PrepareHit', pokemon, target, move);
-
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-			if (move.target === 'all') {
-				hitResult = this.runEvent('TryHitField', target, pokemon, move);
-			} else {
-				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
-			}
-			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
-				return true;
-			}
-			return this.moveHit(target, pokemon, move);
+		if (move.selfdestruct && spreadHit) {
+			pokemon.hp = 0;
 		}
 
 		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			return false;
 		}
+
+		this.setActiveMove(move, pokemon, target);
+		var hitResult = true;
 
 		if (typeof move.affectedByImmunities === 'undefined') {
 			move.affectedByImmunities = (move.category !== 'Status');
