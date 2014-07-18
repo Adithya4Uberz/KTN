@@ -23,9 +23,14 @@ var components = exports.components = {
     back: function (target, room, user, connection, cmd) {
         if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
         user.away = !user.away;
-        if (user.isStaff && cmd !== 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
+        if (user.isStaff) {
+        	if (cmd === 'away') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
+        }
+        else {
+        	if (cmd === 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now back.');
+        }
         user.updateIdentity();
-        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
+        // this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
 
     earnbuck: 'earnmoney',
@@ -725,7 +730,7 @@ var components = exports.components = {
 
     tierpoll: function (target, room, user) {
         if (!this.can('broadcast')) return;
-        this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+        this.parse('/poll Tournament Tier?, randbats, ou, ubers, uu, ru, nu, lc, customgame, random doubles, doubles, stabmons, almostanyability, cc, cc1v1, 1v1, hackmons, bh, inv battle, ou mono, tier shift, mediocremons');
     },
 
     endpoll: function (target, room, user) {
