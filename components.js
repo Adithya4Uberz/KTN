@@ -315,13 +315,13 @@ var components = exports.components = {
         if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
         if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-        tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+        "<b>"tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said:</b> " + message);
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
     viewtells: 'showtells',
     showtells: function (target, room, user){
-        return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
+        return this.sendReply("<b>These users have currently have queued tells:</b> " + Object.keys(tells));
     },
 
     vote: function (target, room, user) {
