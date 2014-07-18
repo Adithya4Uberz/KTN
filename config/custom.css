@@ -332,7 +332,6 @@ background-color: #2c99b6;
 }
 .setchart {
 border: 1px solid #999999;
-background: #DAE5F0;
 border-radius: 5px;
 padding: 2px 0 0 3px;
 height: 127px;
@@ -358,7 +357,7 @@ position: absolute;
 left: -5px;
 top: 5px;
 border: 1px solid #999999;
-background: url('http://i.imgur.com/NLXdw07.jpg?1?3852');
+background: url('http://i.imgur.com/6sH1u2g.jpg');
 border-radius: 5px;
 padding: 1px 0 0 0;
 width: 110px;
@@ -585,170 +584,7 @@ color: #777777;
         left: 5px;
 }
  
-.statbar {
-        position: absolute;
-        width: 186px;
-        background: url(http://googledrive.com/host/0B97W-kbgl6pGaXpUdy1JYTBRMXM/battle-hpbar.png) !important;
-        background-position: 0px 22px !important;
-        background-repeat: no-repeat !important;
-        min-height: 40px;
-        padding: 16px 4px 2px 26px;
-        margin-left: -26px;
-        margin-top: -10px;
-        z-index: 2;
-}
- 
-/*
- * .rstatbar[style*="130"] = player pokemon   (singles - left in doubles  - left in triples)
- * .rstatbar[style*="205"] = player pokemon   (        - right in doubles - central in triples)
- * .rstatbar[style*="280"] = player pokemon   (        -                  - right in triples)
- * .lstatbar[style*="250"] = opponent pokemon (        -                  - left in triples)
- * .lstatbar[style*="300"] = opponent pokemon (        - left in doubles  - central in triples)
- * .lstatbar[style*="350"] = opponent pokemon (singles - right in doubles - right in triples)
- */
- 
-.rstatbar[style*="205"], .lstatbar[style*="300"] {
-        z-index: 3;
-}
- 
-.rstatbar[style*="280"], .lstatbar[style*="350"] {
-        z-index: 4;
-}
- 
-.statbar:hover {
-        z-index: 5;
-}
- 
-.statbar strong {
-        position: absolute;
-        top: 8px;
-        font-size: 11px;
-        font-weight: bold;
-        display: block;
-        text-align: center;
-        color: #FFF;
-        text-shadow: #000 1px 0px 0, #000 -1px 0px 0, #000 0px -1px 0, #000 0px 1px 0, #000 1px 1px 0, #000 1px -1px 0, #000 -1px 1px 0, #000 -1px -1px 0;
-}
- 
-.statbar strong small {
-        font-size: 11px;
-}
- 
-.statbar .hpbar {
-        position: relative;
-        border: 0;
-        border-radius: 0px;
-        background: #FCFEFF;
-        height: 5px;
-        margin: 0 0 0 0;
-        width: 151px;
-        padding: 0;
-        top: 12px;
-        left: -2px;
-}
- 
-.hptextborder {
-        display: none !important;
-}
- 
-.statbar .hpbar .hp {
-        height: 5px;
-        border: 0;
-        border-right: 1px solid #081713;
-        background: #00bb51;
-        border-radius: 0px;
-}
- 
-.statbar .hpbar .hp-yellow {
-        background-color: #f5d538;
-        border-color: #be9f0a;
-}
- 
-.statbar .hpbar .hp-red {
-        background-color: #ee4928;
-        border-color: #a3260d;
-}
- 
-.statbar .hpbar .prevhp {
-        height: 5px;
-        border-radius: 0px;
-}
- 
-.statbar .hpbar .prevhp-yellow {
-        background-color: #fcf4ca;
-}
- 
-.statbar .hpbar .prevhp-red {
-        background-color: #facec5;
-}
- 
-.hptext {
-        margin-top: 2px;
-}
- 
-.statbar .hpbar .hptext {
-        position: absolute;
-        color: #FFFFFF;
-        text-shadow: #000 1px 0px 0, #000 -1px 0px 0, #000 0px -1px 0, #000 0px 1px 0, #000 1px 1px 0, #000 1px -1px 0, #000 -1px 1px 0, #000 -1px -1px 0;
-        font-size: 9px;
-        width: 32px;
-        top: -8px;
-        text-align: center;
-        padding-top: 2px;
-        background: url(http://googledrive.com/host/0B97W-kbgl6pGaXpUdy1JYTBRMXM/battle-hpbar-xy-r.png) !important;
-        width: 40px;
-        height: 15px;
-}
- 
-.rstatbar .hpbar .hptext {
-        right: -38px;
-}
- 
-.lstatbar .hpbar .hptext {
-        left: 148px;
-}
- 
-.statbar .status {
-        margin-top: 7px;
-        min-height: 10px;
-        font-size: 7pt;
-}
- 
-/*.statbar span.brn,
-.statbar span.psn,
-.statbar span.slp,
-.statbar span.par,
-.statbar span.frz {
-        position: absolute;
-        right: 174px;
-        top: -6px;
-        font-size: 12px;
-        font-weight: bold;
-        padding: 0px 6px 1px;
-        border: 0;
-        border-radius: 5px;
-        transform: scaleX(0.85);
-}*/
- 
-.statbar span.bad {
-        background: #e74c3c;
-        color: #ecf0f1;
-        border-color: #c0392b;
-}
- 
-.statbar span.good {
-        background: #27ae60;
-        color: #ecf0f1;
-        border-color: #067A37;
-}
- 
-.statbar span.neutral {
-        background: #7f8c8d;
-        color: #ecf0f1;
-        border-color: #2c3e50;
-}
- 
-.pfx-panel {
+.pxf-panel {
         background: #333;
 }
  
@@ -770,11 +606,11 @@ color: #777777;
 }
  
 .ladder td, .ladder th {
-        background: #555 !important;
+        background: #b5e6ff !important;
 }
  
 .ladder strong {
-        color: #ccc !important;
+        color: #0c0c99 !important;
 }
 #tooltipwrapper .tooltip {
         position: absolute;
