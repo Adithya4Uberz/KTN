@@ -121,7 +121,7 @@ user.updateIdentity();
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
                  '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
-                 '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a>, <a href="https://github.com/CreaturePhil/"><b>CreaturePhil</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
+                 '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
                  '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
                  '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
                  '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>');
