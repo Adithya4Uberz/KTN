@@ -188,13 +188,6 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Aura Break');
 		},
-		onAnyTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			source.addVolatile('aurabreak');
-		},
-		effect: {
-			duration: 1
-		},
 		id: "aurabreak",
 		name: "Aura Break",
 		rating: 2,
@@ -460,10 +453,23 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
-		onAnyTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+		onBasePowerPriority: 8,
+		onAnyBasePower: function (basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
+					reverseAura = true;
+					this.debug('Reversing Dark Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Dark') {
-				source.addVolatile('aura');
+				return this.chainModify(reverseAura? 0.75 : 4 / 3);
 			}
 		},
 		id: "darkaura",
@@ -622,10 +628,23 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
-		onAnyTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+		onBasePowerPriority: 8,
+		onAnyBasePower: function (basePower, attacker, defender, move) {
+			var reverseAura = false;
+			for (var p in attacker.side.active) {
+				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
+			for (var p in defender.side.active) {
+				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
+					reverseAura = true;
+					this.debug('Reversing Fairy Aura due to Aura Break');
+				}
+			}
 			if (move.type === 'Fairy') {
-				source.addVolatile('aura');
+				return this.chainModify(reverseAura? 0.75 : 4 / 3);
 			}
 		},
 		id: "fairyaura",
@@ -1969,7 +1988,8 @@ exports.BattleAbilities = {
 	"protean": {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
-		onPrepareHit: function (source, target, move) {
+		onSourceTryPrimaryHit: function (target, source, move) {
+			if (!move || source.volatiles.mustrecharge) return;
 			if (source.getTypes().join() !== move.type) {
 				if (!source.setType(move.type)) return;
 				this.add('-start', source, 'typechange', move.type, '[from] Protean');
