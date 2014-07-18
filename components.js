@@ -34,7 +34,7 @@ var components = exports.components = {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
                  '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
-                 '<li>Follow <a href="https://github.com/macrarazy/"><b><font color="' + hashColor('' + toId(macrarazy) + '') + '">macrarazy</font></b></a>, <a href="https://github.com/CreaturePhil/"><b><font color="' + hashColor('' + toId(CreaturePhil) + '') + '">CreaturePhil</font></b></a> and <a href="https://github.com/BlakJack/"><b><font color="' + hashColor('' + toId(BlakJack) + '') + '">BlakJack</font></b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
+                 '<li>Follow <a href="https://github.com/macrarazy/"><b><font color="'+hashColor(''+toId(macrarazy)+'')+'">macrarazy</font></b></a>, <a href="https://github.com/CreaturePhil/"><b><font color="'+hashColor(''+toId(CreaturePhil)+'')+'">CreaturePhil</font></b></a> and <a href="https://github.com/BlakJack/"><b><font color="'+hashColor(''+toId(BlakJack)+'')+'">BlakJack</font></b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
                  '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
                  '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
                  '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>');
@@ -42,21 +42,21 @@ var components = exports.components = {
     
     hex: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (!target) {
-			this.sendReplyBox('<center><b>Your name\'s hexcode is: <font color="' + hashColor('' + toId(user.name) + '') + '"> '+hashColor(''+toId(user.name)+''));
+		if(!target){
+			this.sendReplyBox('<center><b>Your name\'s hexcode is:<font color="'+hashColor(''+toId(user.name)+'')+'"> '+hashColor(''+toId(user.name)+''));
 			return;
-		};
-		if (target.indexOf('#') < 0) {
-			this.sendReplyBox('Please include the \'#\' symbol.');
+		}
+		if(target.indexOf('#') < 0){
+			this.sendReplyBox('Please include the \'#\' symbol');
 			return false;
-		};
+		}
 		var verify = /^#[0-9A-F]{6}$/i;
-		if (verify.test(target)) {
+		if(verify.test(target)){
 			this.sendReplyBox('<center><b><font size="5" color="' + target + '">' + target + '</font></b></center>');
-		} else {
+		}else{
 			this.sendReplyBox('Could not find a valid color to match your hex code');
-		};
-    },
+		}
+	},
 
     staff: 'stafflist',
     stafflist: function (target, room, user) {
