@@ -792,7 +792,7 @@ user.updateIdentity();
     },*/
 
     poll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.canBroadcast()) return;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
         if (!this.canTalk()) return;
 
@@ -817,12 +817,12 @@ user.updateIdentity();
     },
 
     tierpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.canBroadcast()) return;
         this.parse('/poll Tournament Tier?, randbats, ou, ubers, uu, ru, nu, lc, customgame, random doubles, doubles, stabmons, almostanyability, cc, cc1v1, 1v1, hackmons, bh, inv battle, ou mono, tier shift, mediocremons');
     },
 
     endpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.canBroadcast()) return;
         if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
 
         var votes = Object.keys(Poll[room.id].options).length;
