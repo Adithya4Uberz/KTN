@@ -899,11 +899,11 @@ var commands = exports.commands = {
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Pokemon Showdown is open source:<br />" +
+			"Lotus codes are open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
 			"- <a href=\"https://github.com/Lotus-Team/BlakJack-Boilerplate/\">Server source code</a><br />"+
 			"- <a href=\"https://github.com/Lotus-Team/BlakJack-Boilerplate/commits/master/\">What's new?</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
+			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client/\">Client source code</a>"
 		);
 	},
 
