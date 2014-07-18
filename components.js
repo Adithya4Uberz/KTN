@@ -885,7 +885,7 @@ user.updateIdentity();
         while (len--) {
             room.log[len] = '';
         }
-        for (var user in room.users) {
+        /*for (var user in room.users) {
             users.push(user);
             Users.get(user).leaveRoom(room, Users.get(user).connections[0]);
         }
@@ -894,7 +894,7 @@ user.updateIdentity();
             while (len--) {
                 Users.get(users[len]).joinRoom(room, Users.get(users[len]).connections[0]);
             }
-        }, 1000);
+        }, 1000);*/
     },
 
     /*********************************************************
