@@ -24,8 +24,6 @@ var components = exports.components = {
         if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
         user.away = !user.away;
         if (!user.away && cmd.toLowerCase() === 'away') return this.sendReply('You are already set as away.');
-        user.getIdentity = function () {
-        var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
         user.updateIdentity();
         this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
