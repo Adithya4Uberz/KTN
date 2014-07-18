@@ -812,7 +812,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
-		if (!this.can('unmute', targetUser, room)) return false;
+		if (!this.can('warn', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
 			return this.sendReply("" + targetUser.name + " is not muted.");
