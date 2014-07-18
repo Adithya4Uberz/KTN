@@ -3217,4 +3217,750 @@ var Battle = (function () {
 
 			this.add('start');
 			for (var pos = 0; pos < this.p1.active.length; pos++) {
-				this.switchIn(this.p1.pokemon[pos]
+				this.switchIn(this.p1.pokemon[pos], pos);
+			}
+			for (var pos = 0; pos < this.p2.active.length; pos++) {
+				this.switchIn(this.p2.pokemon[pos], pos);
+			}
+			for (var pos = 0; pos < this.p1.pokemon.length; pos++) {
+				pokemon = this.p1.pokemon[pos];
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			}
+			for (var pos = 0; pos < this.p2.pokemon.length; pos++) {
+				pokemon = this.p2.pokemon[pos];
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			}
+			this.midTurn = true;
+			break;
+		case 'move':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			break;
+		case 'megaEvo':
+			if (this.runMegaEvo) this.runMegaEvo(decision.pokemon);
+			break;
+		case 'beforeTurnMove':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.debug('before turn callback: ' + decision.move.id);
+			decision.move.beforeTurnCallback.call(this, decision.pokemon, this.getTarget(decision));
+			break;
+		case 'event':
+			this.runEvent(decision.event, decision.pokemon);
+			break;
+		case 'team':
+			var i = parseInt(decision.team[0], 10) - 1;
+			if (i >= 6 || i < 0) return;
+
+			if (decision.team[1]) {
+				// validate the choice
+				var len = decision.side.pokemon.length;
+				var newPokemon = [null, null, null, null, null, null].slice(0, len);
+				for (var j = 0; j < len; j++) {
+					var i = parseInt(decision.team[j], 10) - 1;
+					newPokemon[j] = decision.side.pokemon[i];
+				}
+				var reject = false;
+				for (var j = 0; j < len; j++) {
+					if (!newPokemon[j]) reject = true;
+				}
+				if (!reject) {
+					for (var j = 0; j < len; j++) {
+						newPokemon[j].position = j;
+					}
+					decision.side.pokemon = newPokemon;
+					return;
+				}
+			}
+
+			if (i === 0) return;
+			pokemon = decision.side.pokemon[i];
+			if (!pokemon) return;
+			decision.side.pokemon[i] = decision.side.pokemon[0];
+			decision.side.pokemon[0] = pokemon;
+			decision.side.pokemon[i].position = i;
+			decision.side.pokemon[0].position = 0;
+			return;
+			// we return here because the update event would crash since there are no active pokemon yet
+			break;
+		case 'pass':
+			if (!decision.priority || decision.priority <= 101) return;
+			if (decision.pokemon) {
+				decision.pokemon.switchFlag = false;
+			}
+			break;
+		case 'switch':
+			if (decision.pokemon) {
+				decision.pokemon.beingCalledBack = true;
+				var lastMove = this.getMove(decision.pokemon.lastMove);
+				if (lastMove.selfSwitch !== 'copyvolatile') {
+					this.runEvent('BeforeSwitchOut', decision.pokemon);
+				}
+				if (!this.runEvent('SwitchOut', decision.pokemon)) {
+					// Warning: DO NOT interrupt a switch-out
+					// if you just want to trap a pokemon.
+					// To trap a pokemon and prevent it from switching out,
+					// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
+					// instead.
+
+					// Note: Nothing in BW or earlier interrupts
+					// a switch-out.
+					break;
+				}
+			}
+			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				if (this.gen <= 4) {
+					decision.priority = -101;
+					this.addQueue(decision, true);
+					this.debug('Pursuit target fainted');
+					break;
+				}
+				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
+				break;
+			}
+			if (decision.target.isActive) {
+				this.debug('Switch target is already active');
+				break;
+			}
+			this.switchIn(decision.target, decision.pokemon.position);
+			//decision.target.runSwitchIn();
+			break;
+		case 'runSwitch':
+			decision.pokemon.isStarted = true;
+			if (!decision.pokemon.fainted) {
+				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			}
+			break;
+		case 'shift':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.swapPosition(decision.pokemon, 1);
+			break;
+		case 'beforeTurn':
+			this.eachEvent('BeforeTurn');
+			break;
+		case 'residual':
+			this.add('');
+			this.clearActiveMove(true);
+			this.residualEvent('Residual');
+			break;
+		}
+		this.clearActiveMove();
+
+		// phazing (Roar, etc)
+
+		var self = this;
+		function checkForceSwitchFlag(a) {
+			if (!a) return false;
+			if (a.hp && a.forceSwitchFlag) {
+				self.dragIn(a.side, a.position);
+			}
+			delete a.forceSwitchFlag;
+		}
+		this.p1.active.forEach(checkForceSwitchFlag);
+		this.p2.active.forEach(checkForceSwitchFlag);
+
+		// fainting
+
+		this.faintMessages();
+		if (this.ended) return true;
+
+		// switching (fainted pokemon, U-turn, Baton Pass, etc)
+
+		if (!this.queue.length) {
+			this.checkFainted();
+		} else if (decision.choice === 'pass') {
+			this.eachEvent('Update');
+			return false;
+		}
+
+		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
+		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
+		var p1switch = this.p1.active.any(hasSwitchFlag);
+		var p2switch = this.p2.active.any(hasSwitchFlag);
+
+		if (p1switch && !this.canSwitch(this.p1)) {
+			this.p1.active.forEach(removeSwitchFlag);
+			p1switch = false;
+		}
+		if (p2switch && !this.canSwitch(this.p2)) {
+			this.p2.active.forEach(removeSwitchFlag);
+			p2switch = false;
+		}
+
+		if (p1switch || p2switch) {
+			this.makeRequest('switch');
+			return true;
+		}
+
+		this.eachEvent('Update');
+
+		return false;
+	};
+	Battle.prototype.go = function () {
+		this.add('');
+		if (this.currentRequest) {
+			this.currentRequest = '';
+		}
+
+		if (!this.midTurn) {
+			this.queue.push({choice:'residual', priority: -100});
+			this.queue.push({choice:'beforeTurn', priority: 100});
+			this.midTurn = true;
+		}
+		this.addQueue(null);
+
+		var currentPriority = 6;
+
+		while (this.queue.length) {
+			var decision = this.queue.shift();
+
+			/* while (decision.priority < currentPriority && currentPriority > -6) {
+				this.eachEvent('Priority', null, currentPriority);
+				currentPriority--;
+			} */
+
+			this.runDecision(decision);
+
+			if (this.currentRequest) {
+				return;
+			}
+
+			// if (!this.queue.length || this.queue[0].choice === 'runSwitch') {
+			// 	if (this.faintMessages()) return;
+			// }
+
+			if (this.ended) return;
+		}
+
+		this.nextTurn();
+		this.midTurn = false;
+		this.queue = [];
+	};
+	/**
+	 * Changes a pokemon's decision.
+	 *
+	 * The un-modded game should not use this function for anything,
+	 * since it rerolls speed ties (which messes up RNG state).
+	 *
+	 * You probably want the OverrideDecision event (which doesn't
+	 * change priority order).
+	 */
+	Battle.prototype.changeDecision = function (pokemon, decision) {
+		this.cancelDecision(pokemon);
+		if (!decision.pokemon) decision.pokemon = pokemon;
+		this.addQueue(decision);
+	};
+	/**
+	 * Takes a choice string passed from the client. Starts the next
+	 * turn if all required choices have been made.
+	 */
+	Battle.prototype.choose = function (sideid, choice, rqid) {
+		var side = null;
+		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
+		// This condition should be impossible because the sideid comes
+		// from our forked process and if the player id were invalid, we would
+		// not have even got to this function.
+		if (!side) return; // wtf
+
+		// This condition can occur if the client sends a decision at the
+		// wrong time.
+		if (!side.currentRequest) return;
+
+		// Make sure the decision is for the right request.
+		if ((rqid !== undefined) && (parseInt(rqid, 10) !== this.rqid)) {
+			return;
+		}
+
+		// It should be impossible for choice not to be a string. Choice comes
+		// from splitting the string sent by our forked process, not from the
+		// client. However, just in case, we maintain this check for now.
+		if (typeof choice === 'string') choice = choice.split(',');
+
+		side.decision = this.parseChoice(choice, side);
+
+		if (this.p1.decision && this.p2.decision) {
+			this.commitDecisions();
+		}
+	};
+	Battle.prototype.commitDecisions = function () {
+		if (this.p1.decision !== true) {
+			this.addQueue(this.p1.decision, true, this.p1);
+		}
+		if (this.p2.decision !== true) {
+			this.addQueue(this.p2.decision, true, this.p2);
+		}
+
+		this.currentRequest = '';
+		this.p1.currentRequest = '';
+		this.p2.currentRequest = '';
+
+		this.p1.decision = true;
+		this.p2.decision = true;
+
+		this.go();
+	};
+	Battle.prototype.undoChoice = function (sideid) {
+		var side = null;
+		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
+		// The following condition can never occur for the reasons given in
+		// the choose() function above.
+		if (!side) return; // wtf
+		// This condition can occur.
+		if (!side.currentRequest) return;
+
+		if (side.decision && side.decision.finalDecision) {
+			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			return;
+		}
+
+		side.decision = false;
+	};
+	/**
+	 * Parses a choice string passed from a client into a decision object
+	 * usable by PS's engine.
+	 *
+	 * Choice validation is also done here.
+	 */
+	Battle.prototype.parseChoice = function (choices, side) {
+		var prevSwitches = {};
+		if (!side.currentRequest) return true;
+
+		if (typeof choices === 'string') choices = choices.split(',');
+
+		var decisions = [];
+		var len = choices.length;
+		if (side.currentRequest === 'move') len = side.active.length;
+
+		var freeSwitchCount = {'switch':0, 'pass':0};
+		if (side.currentRequest === 'switch') {
+			var canSwitch = side.active.filter(function (mon) {return mon && mon.switchFlag;}).length;
+			freeSwitchCount['switch'] = Math.min(canSwitch, side.pokemon.slice(side.active.length).filter(function (mon) {return !mon.fainted;}).length);
+			freeSwitchCount['pass'] = canSwitch - freeSwitchCount['switch'];
+		}
+		for (var i = 0; i < len; i++) {
+			var choice = (choices[i] || '').trim();
+
+			var data = '';
+			var firstSpaceIndex = choice.indexOf(' ');
+			if (firstSpaceIndex >= 0) {
+				data = choice.substr(firstSpaceIndex + 1).trim();
+				choice = choice.substr(0, firstSpaceIndex).trim();
+			}
+
+			switch (side.currentRequest) {
+			case 'teampreview':
+				if (choice !== 'team' || i > 0) return false;
+				break;
+			case 'move':
+				if (i >= side.active.length) return false;
+				if (!side.pokemon[i] || side.pokemon[i].fainted) {
+					decisions.push({
+						choice: 'pass'
+					});
+					continue;
+				}
+				if (choice !== 'move' && choice !== 'switch' && choice !== 'shift') {
+					if (i === 0) return false;
+					// fallback
+					choice = 'move';
+					data = '1';
+				}
+				break;
+			case 'switch':
+				if (i >= side.active.length) return false;
+				if (!side.active[i] || !side.active[i].switchFlag) {
+					if (choice !== 'pass') choices.splice(i, 0, 'pass');
+					decisions.push({
+						choice: 'pass'
+					});
+					continue;
+				}
+				if (choice !== 'switch' && choice !== 'pass') return false;
+				freeSwitchCount[choice]--;
+				break;
+			default:
+				return false;
+			}
+
+			var decision = null;
+			switch (choice) {
+			case 'team':
+				decisions.push({
+					choice: 'team',
+					side: side,
+					team: data
+				});
+				break;
+
+			case 'switch':
+				if (i > side.active.length || i > side.pokemon.length) continue;
+				if (side.currentRequest === 'move') {
+					if (side.pokemon[i].trapped) {
+						//this.debug("Can't switch: The active pokemon is trapped");
+						side.emitCallback('trapped', i);
+						return false;
+					} else if (side.pokemon[i].maybeTrapped) {
+						var finalDecision = true;
+						for (var j = i + 1; j < side.active.length; ++j) {
+							if (side.active[j] && !side.active[j].fainted) {
+								finalDecision = false;
+							}
+						}
+						decisions.finalDecision = decisions.finalDecision || finalDecision;
+					}
+				}
+
+				data = parseInt(data, 10) - 1;
+				if (data < 0) data = 0;
+				if (data > side.pokemon.length - 1) data = side.pokemon.length - 1;
+
+				if (!side.pokemon[data]) {
+					this.debug("Can't switch: You can't switch to a pokemon that doesn't exist");
+					return false;
+				}
+				if (data === i) {
+					this.debug("Can't switch: You can't switch to yourself");
+					return false;
+				}
+				if (data < side.active.length) {
+					this.debug("Can't switch: You can't switch to an active pokemon");
+					return false;
+				}
+				if (side.pokemon[data].fainted) {
+					this.debug("Can't switch: You can't switch to a fainted pokemon");
+					return false;
+				}
+				if (prevSwitches[data]) {
+					this.debug("Can't switch: You can't switch to pokemon already queued to be switched");
+					return false;
+				}
+				prevSwitches[data] = true;
+
+				decisions.push({
+					choice: 'switch',
+					priority: (side.currentRequest === 'switch' ? 101 : undefined),
+					pokemon: side.pokemon[i],
+					target: side.pokemon[data]
+				});
+				break;
+
+			case 'shift':
+				if (i > side.active.length || i > side.pokemon.length) continue;
+				if (this.gameType !== 'triples') {
+					this.debug("Can't shift: You can't shift a pokemon to the center except in a triple battle");
+					return false;
+				}
+				if (i === 1) {
+					this.debug("Can't shift: You can't shift a pokemon to its own position");
+					return false;
+				}
+
+				decisions.push({
+					choice: 'shift',
+					pokemon: side.pokemon[i]
+				});
+				break;
+
+			case 'move':
+				var targetLoc = 0;
+				var pokemon = side.pokemon[i];
+				var lockedMove = pokemon.getLockedMove();
+				var validMoves = pokemon.getValidMoves(lockedMove);
+				var moveid = '';
+
+				if (data.substr(data.length - 2) === ' 1') targetLoc = 1;
+				if (data.substr(data.length - 2) === ' 2') targetLoc = 2;
+				if (data.substr(data.length - 2) === ' 3') targetLoc = 3;
+				if (data.substr(data.length - 3) === ' -1') targetLoc = -1;
+				if (data.substr(data.length - 3) === ' -2') targetLoc = -2;
+				if (data.substr(data.length - 3) === ' -3') targetLoc = -3;
+
+				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
+
+				if (lockedMove) targetLoc = (this.runEvent('LockMoveTarget', pokemon) || 0);
+
+				if (data.substr(data.length - 5) === ' mega') {
+					if (!lockedMove) {
+						decisions.push({
+							choice: 'megaEvo',
+							pokemon: pokemon
+						});
+					}
+					data = data.substr(0, data.length - 5);
+				}
+
+				if (data.search(/^[0-9]+$/) >= 0) {
+					moveid = validMoves[parseInt(data, 10) - 1];
+				} else {
+					moveid = toId(data);
+					if (moveid.substr(0, 11) === 'hiddenpower') {
+						moveid = 'hiddenpower';
+					}
+					if (validMoves.indexOf(moveid) < 0) {
+						moveid = '';
+					}
+				}
+				if (!moveid) {
+					moveid = validMoves[0];
+				}
+
+				decisions.push({
+					choice: 'move',
+					pokemon: pokemon,
+					targetLoc: targetLoc,
+					move: moveid
+				});
+				break;
+
+			case 'pass':
+				if (i > side.active.length || i > side.pokemon.length) continue;
+				if (side.currentRequest !== 'switch') {
+					this.debug("No se pudo pasar el turno.");
+					return false;
+				}
+				decisions.push({
+					choice: 'pass',
+					priority: 102,
+					pokemon: side.active[i]
+				});
+			}
+		}
+		if (freeSwitchCount['switch'] !== 0 || freeSwitchCount['pass'] !== 0) return false;
+
+		return decisions;
+	};
+	Battle.prototype.add = function () {
+		var parts = Array.prototype.slice.call(arguments);
+		var functions = parts.map(function (part) {
+			return typeof part === 'function';
+		});
+		if (functions.indexOf(true) < 0) {
+			this.log.push('|' + parts.join('|'));
+		} else {
+			this.log.push('|split');
+			var sides = this.sides.concat(null, true);
+			for (var i = 0; i < sides.length; ++i) {
+				var line = '';
+				for (var j = 0; j < parts.length; ++j) {
+					line += '|';
+					if (functions[j]) {
+						line += parts[j](sides[i]);
+					} else {
+						line += parts[j];
+					}
+				}
+				this.log.push(line);
+			}
+		}
+	};
+	Battle.prototype.addMove = function () {
+		this.lastMoveLine = this.log.length;
+		this.log.push('|' + Array.prototype.slice.call(arguments).join('|'));
+	};
+	Battle.prototype.attrLastMove = function () {
+		this.log[this.lastMoveLine] += '|' + Array.prototype.slice.call(arguments).join('|');
+	};
+	Battle.prototype.debug = function (activity) {
+		if (this.getFormat().debug) {
+			this.add('debug', activity);
+		}
+	};
+	Battle.prototype.debugError = function (activity) {
+		this.add('debug', activity);
+	};
+
+	// players
+
+	Battle.prototype.join = function (slot, name, avatar, team) {
+		if (this.p1 && this.p1.isActive && this.p2 && this.p2.isActive) return false;
+		if ((this.p1 && this.p1.isActive && this.p1.name === name) || (this.p2 && this.p2.isActive && this.p2.name === name)) return false;
+		if (this.p1 && this.p1.isActive || slot === 'p2') {
+			if (this.started) {
+				this.p2.name = name;
+			} else {
+				//console.log("NEW SIDE: " + name);
+				this.p2 = new BattleSide(name, this, 1, team);
+				this.sides[1] = this.p2;
+			}
+			if (avatar) this.p2.avatar = avatar;
+			this.p2.isActive = true;
+			this.add('player', 'p2', this.p2.name, avatar);
+		} else {
+			if (this.started) {
+				this.p1.name = name;
+			} else {
+				//console.log("NEW SIDE: " + name);
+				this.p1 = new BattleSide(name, this, 0, team);
+				this.sides[0] = this.p1;
+			}
+			if (avatar) this.p1.avatar = avatar;
+			this.p1.isActive = true;
+			this.add('player', 'p1', this.p1.name, avatar);
+		}
+		this.start();
+		return true;
+	};
+	Battle.prototype.rename = function (slot, name, avatar) {
+		if (slot === 'p1' || slot === 'p2') {
+			var side = this[slot];
+			side.name = name;
+			if (avatar) side.avatar = avatar;
+			this.add('player', slot, name, side.avatar);
+		}
+	};
+	Battle.prototype.leave = function (slot) {
+		if (slot === 'p1' || slot === 'p2') {
+			var side = this[slot];
+			if (!side) {
+				console.log('**** ' + slot + ' tried to leave before it was possible in ' + this.id);
+				require('./crashlogger.js')({stack: '**** ' + slot + ' tried to leave before it was possible in ' + this.id}, 'A simulator process');
+				return;
+			}
+
+			side.emitRequest(null);
+			side.isActive = false;
+			this.add('player', slot);
+			this.active = false;
+		}
+		return true;
+	};
+
+	// IPC
+
+	// Messages sent by this function are received and handled in
+	// Simulator.prototype.receive in simulator.js (in another process).
+	Battle.prototype.send = function (type, data) {
+		if (Array.isArray(data)) data = data.join("\n");
+		battleEngineFakeProcess.client.send(this.id + "\n" + type + "\n" + data);
+	};
+	// This function is called by this process's 'message' event.
+	Battle.prototype.receive = function (data, more) {
+		this.messageLog.push(data.join(' '));
+		var logPos = this.log.length;
+		var alreadyEnded = this.ended;
+		switch (data[1]) {
+		case 'join':
+			var team = null;
+			try {
+				if (more) team = Tools.fastUnpackTeam(more);
+			} catch (e) {
+				console.log('TEAM PARSE ERROR: ' + more);
+				team = null;
+			}
+			this.join(data[2], data[3], data[4], team);
+			break;
+
+		case 'rename':
+			this.rename(data[2], data[3], data[4]);
+			break;
+
+		case 'leave':
+			this.leave(data[2]);
+			break;
+
+		case 'chat':
+			this.add('chat', data[2], more);
+			break;
+
+		case 'win':
+		case 'tie':
+			this.win(data[2]);
+			break;
+
+		case 'choose':
+			this.choose(data[2], data[3], data[4]);
+			break;
+
+		case 'undo':
+			this.undoChoice(data[2]);
+			break;
+
+		case 'eval':
+			var battle = this;
+			var p1 = this.p1;
+			var p2 = this.p2;
+			var p1active = p1 ? p1.active[0] : null;
+			var p2active = p2 ? p2.active[0] : null;
+			data[2] = data[2].replace(/\f/g, '\n');
+			this.add('', '>>> ' + data[2]);
+			try {
+				this.add('', '<<< ' + eval(data[2]));
+			} catch (e) {
+				this.add('', '<<< error: ' + e.message);
+			}
+			break;
+		}
+
+		this.sendUpdates(logPos, alreadyEnded);
+	};
+	Battle.prototype.sendUpdates = function (logPos, alreadyEnded) {
+		if (this.p1 && this.p2) {
+			var inactiveSide = -1;
+			if (!this.p1.isActive && this.p2.isActive) {
+				inactiveSide = 0;
+			} else if (this.p1.isActive && !this.p2.isActive) {
+				inactiveSide = 1;
+			} else if (!this.p1.decision && this.p2.decision) {
+				inactiveSide = 0;
+			} else if (this.p1.decision && !this.p2.decision) {
+				inactiveSide = 1;
+			}
+			if (inactiveSide !== this.inactiveSide) {
+				this.send('inactiveside', inactiveSide);
+				this.inactiveSide = inactiveSide;
+			}
+		}
+
+		if (this.log.length > logPos) {
+			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
+				if (this.rated) {
+					var log = {
+						turns: this.turn,
+						p1: this.p1.name,
+						p2: this.p2.name,
+						p1team: this.p1.team,
+						p2team: this.p2.team,
+						log: this.log
+					};
+					this.send('log', JSON.stringify(log));
+				}
+				this.send('score', [this.p1.pokemonLeft, this.p2.pokemonLeft]);
+				this.send('winupdate', [this.winner].concat(this.log.slice(logPos)));
+			} else {
+				this.send('update', this.log.slice(logPos));
+			}
+		}
+	};
+
+	Battle.prototype.destroy = function () {
+		// deallocate ourself
+
+		// deallocate children and get rid of references to them
+		for (var i = 0; i < this.sides.length; i++) {
+			if (this.sides[i]) this.sides[i].destroy();
+			this.sides[i] = null;
+		}
+		this.p1 = null;
+		this.p2 = null;
+		for (var i = 0; i < this.queue.length; i++) {
+			delete this.queue[i].pokemon;
+			delete this.queue[i].side;
+			this.queue[i] = null;
+		}
+		this.queue = null;
+
+		// in case the garbage collector really sucks, at least deallocate the log
+		this.log = null;
+
+		// remove from battle list
+		Battles[this.id] = null;
+	};
+	return Battle;
+})();
+
+exports.BattlePokemon = BattlePokemon;
+exports.BattleSide = BattleSide;
+exports.Battle = Battle;
