@@ -898,9 +898,9 @@ var components = exports.components = {
     	
     	    return this.sendReply('|raw|<font color="green">Casino files and dice have been reloaded.</font>');
     	} catch (e) {
-    	    return this.sendReply('|raw|<font color="green">Something failed while trying to reload Casimo files:</font> \n' + e.stack);
+    	    return this.sendReply('|raw|<font color="red">Something failed while trying to reload Casimo files:</font> \n' + e.stack);
     	}
-    	},
+    },
 
     db: 'database',
     database: function (target, room, user) {
