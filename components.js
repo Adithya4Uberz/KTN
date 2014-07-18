@@ -868,10 +868,6 @@ var components = exports.components = {
             this.sendReply('Reloading Trainer Cards...');
             CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
             trainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
-            
-            this.sendReply('Reloading Casino...');
-            CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
-            dice = require(path.join(__dirname, './', 'casino.js'));
 
             this.sendReply('Reloading Core...');
             CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
@@ -889,6 +885,21 @@ var components = exports.components = {
         } catch (e) {
             return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
         }
+    },
+    
+    creload: function (target, room, user) {
+    	if (this.can('creload')) return;
+    	
+    	try {
+    	this.sendReply('Reloading Casino...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
+            dice = require(path.join(__dirname, './', 'casino.js'));
+    	
+    	    return this.sendReply('|raw|<font color="green">Casino files and dice have been reloaded.</font>');
+    	} catch (e) {
+    	    return this.sendReply('|raw|<font color="green">Something failed while trying to reload Casimo files:</font> \n' + e.stack);
+    	}
+    	}
     },
 
     db: 'database',
