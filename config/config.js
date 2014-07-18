@@ -232,13 +232,11 @@ exports.groups = {
 		'~': {
 			id: 'admin',
 			name: "Administrator",
-			description: "They can do anything, like change what this message says",
 			root: true
 		},
 		'&': {
 			id: 'leader',
 			name: "Leader",
-			description: "They can promote to moderator and force ties",
 			inherit: '@',
 			jurisdiction: '@u',
 			banword: true,
@@ -250,26 +248,26 @@ exports.groups = {
 			promote: 'u',
 			takemoney: true,
 			givemoney: true,
+			tournamentsmoderation: true,
+			tournaments: true,
 			rangeban: true
 		},
 		'#': {
 			id: 'owner',
 			name: "Room Owner",
-			description: "They are administrators of the room and can almost totally control it",
 			inherit: '@',
 			jurisdiction: 'u',
 			declare: true,
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
-			tournaments: true,
 			tournamentsmoderation: true,
+			tournaments: true,
 			roompromote: 'u'
 		},
 		'\u2605': {
 			id: 'player',
 			name: "Player",
-			description: "Only in battles, they are the players that are battling",
 			inherit: '+',
 			modchat: true,
 			privateroom: true,
@@ -278,7 +276,6 @@ exports.groups = {
 		'@': {
 			id: 'mod',
 			name: "Moderator",
-			description: "They can ban users and set modchat",
 			inherit: '%',
 			jurisdiction: 'u',
 			alts: '@u',
@@ -286,12 +283,13 @@ exports.groups = {
 			forcerename: true,
 			ip: true,
 			modchat: true,
+			tournamentsmoderation: true,
+			tournaments: true,
 			roompromote: '+ '
 		},
 		'%': {
 			id: 'driver',
 			name: "Driver",
-			description: "They can mute. Global % can also lock and check users for alts",
 			inherit: '+',
 			jurisdiction: 'u',
 			alts: '%u',
@@ -305,6 +303,8 @@ exports.groups = {
 			staff: true,
 			timer: true,
 			scavengers: true,
+			tournamentsmoderation: true,
+			tournaments: true,
 			warn: true
 		},
 		'±': {
@@ -315,17 +315,17 @@ exports.groups = {
 			alts: '±u',
 			announce: true,
 			opmute: true,
-			unmute: true,
 			warn: true,
-			tournamentsmoderation: true
+			tournamentsmoderation: true,
+			tournaments: true
 		},
 		'+': {
 			id: 'voice',
 			name: "Voice",
-			description: "They can use ! commands like !groups, and talk during moderated chat",
 			inherit: ' ',
 			broadcast: true,
 			joinbattle: true,
+			tournamentsmoderation: true,
 			tournaments: true
 		},
 		' ': {
