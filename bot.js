@@ -87,7 +87,7 @@ function joinServer() {
 }
 
 const ACTION_COOLDOWN = 3 * 1000;
-const FLOOD_MESSAGE_NUM = 5;
+const FLOOD_MESSAGE_NUM = 7;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6 * 1000;
 const MIN_CAPS_LENGTH = 18;
@@ -216,8 +216,8 @@ var parse = {
 
         if ((message.charAt(0) === '.' && Object.keys(Bot.commands).join(' ').toString().indexOf(cmd) >= 0 && message.substr(1) !== '') && !Bot.config.debug) {
 
-            if ((now - user.lastBotCmd) * 0.001 < 30) {
-                connection.sendTo(room, 'Please wait ' + Math.floor((30 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
+            if ((now - user.lastBotCmd) * 0.001 < 5) {
+                connection.sendTo(room, 'Please wait ' + Math.floor((5 - (now - user.lastBotCmd) * 0.001)) + ' seconds until the next command.');
                 return true;
             }
 
