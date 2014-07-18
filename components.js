@@ -384,7 +384,7 @@ user.updateIdentity();
         if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
         if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-        tells[toId(this.targetUsername)].push(Date().toLocaleString() + "|raw| <b>- " + user.getIdentity() + " said:</b> " + message);
+        tells[toId(this.targetUsername)].push(Date().toLocaleString() + "- " + user.getIdentity() + " said: " + message);
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
@@ -875,6 +875,7 @@ user.updateIdentity();
         if (parts[1].trim().toLowerCase() === 'pm') {
             return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
         }
+        this.sendReply('User \'' + Users.get(part[0].trim()).name + ' successfully PMed ' + Users.get(parts[2]).trim()).name + ' "' + parts[3].trim() + '".');
     },
 
     clearall: function (target, room, user) {
