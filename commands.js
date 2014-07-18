@@ -151,7 +151,7 @@ var commands = exports.commands = {
 	},
 
 	makechatroom: function (target, room, user) {
-		if (!this.can('declare')) return;
+		if (!this.can('promote')) return;
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
@@ -162,7 +162,7 @@ var commands = exports.commands = {
 	},
 
 	deregisterchatroom: function (target, room, user) {
-		if (!this.can('declare')) return;
+		if (!this.can('promote')) return;
 		var id = toId(target);
 		if (!id) return this.parse('/help deregisterchatroom');
 		var targetRoom = Rooms.get(id);
@@ -175,6 +175,14 @@ var commands = exports.commands = {
 		}
 		return this.sendReply("The room '" + target + "' isn't registered.");
 	},
+	
+	/*renamechatroom: function (target, room, user) {
+		if (!this.can('promote')) return;
+		var parts = target.split(',');
+
+		if (parts.length < 2) return this.parse("/help renamechatroom");
+		// INCOMPLETE
+	},*/
 	
 	leagueroom: function (target, room, user) {
 		if (!this.can('promote')) return;
