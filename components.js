@@ -899,8 +899,7 @@ var components = exports.components = {
     	} catch (e) {
     	    return this.sendReply('|raw|<font color="green">Something failed while trying to reload Casimo files:</font> \n' + e.stack);
     	}
-    	}
-    },
+    	},
 
     db: 'database',
     database: function (target, room, user) {
