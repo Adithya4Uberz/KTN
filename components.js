@@ -27,10 +27,8 @@ var components = exports.components = {
         user.updateIdentity();
         this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
-
-    earnbuck: 'earnmoney',
-    earnbucks: 'earnmoney',
-    earnmoney: function (target, room, user) {
+        
+        earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
                  '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
