@@ -23,21 +23,21 @@ var components = exports.components = {
     back: function (target, room, user, connection, cmd) {
         if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
         user.away = !user.away;
-        if (user.isStaff) {
-        	if (cmd === 'away') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
-        }
-        else {
-        	if (cmd === 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now back.');
-        }
+        if (!user.away && cmd.toLowerCase() === 'away') return this.sendReply('You are already set as away.');
+        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
         user.updateIdentity();
-        // this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
 
     earnbuck: 'earnmoney',
     earnbucks: 'earnmoney',
     earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('Sorry! There are no current ways to earn bucks. We will quickly add all possible ways later, just please be patient for this one time!');
+        this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
+                 '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
+                 '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a>, <a href="https://github.com/CreaturePhil/"><b>CreaturePhil</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
+                 '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
+                 '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
+                 '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>');
     },
 
     staff: 'stafflist',
