@@ -286,8 +286,7 @@ exports.groups = {
 			forcerename: true,
 			ip: true,
 			modchat: true,
-			roompromote: '+ ',
-			scavengers: true
+			roompromote: '+ '
 		},
 		'%': {
 			id: 'driver',
@@ -305,6 +304,7 @@ exports.groups = {
 			redirect: true,
 			staff: true,
 			timer: true,
+			scavengers: true,
 			warn: true
 		},
 		'±': {
