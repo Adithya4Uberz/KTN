@@ -497,6 +497,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "C&E",
+		section: "Other Metagames",
+		
+		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod']
+	},
+	{
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
