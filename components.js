@@ -22,12 +22,12 @@ var components = exports.components = {
     away: 'back',
     back: function (target, room, user, connection, cmd) {
         if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
-        if (!user.away && cmd.toLowerCase() === 'away') return this.parse('/nick ' + user.name + ' - Ⓐⓦⓐⓨ'); 
         user.away = !user.away;
         if (!user.away && cmd.toLowerCase() === 'away') return this.sendReply('You are already set as away.');
-        if (!user.away && cmd.toLowerCase() === 'back') return this.parse('/nick ' + user.name);
-        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
+        user.getIdentity = function () {
+        var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
         user.updateIdentity();
+        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
     },
 
     earnbuck: 'earnmoney',
@@ -193,7 +193,6 @@ var components = exports.components = {
         user.lastAbout = now;
 
         target = Tools.escapeHTML(target);
-        target = target.replace(/[^A-Za-z\d ]+/g, '');
 
         var data = Core.stdin('about', user.userid);
         if (data === target) return this.sendReply('This about is the same as your current one.');
@@ -240,7 +239,7 @@ var components = exports.components = {
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
                     for (var u in Users.users) {
-                        if (Users.get(u).group === '~') Users.get(u).send('|pm|' + user.group + user.name + '|' + Users.get(u).group + Users.get(u).name + '|' + 'I have bought ' + target + ' from the shop.');
+                        if (Users.get(u).group === '~') Users.get(u).send('|pm|~Shop|' + Users.get(u).group + Users.get(u).name + '|' + user.name ' has bought ' + target + ' from the shop.');
                     }
                 }
                 room.add(user.name + ' has bought ' + target + ' from the shop.');
@@ -300,13 +299,14 @@ var components = exports.components = {
         if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
         if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-        tells[toId(this.targetUsername)].push(Date().toLocaleString() + " <b>- " + user.getIdentity() + " said:</b> " + message);
+        tells[toId(this.targetUsername)].push(Date().toLocaleString() + "|raw| <b>- " + user.getIdentity() + " said:</b> " + message);
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
     viewtells: 'showtells',
-    showtells: function (target, room, user){
-        return this.sendReply("<b>These users have currently have queued tells:</b> " + Object.keys(tells));
+    showtells: function (target, room, user) {
+    	if (!tells) return this.sendReply('You currently have no queued tells.');
+        return this.sendReply("|raw|<b>These users have currently have queued tells:</b> " + Object.keys(tells));
     },
 
     vote: function (target, room, user) {
