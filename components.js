@@ -875,7 +875,7 @@ user.updateIdentity();
         if (parts[1].trim().toLowerCase() === 'pm') {
             return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
         }
-        this.sendReply('User \'' + Users.get(part[0].trim()).name + ' successfully PMed ' + Users.get(parts[2]).trim()).name + ' "' + parts[3].trim() + '".');
+        this.sendReply('User \'' + Users.get(part[0].trim()).name + ' successfully PMed ' + Users.get(parts[2].trim()).name + ' "' + parts[3].trim() + '".');
     },
 
     clearall: function (target, room, user) {
