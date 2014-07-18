@@ -235,7 +235,7 @@ var components = exports.components = {
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
                     for (var u in Users.users) {
-                        if (Users.get(u).group === '~') Users.get(u).send('|pm|~Shop|' + Users.get(u).group + Users.get(u).name + '|' + user.name ' has bought ' + target + ' from the shop.');
+                        if (Users.get(u).group === '~') Users.get(u).send('|pm|~Shop|' + Users.get(u).group + Users.get(u).name + '|' + user.name + ' has bought ' + target + ' from the shop.');
                     }
                 }
                 room.add(user.name + ' has bought ' + target + ' from the shop.');
