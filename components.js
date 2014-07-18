@@ -297,7 +297,7 @@ var components = exports.components = {
         if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
         if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-        "<b>"tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said:</b> " + message);
+        tells[toId(this.targetUsername)].push(Date().toLocaleString() + " <b>- " + user.getIdentity() + " said:</b> " + message);
         return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
     },
 
@@ -869,7 +869,7 @@ var components = exports.components = {
             CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
             trainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
             
-            this.sendReply('Reloading casino...');
+            this.sendReply('Reloading Casino...');
             CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
             dice = require(path.join(__dirname, './', 'casino.js'));
 
