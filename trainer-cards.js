@@ -47,7 +47,7 @@ var trainerCards = {
 	sss: 'isawa',
 	kurushi: 'isawa',
 	piers: 'isawa',
-	isawa: function(target, room, user) {
+	isawa: function(target, room, user) { 
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/hwqR2b8.jpg" width="160" height="140">' +
 			'<img src="http://i.imgur.com/qZvvpNG.png?1" width="220">' +
@@ -59,7 +59,7 @@ var trainerCards = {
 	kafka: 'kafkablack',
 	kafkablack: function(target, room, user) {
 		if (!this.canBroadcast()) return false;
-		return this.sendReplyBox('<center><img src="http://i.imgur.com/bvCvPmd.gif"><br />' +
+		return this.sendReplyBox('<center><img src="http://i.imgur.com/bvCvPmd.gif" width="200" height="166"><br />' +
 			'<font size="3"><b><i><font color="CCCC33">Kafka</i><br></font><b><br />' +
 			'<blink>Ace: Shimmy</blink></b><br />' +
 			'<b>Stop, oh, and wiggle with it. YEAHHH!</b></center>');
@@ -162,7 +162,7 @@ var trainerCards = {
 	recep: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/48CvnKv.gif" height="80" width="440"></center><br />' +
-			'<center><center><img src="http://gifstumblr.com/images/the-party-doesnt-start-till-i-walk-in_1087.gif" height="264" width="486"></center><br />' +
+			'<center><center><img src="http://gifstumblr.com/images/the-party-doesnt-start-till-i-walk-in_1087.gif" width="243" height="132"></center><br />' +
 			'<center><b>Ace:</b> Patrick</center><br />' +
 			'<center><b>Catchphrase:</b> KafkaBlack has been kicked from room by Receptionist147.</center>');
 	},
