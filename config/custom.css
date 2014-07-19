@@ -301,7 +301,7 @@ cursor: pointer;
 content: url('http://i.imgur.com/97flsJB.png?1?7655');
 }
 .tournament-bracket-tree-node>rect {
-fill: rgba(96, 242, 248, 1);
+fill: rgba(160, 194, 241, 0.7)!important;
 stroke: rgba(178,183,191,0.7);
 }
 .tournament-bracket {
