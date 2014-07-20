@@ -107,7 +107,7 @@ var core = exports.core = {
             return '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + Config.groups.bySymbol[user.group].name;
         },
         
-        badges: function (online, user) {
+        /*badges: function (online, user) {
             var badges = '<br>&nbsp;<strong><font color="' + this.color + '">Badges:</font></strong>&nbsp;' + profile.readBadges(targetUser);
             
             if (online === true) {
@@ -117,7 +117,7 @@ var core = exports.core = {
             }
         },
         
-        /*readBadges: function (user) {
+        readBadges: function (user) {
 			var badges = '';
 			var key = '';
 			var match = false;
@@ -140,15 +140,15 @@ var core = exports.core = {
 	                	if (key.indexOf('3') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is the Server Host">'; 
 	                	}
-	                	/*if (key.indexOf('4') >= 0) {
+	                	if (key.indexOf('4') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Recruiter">';
-	                	}*/
+	                	}
 	                	if (key.indexOf('5') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
 	                	}
-	                	/*if (key.indexOf('6') >= 0) {
+	                	if (key.indexOf('6') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Frequenter">';
-	                	}*/
+	                	}
 	                	match = true;
 						if (match === true) {
 							break;
