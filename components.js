@@ -292,7 +292,7 @@ user.updateIdentity();
         this.sendReply('Your about is now: "' + target + '"');
     },
     
-    setbadges: 'badge',
+    /*setbadges: 'badge',
     setbadge: 'badge',
     badge: function (target, room, user) {
 		if (!target) return this.sendReply('It is recommended to set badges to their Alumnus rather than no badges at all.');
@@ -355,7 +355,7 @@ user.updateIdentity();
 	            
 	            this.sendReply(targetUser.name + '\'s badgeset is now: ' badges);
 		},
-	},
+	},*/
 
     tourladder: 'tournamentladder',
     tournamentladder: function (target, room, user) {
