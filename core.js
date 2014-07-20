@@ -107,58 +107,9 @@ var core = exports.core = {
             return '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + Config.groups.bySymbol[user.group].name;
         },
         
-        /*badges: function (online, user) {
-            var badges = '<br>&nbsp;<strong><font color="' + this.color + '">Badges:</font></strong>&nbsp;' + profile.readBadges(targetUser);
-            
-            if (online === true) {
-                if (badges === '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;') {
-                    badges = '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + 'None';
-                }
-            }
+        badges: function (online, user) {
+            return Core.stdin('badge', user);
         },
-        
-        readBadges: function (user) {
-			var badges = '';
-			var key = '';
-			var match = false;
-
-	    	var data = fs.readFileSync('config/badges.csv','utf8');
-
-	        var row = (''+data).split("\n");
-	        for (var i = row.length; i > -1; i--) {
-	                if (!row[i]) continue;
-	                var parts = row[i].split(",");
-	                var userid = toUserid(parts[0]);
-	                if (targetUser.userid == userid) {
-	                	key = String(parts[1]);
-	                	if (key.indexOf('1') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
-	                	}
-	                	if (key.indexOf('2') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
-	                	}
-	                	if (key.indexOf('3') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is the Server Host">'; 
-	                	}
-	                	if (key.indexOf('4') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Recruiter">';
-	                	}
-	                	if (key.indexOf('5') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
-	                	}
-	                	if (key.indexOf('6') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Frequenter">';
-	                	}
-	                	match = true;
-						if (match === true) {
-							break;
-						}
-					}
-				}
-	            user.badges = badges;
-	            return user.badges;
-		},
-	},*/
 
         lastSeen: function (online, user) {
             var lastSeen;
