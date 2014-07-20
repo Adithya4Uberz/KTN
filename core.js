@@ -117,7 +117,7 @@ var core = exports.core = {
             }
         },
         
-        readBadges: function (user) {
+        /*readBadges: function (user) {
 			var badges = '';
 			var key = '';
 			var match = false;
@@ -157,8 +157,8 @@ var core = exports.core = {
 				}
 	            user.badges = badges;
 	            return user.badges;
-		    },
-	    },
+		},
+	},*/
 
         lastSeen: function (online, user) {
             var lastSeen;
