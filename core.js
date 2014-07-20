@@ -108,7 +108,9 @@ var core = exports.core = {
         },
         
         badges: function (online, user) {
-            return Core.stdin('badge', user);
+            if (online === true) {
+                return 'br>&nbsp;<strong><font color="' + this.color + '">Badges:</font></strong><&nbsp;' + 'None';
+            }
         },
 
         lastSeen: function (online, user) {
