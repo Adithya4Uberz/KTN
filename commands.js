@@ -1382,19 +1382,45 @@ var commands = exports.commands = {
 		this.sendReply("Your hot-patch command was unrecognized.");
 	},
 	
-	reloadcomp: function (target, room, user) {
-		if (!this.can('reloadcomp')) return;
-		
-		try {
-			this.sendReply('Reloading Components...');
-			CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
-			Components = require(path.join(__dirname, './', './components.js'));
-			
-			return this.sendReply("|raw|<font color=green>Component files have been reloaded.</font>");
-		} catch (e) {
-			return this.sendReply("|raw|<font color=red>Something failed while trying to reload files: \n" + e.stack);
-		}
-	},
+	reloadtwo: function (target, room, user) {
+        if (!this.can('reload')) return;
+
+        try {
+            this.sendReply('Reloading CommandParser...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'command-parser.js'));
+            CommandParser = require(path.join(__dirname, './', 'command-parser.js'));
+
+            this.sendReply('Reloading Bot...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'bot.js'));
+            Bot = require(path.join(__dirname, './', 'bot.js'));
+
+            this.sendReply('Reloading Tournaments...');
+            var runningTournaments = Tournaments.tournaments;
+            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/middleend.js'));
+            Tournaments = require(path.join(__dirname, './', './tournaments/middleend.js'));
+            Tournaments.tournaments = runningTournaments;
+            
+            this.sendReply('Reloading Trainer Cards...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
+            trainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
+
+            this.sendReply('Reloading Core...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            Core = require(path.join(__dirname, './', './core.js')).core;
+
+            this.sendReply('Reloading Components...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
+            Components = require(path.join(__dirname, './', './components.js'));
+
+            this.sendReply('Reloading SysopAccess...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            SysopAccess = require(path.join(__dirname, './', './core.js'));
+
+            return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
+        } catch (e) {
+            return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
+        }
+    },
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
