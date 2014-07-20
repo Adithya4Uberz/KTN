@@ -175,6 +175,9 @@ overflow: auto;
 }
 .pm-window h3 {
 background: rgba(182, 161, 111, 0.8);
+background-image: url("http://i.imgur.com/EwZG2Ou.png?1?9538");
+background-repeat: no-repeat;
+background-position: 85% 0%;
 color: #FFFFFF;
 margin: 0;
 padding: 2px 5px;
@@ -261,16 +264,25 @@ color: black;
 }
 .pm-window.focused h3:hover {
         background: #59d7ea;
+        background-image: url("http://i.imgur.com/abKmAfk.png?1?3333");
+background-repeat: no-repeat;
+background-position: 88% 0%;
         color: #FFFFFF;
         cursor: default;
 }
 .pm-window.focused h3 {
         background: #59d7ea;
+        background-image: url("http://i.imgur.com/1bkSU0e.png?1?9685");
+background-repeat: no-repeat;
+background-position: 88% 0%;
         color: #FFFFFF;
         cursor: default;
 }
  .pm-window h3:hover {
         background: #59d7ea;
+        background-image: url("http://i.imgur.com/abKmAfk.png?1?3333");
+background-repeat: no-repeat;
+background-position: 88% 0%;
         color: #FFFFFF;
         cursor: default;
  }
