@@ -24,6 +24,7 @@ var components = exports.components = {
        gaming: 'away',
        sleep: 'away',
        work: 'away',
+       coding: 'away',
        working: 'away',
        sleeping: 'away',
        busy: 'away',
@@ -56,6 +57,10 @@ break;
 case 'work':
 t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
 t2 = 'Working';
+break;
+case 'coding':
+t = 'Ⓒⓞⓓⓘⓝⓖ';
+t2 = 'Coding';
 break;
 case 'eating':
 t = 'Ⓔⓐⓣⓘⓝⓖ';
@@ -950,8 +955,8 @@ user.updateIdentity();
 
             this.sendReply('Reloading Tournaments...');
             var runningTournaments = Tournaments.tournaments;
-            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/middleend.js'));
-            Tournaments = require(path.join(__dirname, './', './tournaments/middleend.js'));
+            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments'));
+            Tournaments = require(path.join(__dirname, './', './tournaments'));
             Tournaments.tournaments = runningTournaments;
             
             this.sendReply('Reloading Trainer Cards...');
