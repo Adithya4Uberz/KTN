@@ -291,6 +291,56 @@ user.updateIdentity();
 
         this.sendReply('Your about is now: "' + target + '"');
     },
+    
+    setbadges: 'badge',
+    setbadge: 'badge',
+    badge: function (target, room, user) {
+		if (!target) return this.sendReply('It is recommended to set badges to their Alumnus rather than no badges at all.');
+		
+		var badges = '';
+		var key = '';
+		var match = false;
+
+	    	var data = fs.readFileSync('config/badges.csv','utf8');
+
+	        var row = (''+data).split("\n");
+	        for (var i = row.length; i > -1; i--) {
+	                if (!row[i]) continue;
+	                var parts = row[i].split(",");
+	                var userid = toUserid(parts[0]);
+	                if (targetUser.userid == userid) {
+	                	key = String(parts[1]);
+	                	if (key.indexOf('1') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Contributor">';
+	                	}
+	                	if (key.indexOf('2') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
+	                	}
+	                	if (key.indexOf('3') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/z3W1EAh.png" title ="is a Moderator">';
+	                	}
+	                	if (key.indexOf('4') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
+	                	}
+	                	if (key.indexOf('5') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
+	                	}
+	                	if (key.indexOf('6') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is the Server Host">'; 
+	                	}
+	                	if (key.indexOf('7') >= 0) {
+	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
+	                	}
+	                	match = true;
+						if (match === true) {
+							break;
+						}
+					}
+				}
+	            targetUser.badges = badges;
+	            return targetUser.badges;
+		},
+	},
 
     tourladder: 'tournamentladder',
     tournamentladder: function (target, room, user) {
