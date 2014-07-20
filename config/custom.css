@@ -688,3 +688,6 @@ border: 1px solid #89A;
 color: #246;
 text-decoration: none;
 }
+.userlist li button:hover{
+      background: url(http://i.imgur.com/ldpBTQy.png)
+}
