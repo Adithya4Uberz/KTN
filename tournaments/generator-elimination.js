@@ -431,6 +431,10 @@ var Elimination = (function () {
 			}
 		}
 	};
+	
+	Elimination.prototype.isTournamentEnded = function () {
+		return this.tree.tree.getValue().state === 'finished';
+	};
 
 	Elimination.prototype.getResults = function () {
 		if (!this.isTournamentEnded())
