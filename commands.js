@@ -1382,7 +1382,7 @@ var commands = exports.commands = {
 		this.sendReply("Your hot-patch command was unrecognized.");
 	},
 	
-	reloadtwo: function (target, room, user) {
+	update: function (target, room, user) {
         if (!this.can('reload')) return;
 
         try {
@@ -1396,8 +1396,8 @@ var commands = exports.commands = {
 
             this.sendReply('Reloading Tournaments...');
             var runningTournaments = Tournaments.tournaments;
-            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/middleend.js'));
-            Tournaments = require(path.join(__dirname, './', './tournaments/middleend.js'));
+            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments'));
+            Tournaments = require(path.join(__dirname, './', './tournaments'));
             Tournaments.tournaments = runningTournaments;
             
             this.sendReply('Reloading Trainer Cards...');
