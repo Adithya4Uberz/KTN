@@ -297,11 +297,24 @@ user.updateIdentity();
     badge: function (target, room, user) {
 		if (!target) return this.sendReply('It is recommended to set badges to their Alumnus rather than no badges at all.');
 		
+		var now = Date.now();
+		
+		if ((now - user.lastBadge) * 0.001 < 30) {
+			this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
+			(30 - (now - user.lastAbout) * 0.001)) + ' seconds</strong>');
+			return;
+		}
+
+		user.lastBadge = now;
+		
 		var badges = '';
 		var key = '';
 		var match = false;
 
-	    	var data = fs.readFileSync('config/badges.csv','utf8');
+	    	var data = Core.stdin('badge', user.userid);
+	    	if (data === target) return this.sendReply('This badgeset is the same as ' + targetUser.name + '\'s current one.');
+	    	
+	    	Core.stdout('badge', user.userid, target);
 
 	        var row = (''+data).split("\n");
 	        for (var i = row.length; i > -1; i--) {
@@ -339,6 +352,8 @@ user.updateIdentity();
 				}
 	            targetUser.badges = badges;
 	            return targetUser.badges;
+	            
+	            this.sendReply(targetUser.name + '\'s badgeset is now: ' badges);
 		},
 	},
 
