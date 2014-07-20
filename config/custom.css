@@ -668,3 +668,11 @@ margin: 0 5px 1px 5px;
 background: rgba(255, 255, 255, .8);
 cursor: pointer;
 }
+.roomlist a.ilink:hover {
+background-image: url("http://i.imgur.com/Xao6VDq.png?1?1767");
+background-position: center;
+background-repeat: no-repeat;
+border: 1px solid #89A;
+color: #246;
+text-decoration: none;
+}
