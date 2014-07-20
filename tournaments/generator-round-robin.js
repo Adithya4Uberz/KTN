@@ -194,6 +194,10 @@ var RoundRobin = (function () {
 		this.userScores[userIndexB] += virtualScore[1];
 		--this.pendingMatches;
 	};
+	
+	RoundRobin.prototype.isTournamentEnded = function () {
+		return this.isBracketFrozen && this.pendingMatches === 0;
+	}
 
 	RoundRobin.prototype.getResults = function () {
 		if (!this.isTournamentEnded())
