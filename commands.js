@@ -1464,8 +1464,35 @@ var commands = exports.commands = {
 		}
 
 		this.logEntry(user.name + " used /lockdown");
-
 	},
+	
+	battlestop: function (target, room, user) {
+		if (!this.can('battlestop')) return false;
+		
+		Rooms.global.battlestop = true;
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server has entered battlestop mode</b><br />Carry on with your current battle(s), but kindly do not start any more as the coders are updating the battle codes.</div>");
+			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
+				Rooms.rooms[id].requestKickInactive(user, true);
+			}
+		}
+
+		this.logEntry(user.name + " used /battlestop");
+	},
+	
+	endbattlestop: function (target, room, user) {
+		if (!this.can('battlestop')) return false;
+		
+		if (!Rooms.global.battlestop) {
+			return this.sendReply("We're not under battlestop right now.");
+		}
+		Rooms.global.battlestop = false;
+		for (var id in Rooms.rooms) {
+			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server battlestop mode is now lifted.</b><br />You may now start new battles in the server.</b></div>");
+		}
+
+		this.logEntry(user.name + " used /endbattlestop");
+	}
 
 	endlockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1479,7 +1506,6 @@ var commands = exports.commands = {
 		}
 
 		this.logEntry(user.name + " used /endlockdown");
-
 	},
 
 	emergency: function (target, room, user) {
