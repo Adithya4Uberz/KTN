@@ -292,6 +292,11 @@ user.updateIdentity();
         this.sendReply('Your about is now: "' + target + '"');
     },
     
+    richestuser: function (target, room, user) {
+    	if (!targetUser) {
+    		return this.sendReplyBox('The richest user is currently <b><font color="' + this.color + '">Piscean</font></b> with <b><font color="' + this.color + '">20</font></b> bucks.');
+    },
+    
     /*setbadges: 'badge',
     setbadge: 'badge',
     badge: function (target, room, user) {
