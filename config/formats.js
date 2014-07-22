@@ -182,7 +182,7 @@ exports.Formats = [
 	{
 		name: "Random Monotype",
 		section: "Monotype",
-		column: 2,
+		// column: 2,
 
 		team: 'randommonotype',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
@@ -190,6 +190,7 @@ exports.Formats = [
 	{
 		name: "OU Monotype",
 		section: "Monotype",
+
 		ruleset: ['OU', 'Same Type Clause'],
 		banlist: ['Talonflame']
 	},
@@ -528,13 +529,6 @@ exports.Formats = [
 		validateTeam: function (team, format) {
 			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
 		}
-	},
-	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['OU', 'Same Type Clause'],
-		banlist: ['Talonflame']
 	},
 	{
 		name: "Tier Shift",
