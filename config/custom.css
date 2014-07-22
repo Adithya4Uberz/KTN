@@ -220,8 +220,6 @@ background: #DDCFA9;
 .turn {
 position: absolute;
 display: none;
-top: 10px;
-left: 480px!important;
 font-size: 13pt;
 font-weight: bold;
 margin: 0;
