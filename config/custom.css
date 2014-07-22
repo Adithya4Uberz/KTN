@@ -215,7 +215,7 @@ background: #DDCFA9;
 }
 .backdrop {
 	background-image: url("http://i.imgur.com/8aLi0ry.png?1?3475") !important;
-  top: 0px
+  top: 0px!important;
 }
 .turn {
 position: absolute;
