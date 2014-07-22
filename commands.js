@@ -1471,7 +1471,7 @@ var commands = exports.commands = {
 		
 		Rooms.global.battlestop = true;
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server has entered battlestop mode</b><br />Carry on with your current battle(s), but kindly do not start any more as the coders are updating the battle codes.</div>");
+			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server has entered battlestop mode.</b><br />Carry on with your current battle(s), but kindly do not start any more as the coders are updating the battle codes.</div>");
 			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
 				Rooms.rooms[id].requestKickInactive(user, true);
 			}
