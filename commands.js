@@ -1492,7 +1492,7 @@ var commands = exports.commands = {
 		}
 
 		this.logEntry(user.name + " used /endbattlestop");
-	}
+	},
 
 	endlockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
