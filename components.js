@@ -293,7 +293,7 @@ user.updateIdentity();
     },
     
     richestuser: function (target, room, user) {
-    	if (!this.canBroadcast()) return this.sendReplyBox('The richest user is currently <b><font color="' + this.color + '">Piscean</font></b> with <b><font color="' + this.color + '">20</font></b> bucks.');
+    	if (!this.canBroadcast()) return this.sendReplyBox('The richest user is currently <b><font color="#24678d">Piscean</font></b> with <b><font color="#24678d">20</font></b> bucks.');
     },
     
     /*setbadges: 'badge',
