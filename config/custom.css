@@ -393,85 +393,21 @@ box-shadow: inset 1px 1px 0 rgba(255,255,255,.6);
 }
 .rightbar {
 position: absolute;
-bottom: 0;
-right: 0;
-top: auto;
-height: 100px;
-width: 320px;
+height: 450px;
+width: 100px;
+border-left: 1px solid rgba(215,215,215,0.5);
 color: #777777;
 background-image: url(http://i.imgur.com/N347abd.jpg);
-}
-
-.rightbar .trainer {
-margin-top: 0px;
-}
-
-.rightbar .trainersprite{
-position: absolute;
-top: 5px;
-left: 10px;
-opacity: 1 !important;
-}
-.trainer strong {
-display: block;
-font-size: 8pt;
-width: 150px;
-height: 14px;
-text-align: right;
-padding-top: 10px;
-padding-left: 90px;
-color: #111;
-}
-  
-  
-.rightbar .trainer .teamicons {
-float:left;
-position: relative;
-top: 35px;
-left: 80px;
 }
 
 .leftbar {
 position: absolute;
-top: 0px;
-left: 0;
-height: 100px;
-width: 320px;
-background-color: rgba(255,255,255,0);
-border: 0px solid rgba(215,215,215,0.5);
+height: 450px;
+width: 100px;
+border-right: 1px solid rgba(215,215,215,0.5);
 color: #777777;
 background-image: url(http://i.imgur.com/N347abd.jpg);
 }
-
-.leftbar .trainer {
-margin-top: 30px;
-text-align: left;
-}
-
-.leftbar .trainersprite{
-position: absolute;
-top: 5px;
-right: 40px;
-opacity: 1 !important;
-}
-
-.leftbar .trainer strong {
-display: block;
-font-size: 8pt;
-overflow: hidden;
-padding-top: 45px;
-padding-left: 10px;
-}
-  
-  
-.leftbar .trainer .teamicons {
-float:right;
-top: -63px;
-left: -105px;
-position: relative;
-
-}
-  
  
 .switchcontrols {
         float: left;
