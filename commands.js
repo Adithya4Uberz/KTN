@@ -1133,17 +1133,17 @@ var commands = exports.commands = {
 		
 		if (cmd === 'gdeclare') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font>' + target + '</b></div>');
 			}
 		}
 		if (cmd === 'gdeclarered') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font>' + target + '</b></div>');
 			}
 		}
 		else if (cmd === 'gdeclaregreen') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font>' + target + '</b></div>');
 			}
 		}
 		this.logModCommand(user.name + " globally declared " + target);
