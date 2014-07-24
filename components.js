@@ -311,7 +311,7 @@ var components = exports.components = {
                 var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
                 var tourd = '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
                 var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="is an Artist">';
-                if (target === 'list' || target === 'help') {
+                if (target === 'list' || target === 'help' || !target) {
                         matched = true;
                         this.sendReplyBox('<center><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
