@@ -304,6 +304,8 @@ var components = exports.components = {
                 var matched = false;
                 var admin = '<img src="http://i.imgur.com/lfPYzFG.png" title="is an Administrator">';
                 var dev = '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
+                var owner = '<img src="http://www.smogon.com/media/forums/images/badges/sitestaff.png.v.W3Bw1cia4qYxYu9_y90uyw" title="is an Owner">';
+                var host = '<img src="http://www.smogon.com/media/forums/images/badges/simadmin.png.v.wVryzbSjSdZ_IFw429wNAg" title="is the Host">';
                 var leader = '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
                 var mod = '<img src="http://i.imgur.com/z3W1EAh.png" title="is a Moderator">';
                 var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
@@ -311,23 +313,43 @@ var components = exports.components = {
                 var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="is an Artist">';
                 if (target === 'list' || target === 'help') {
                         matched = true;
-                        this.sendReplyBox('<center><b>List of Badges:</b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
+                        this.sendReplyBox('<center><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
-                if (target === 'macrarazy' || target === 'macra') {
+                if (target === 'blakjack' || target === 'bj') {
                         matched = true;
-                        this.sendReplyBox('<center><b><font size="2">macrarazy:</font></b>  ' + admin + '  ' + dev + '</center>');
-                }
-                if (target === 'naten2006' || target === 'naten' || target === 'nathan') {
-                        matched = true;
-                        this.sendReplyBox('<center><b><font size="2">naten2006:</font></b>  ' + admin + '  ' + artist + '  ' + owner + '</center>');
+                        this.sendReplyBox('<center><b><font size="3">BlakJack:</font></b>  ' + admin + '  ' + dev + '  ' + owner + '  ' + host + '</center>')
                 }
                 if (target === 'brittlewind' || target === 'bw' || target === 'bwind') {
                         matched = true;
-                        this.sendReplyBox('<center><b><font size="2">BrittleWind:</font></b>  ' + admin + '  ' + artist + '  ' + '</center>');
+                        this.sendReplyBox('<center><b><font size="3">BrittleWind:</font></b>  ' + admin + '  ' + owner + '  ' + artist + '  ' + '</center>');
+                }
+                if (target === 'macrarazy' || target === 'macra') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">macrarazy:</font></b>  ' + admin + '  ' + dev + '  ' + owner + '</center>');
+                }
+                if (target === 'naten2006' || target === 'naten' || target === 'nathan') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">naten2006:</font></b>  ' + admin + '  ' + owner + '  ' + artist + '</center>');
+                }
+                if (target === 'freelancermac' || target === 'mac') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">Freelancer Mac:</font></b>  ' + leader + '  ' + donnor + '</center>');
+                }
+                if (target === 'glisteringaeon' || target === 'aeon') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">Glistering Aeon:</font></b>  ' + leader + '</center>');
+                }
+                if (target === 'kammi') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">Kammi:</font></b>  ' + leader + '</center>');
+                }
+                if (target === 'piscean' || target === 'fishy' || target === 'fish') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="3">Piscean:</font></b>  ' + leader + '</center>');
                 }
                 if (target === 'receptionist147' || target === 'recep' || target === 'recept' || target === 'receptionist') {
                         matched = true;
-                        this.sendReplyBox('<center><b><font size="2">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>')
+                        this.sendReplyBox('<center><b><font size="3">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>');
                 }
                 if (!matched) {
                         this.sendReplyBox('<center><b>' + targetUser.name + '</b> does not have a badge.');
