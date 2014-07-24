@@ -230,7 +230,7 @@ var components = exports.components = {
 
                 var targetUser = this.targetUserOrSelf(target);
 
-                if (cmd === 'atm') return this.sendReply('|raw| <b><font color"' + Core.profile.color + '">' + targetUser + ' </font></b>has <b><font color"red">' + money + '</font></b> ' + b + '.');
+                if (cmd === 'atm') return this.sendReplyBox('<b><font color' + Core.profile.color + '>' + targetUser + ' </font></b>has <b><font color"red">' + money + '</font></b> ' + b + '.');
 
                 if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
