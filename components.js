@@ -172,7 +172,7 @@ var components = exports.components = {
                 buffer.operators = buffer.operators.join(', ');
                 buffer.voices = buffer.voices.join(', ');
 
-                this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.operators + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+                this.popupReply('Administrators:\n____________________\n' + buffer.admins + '\n\nLeaders:\n____________________\n' + buffer.leaders + '\n\nModerators:\n____________________\n' + buffer.mods + '\n\nDrivers:\n____________________\n' + buffer.drivers + '\n\nOperators:\n____________________\n' + buffer.operators + '\n\nVoices:\n____________________\n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
         },
 
         regdate: function (target, room, user, connection) {
