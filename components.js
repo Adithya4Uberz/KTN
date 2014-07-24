@@ -228,11 +228,11 @@ var components = exports.components = {
 
                 var money = Core.profile.money(userId);
 
-                if (cmd === 'atm' && !targetUser) return this.sendReplyBox('<b><font color="#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + Core.profile.display('money', money) + ' </font></b>buck(s).');
+                if (cmd === 'atm' && !targetUser) return this.sendReplyBox('<b><font color="#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + money + ' </font></b>buck(s).');
                 
                 var money = Core.profile.money(targetUser.userid);
 
-                if (cmd === 'atm') return this.sendReplyBox('<b><font color="'#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + Core.profile.display('money', money) + ' </font></b>buck(s).');
+                if (cmd === 'atm') return this.sendReplyBox('<b><font color="'#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + money + ' </font></b>buck(s).');
 
                 if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
