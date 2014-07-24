@@ -1105,11 +1105,6 @@ var commands = exports.commands = {
 	declare: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
-		
-		var staff = '';
-		staff = 'a ' + Config.groups[user.group].name;
-		if (user.group == '~') staff = 'an Administrator';
-		if (user.group == '&') staff = 'a Leader';
 
 		if (!this.canTalk()) return;
 
@@ -1135,8 +1130,6 @@ var commands = exports.commands = {
 		staff = 'a ' + Config.groups[user.group].name;
 		if (user.group == '~') staff = 'an Administrator';
 		if (user.group == '&') staff = 'a Leader';
-		
-		if (!this.canTalk()) return;
 		
 		if (cmd === 'gdeclare') {
 			for (var id in Rooms.rooms) {
