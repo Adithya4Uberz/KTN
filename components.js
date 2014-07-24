@@ -19,251 +19,253 @@ var fs = require("fs");
 
 var components = exports.components = {
 
-    
-	eating: 'away',
-       gaming: 'away',
-       sleep: 'away',
-       work: 'away',
-       coding: 'away',
-       working: 'away',
-       sleeping: 'away',
-       busy: 'away',
-       afk: 'away',
-       away: function(target, room, user, connection, cmd) {
-            // unicode away message idea by Siiilver
-            var t = 'Ⓐⓦⓐⓨ';
-            var t2 = 'Away';
-            switch (cmd) {
-           case 'busy':
-t = 'Ⓑⓤⓢⓨ';
-t2 = 'Busy';
-break;
-case 'sleeping':
-t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
-t2 = 'Sleeping';
-break;
-case 'sleep':
-t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
-t2 = 'Sleeping';
-break;
-case 'gaming':
-t = 'Ⓖⓐⓜⓘⓝⓖ';
-t2 = 'Gaming';
-break;
-case 'working':
-t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
-t2 = 'Working';
-break;
-case 'work':
-t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
-t2 = 'Working';
-break;
-case 'coding':
-t = 'Ⓒⓞⓓⓘⓝⓖ';
-t2 = 'Coding';
-break;
-case 'eating':
-t = 'Ⓔⓐⓣⓘⓝⓖ';
-t2 = 'Eating';
-break;
-default:
-t = 'Ⓐⓦⓐⓨ'
-t2 = 'Away';
-break;
-}
+        eating: 'away',
+        gaming: 'away',
+        sleep: 'away',
+        work: 'away',
+        coding: 'away',
+        working: 'away',
+        sleeping: 'away',
+        busy: 'away',
+        afk: 'away',
+        away: function (target, room, user, connection, cmd) {
+                var t = 'Ⓐⓦⓐⓨ';
+                var t2 = 'Away';
+                switch (cmd) {
+                case 'busy':
+                t = 'Ⓑⓤⓢⓨ';
+                t2 = 'Busy';
+                break;
+                case 'sleeping':
+                t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+                t2 = 'Sleeping';
+                break;
+                case 'sleep':
+                t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+                t2 = 'Sleeping';
+                break;
+                case 'gaming':
+                t = 'Ⓖⓐⓜⓘⓝⓖ';
+                t2 = 'Gaming';
+                break;
+                case 'working':
+                t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+                t2 = 'Working';
+                break;
+                case 'work':
+                t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+                t2 = 'Working';
+                break;
+                case 'coding':
+                t = 'Ⓒⓞⓓⓘⓝⓖ';
+                t2 = 'Coding';
+                break;
+                case 'eating':
+                t = 'Ⓔⓐⓣⓘⓝⓖ';
+                t2 = 'Eating';
+                break;
+                default:
+                t = 'Ⓐⓦⓐⓨ'
+                t2 = 'Away';
+                break;
+                }
 
-if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+                if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+                if (!user.isAway) {
+                user.originalName = user.name;
+                var awayName = user.name + ' - ' + t;
+                delete Users.get(awayName);
+                user.forceRename(awayName, undefined, true);
 
-if (!user.isAway) {
-user.originalName = user.name;
-var awayName = user.name + ' - '+t;
-//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
-delete Users.get(awayName);
-user.forceRename(awayName, undefined, true);
+                if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now ' + t2.toLowerCase() + '. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
 
-if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+                user.isAway = true;
+                }
+                else {
+                        return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+                }
 
-user.isAway = true;
-}
-else {
-return this.sendReply('You are already set as a form of away, type /back if you are now back.');
-}
+                user.updateIdentity();
+        },
 
-user.updateIdentity();
-},
+        back: function (target, room, user, connection) {
+                if (user.isAway) {
+                if (user.name === user.originalName) {
+                user.isAway = false;
+                        return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+                }
 
-back: function(target, room, user, connection) {
+                var newName = user.originalName;
 
-if (user.isAway) {
-if (user.name === user.originalName) {
-user.isAway = false;
-return this.sendReply('Your name has been left unaltered and no longer marked as away.');
-}
+                delete Users.get(newName);
 
-var newName = user.originalName;
+                user.forceRename(newName, undefined, true);
 
-//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
-delete Users.get(newName);
+                user.authenticated = true;
 
-user.forceRename(newName, undefined, true);
+                if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer ' + t2.toLowerCase() + '.');
 
-//user will be authenticated
-user.authenticated = true;
+                user.originalName = '';
+                user.isAway = false;
+                }
+                else {
+                        return this.sendReply('You are not set as away.');
+                }
 
-if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
-
-user.originalName = '';
-user.isAway = false;
-}
-else {
-return this.sendReply('You are not set as away.');
-}
-
-user.updateIdentity();
-},
+                user.updateIdentity();
+        },
         
         earnmoney: function (target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
-                 '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
-                 '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
-                 '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
-                 '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
-                 '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>');
-    },
+                this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
+                        '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
+                        '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
+                        '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
+                        '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
+                        '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>'
+                );
+        },
 
-    staff: 'stafflist',
-    stafflist: function (target, room, user) {
-        var buffer = {
-            admins: [],
-            leaders: [],
-            mods: [],
-            drivers: [],
-            operators: [],
-            voices: []
-        };
+        staff: 'stafflist',
+        stafflist: function (target, room, user) {
+                var buffer = {
+                        admins: [],
+                        leaders: [],
+                        mods: [],
+                        drivers: [],
+                        operators: [],
+                        voices: []
+                };
 
-        var staffList = fs.readFileSync(path.join(__dirname, './', './config/usergroups.csv'), 'utf8').split('\n');
-        var numStaff = 0;
-        var staff;
+                var staffList = fs.readFileSync(path.join(__dirname, './', './config/usergroups.csv'), 'utf8').split('\n');
+                var numStaff = 0;
+                var staff;
 
-        var len = staffList.length;
-        while (len--) {
-            staff = staffList[len].split(',');
-            if (staff.length >= 2) numStaff++;
-            if (staff[1] === '~') {
+                var len = staffList.length;
+                while (len--) {
+                staff = staffList[len].split(',');
+                if (staff.length >= 2) numStaff++;
+                if (staff[1] === '~') {
                 buffer.admins.push(staff[0]);
-            }
-            if (staff[1] === '&') {
+                        }
+                if (staff[1] === '&') {
                 buffer.leaders.push(staff[0]);
-            }
-            if (staff[1] === '@') {
+                        }
+                if (staff[1] === '@') {
                 buffer.mods.push(staff[0]);
-            }
-            if (staff[1] === '%') {
+                        }
+                if (staff[1] === '%') {
                 buffer.drivers.push(staff[0]);
-            }
-            if (staff[1] === '±') {
-            	buffer.operators.push(staff[0]);
-            }
-            if (staff[1] === '+') {
+                        }
+                if (staff[1] === '±') {
+                buffer.operators.push(staff[0]);
+                        }
+                if (staff[1] === '+') {
                 buffer.voices.push(staff[0]);
-            }
-        }
+                        }
+                }
 
-        buffer.admins = buffer.admins.join(', ');
-        buffer.leaders = buffer.leaders.join(', ');
-        buffer.mods = buffer.mods.join(', ');
-        buffer.drivers = buffer.drivers.join(', ');
-        buffer.operators = buffer.operators.join(', ');
-        buffer.voices = buffer.voices.join(', ');
+                buffer.admins = buffer.admins.join(', ');
+                buffer.leaders = buffer.leaders.join(', ');
+                buffer.mods = buffer.mods.join(', ');
+                buffer.drivers = buffer.drivers.join(', ');
+                buffer.operators = buffer.operators.join(', ');
+                buffer.voices = buffer.voices.join(', ');
 
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.operators + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
-    },
+                this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.operators + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+        },
 
-    regdate: function (target, room, user, connection) {
-        if (!this.canBroadcast()) return;
-        if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
-        var username = target;
-        target = target.replace(/\s+/g, '');
+        regdate: function (target, room, user, connection) {
+                if (!this.canBroadcast()) return;
+                if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
+                var username = target;
+                target = target.replace(/\s+/g, '');
 
-        var options = {
-            host: "www.pokemonshowdown.com",
-            port: 80,
-            path: "/forum/~" + target
-        };
+                var options = {
+                        host: "www.pokemonshowdown.com",
+                        port: 80,
+                        path: "/forum/~" + target
+                };
 
-        var content = "";
-        var self = this;
-        var req = http.request(options, function (res) {
+                var content = "";
+                var self = this;
+                var req = http.request(options, function (res) {
 
-            res.setEncoding("utf8");
-            res.on("data", function (chunk) {
-                content += chunk;
-            });
-            res.on("end", function () {
+                        res.setEncoding("utf8");
+                        res.on("data", function (chunk) {
+                                content += chunk;
+                        });
+
+                res.on("end", function () {
                 content = content.split("<em");
                 if (content[1]) {
-                    content = content[1].split("</p>");
-                    if (content[0]) {
-                        content = content[0].split("</em>");
+                        content = content[1].split("</p>");
+                        if (content[0]) {
+                                content = content[0].split("</em>");
                         if (content[1]) {
-                            regdate = content[1];
-                            data = Tools.escapeHTML(username) + ' was registered on' + regdate + '.';
+                                regdate = content[1];
+                                data = Tools.escapeHTML(username) + ' was registered on' + regdate + '.';
                         }
-                    }
-                } else {
-                    data = Tools.escapeHTML(username) + ' is not registered.';
                 }
+                } else {
+                        data = Tools.escapeHTML(username) + ' is not registered.';
+                }
+                
                 self.sendReplyBox(data);
+                
                 room.update();
-            });
-        });
-        req.end();
-    },
+                        });
+                });
 
-    atm: 'profile',
-    profile: function (target, room, user, connection, cmd) {
-        if (!this.canBroadcast()) return;
-        if (cmd === 'atm' && !target) return this.sendReply('Kindly use /profile or !profile if broadcasting.');
-        if (cmd === 'atm') return this.sendReply('Kindly use /profile [username] or !profile [username] if broadcasting.');
-        if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
+                req.end();
+        },
 
-        var targetUser = this.targetUserOrSelf(target);
+        atm: 'profile',
+        profile: function (target, room, user, connection, cmd) {
+                if (!this.canBroadcast()) return;
 
-        if (!targetUser) {
-            var userId = toId(target);
-            var money = Core.profile.money(userId);
-            var elo = Core.profile.tournamentElo(userId);
-            var about = Core.profile.about(userId);
+                var b = 'buck';
+                if (money > 1) b = 'bucks';
 
-            if (elo === 1000 && about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
-            }
-            if (elo === 1000) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
-            }
-            if (about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
-            }
-            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
-        }
+                if (cmd === 'atm') return this.sendReply('<b><font color"' + Core.profile.color + '">' + targetUser + ' </font></b>has <b><font color"red">' + money + '</font></b> ' + b + '.');
 
-        var money = Core.profile.money(targetUser.userid);
-        var elo = Core.profile.tournamentElo(toId(targetUser.userid));
-        var about = Core.profile.about(targetUser.userid);
+                if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
-        if (elo === 1000 && about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
-        }
-        if (elo === 1000) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
-        }
-        if (about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
-        }
-        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
-    },
+                var targetUser = this.targetUserOrSelf(target);
+
+                if (!targetUser) {
+                        var userId = toId(target);
+                        var money = Core.profile.money(userId);
+                        var elo = Core.profile.tournamentElo(userId);
+                        var about = Core.profile.about(userId);
+
+                        if (elo === 1000 && about === 0) {
+                                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+                        }
+                        if (elo === 1000) {
+                                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+                        }
+                        if (about === 0) {
+                                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+                        }
+                                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+                        }
+
+                        var money = Core.profile.money(targetUser.userid);
+                        var elo = Core.profile.tournamentElo(toId(targetUser.userid));
+                        var about = Core.profile.about(targetUser.userid);
+
+                        if (elo === 1000 && about === 0) {
+                                return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+                        }
+                        if (elo === 1000) {
+                                return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+                        }
+                        if (about === 0) {
+                                return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+                        }
+                                return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+        },
 
     setstatus: 'about',
     status: 'about',
@@ -293,73 +295,73 @@ user.updateIdentity();
     },
     
     richestuser: function (target, room, user) {
-    	if (!this.canBroadcast()) return this.sendReplyBox('The richest user is currently <b><font color="#24678d">Piscean</font></b> with <b><font color="#24678d">20</font></b> bucks.');
+        if (!this.canBroadcast()) return this.sendReplyBox('The richest user is currently <b><font color="#24678d">Piscean</font></b> with <b><font color="#24678d">20</font></b> bucks.');
     },
     
     /*setbadges: 'badge',
     setbadge: 'badge',
     badge: function (target, room, user) {
-		if (!target) return this.sendReply('It is recommended to set badges to their Alumnus rather than no badges at all.');
-		
-		var now = Date.now();
-		
-		if ((now - user.lastBadge) * 0.001 < 30) {
-			this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
-			(30 - (now - user.lastAbout) * 0.001)) + ' seconds</strong>');
-			return;
-		}
+                if (!target) return this.sendReply('It is recommended to set badges to their Alumnus rather than no badges at all.');
+                
+                var now = Date.now();
+                
+                if ((now - user.lastBadge) * 0.001 < 30) {
+                        this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
+                        (30 - (now - user.lastAbout) * 0.001)) + ' seconds</strong>');
+                        return;
+                }
 
-		user.lastBadge = now;
-		
-		var badges = '';
-		var key = '';
-		var match = false;
+                user.lastBadge = now;
+                
+                var badges = '';
+                var key = '';
+                var match = false;
 
-	    	var data = Core.stdin('badge', user.userid);
-	    	if (data === target) return this.sendReply('This badgeset is the same as ' + targetUser.name + '\'s current one.');
-	    	
-	    	Core.stdout('badge', user.userid, target);
+                var data = Core.stdin('badge', user.userid);
+                if (data === target) return this.sendReply('This badgeset is the same as ' + targetUser.name + '\'s current one.');
+                
+                Core.stdout('badge', user.userid, target);
 
-	        var row = (''+data).split("\n");
-	        for (var i = row.length; i > -1; i--) {
-	                if (!row[i]) continue;
-	                var parts = row[i].split(",");
-	                var userid = toUserid(parts[0]);
-	                if (targetUser.userid == userid) {
-	                	key = String(parts[1]);
-	                	if (key.indexOf('1') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Contributor">';
-	                	}
-	                	if (key.indexOf('2') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
-	                	}
-	                	if (key.indexOf('3') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/z3W1EAh.png" title ="is a Moderator">';
-	                	}
-	                	if (key.indexOf('4') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
-	                	}
-	                	if (key.indexOf('5') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
-	                	}
-	                	if (key.indexOf('6') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is the Server Host">'; 
-	                	}
-	                	if (key.indexOf('7') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
-	                	}
-	                	match = true;
-						if (match === true) {
-							break;
-						}
-					}
-				}
-	            targetUser.badges = badges;
-	            return targetUser.badges;
-	            
-	            this.sendReply(targetUser.name + '\'s badgeset is now: ' badges);
-		},
-	},*/
+                var row = (''+data).split("\n");
+                for (var i = row.length; i > -1; i--) {
+                        if (!row[i]) continue;
+                        var parts = row[i].split(",");
+                        var userid = toUserid(parts[0]);
+                        if (targetUser.userid == userid) {
+                                key = String(parts[1]);
+                                if (key.indexOf('1') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Contributor">';
+                                }
+                                if (key.indexOf('2') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
+                                }
+                                if (key.indexOf('3') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/z3W1EAh.png" title ="is a Moderator">';
+                                }
+                                if (key.indexOf('4') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
+                                }
+                                if (key.indexOf('5') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
+                                }
+                                if (key.indexOf('6') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is the Server Host">'; 
+                                }
+                                if (key.indexOf('7') >= 0) {
+                                        badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
+                                }
+                                match = true;
+                                                if (match === true) {
+                                                        break;
+                                                }
+                                        }
+                                }
+                    targetUser.badges = badges;
+                    return targetUser.badges;
+                    
+                    this.sendReply(targetUser.name + '\'s badgeset is now: ' badges);
+                },
+        },*/
 
     tourladder: 'tournamentladder',
     tournamentladder: function (target, room, user) {
@@ -464,7 +466,7 @@ user.updateIdentity();
 
     viewtells: 'showtells',
     showtells: function (target, room, user) {
-    	if (!tells) return this.sendReply('You currently have no queued tells.');
+        if (!tells) return this.sendReply('You currently have no queued tells.');
         return this.sendReply("|raw|<b>These users have currently have queued tells:</b> " + Object.keys(tells));
     },
 
@@ -1156,22 +1158,22 @@ user.updateIdentity();
     },
     
     roomfounder: function (target, room, user) {
-		if (!room.chatRoomData) {
-			return this.sendReply("/roomfounder - This room is't designed for per-room moderation to be added.");
-		}
-		var target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
-		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
-		if (!this.can('makeroom')) return false;
-		if (!room.auth) room.auth = room.chatRoomData.auth = {};
-		var name = targetUser.name;
-		room.auth[targetUser.userid] = '#';
-		room.founder = targetUser.userid;
-		this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
-		room.onUpdateIdentity(targetUser);
-		room.chatRoomData.founder = room.founder;
-		Rooms.global.writeChatRoomData();
-	},
+                if (!room.chatRoomData) {
+                        return this.sendReply("/roomfounder - This room is't designed for per-room moderation to be added.");
+                }
+                var target = this.splitTarget(target, true);
+                var targetUser = this.targetUser;
+                if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+                if (!this.can('makeroom')) return false;
+                if (!room.auth) room.auth = room.chatRoomData.auth = {};
+                var name = targetUser.name;
+                room.auth[targetUser.userid] = '#';
+                room.founder = targetUser.userid;
+                this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
+                room.onUpdateIdentity(targetUser);
+                room.chatRoomData.founder = room.founder;
+                Rooms.global.writeChatRoomData();
+        },
 };
 
 Object.merge(CommandParser.commands, components);
