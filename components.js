@@ -228,7 +228,7 @@ var components = exports.components = {
 
                 var money = Core.profile.money(targetUser.userid);
                 var b = 'bucks';
-                if (money === 1) b = 'buck';
+                if (money < 2 || money > 0) b = 'buck';
 
                 if (cmd === 'atm') return this.sendReplyBox('<b><font color="#24678d">' + targetUser.name + ' </font></b>has <b><font color="#24678d">' + money + ' </font></b>' + b + '.');
 
