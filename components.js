@@ -224,17 +224,13 @@ var components = exports.components = {
         profile: function (target, room, user, connection, cmd) {
                 if (!this.canBroadcast()) return;
 
-                var money = Core.profile.money(userId);
-                var b = 'buck';
-                if (money > 1) b = 'bucks';
-
                 var targetUser = this.targetUserOrSelf(target);
 
                 if (cmd === 'atm' && !targetUser) {
                         var money = Core.profile.money(userId);
                         return this.sendReplyBox('<b><font color="#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + Core.profile.display('money', money) + ' </font></b>buck(s).');
                 }
-                else if (cmd === 'atm') {
+                if (cmd === 'atm') {
                         var money = Core.profile.money(targetUser.userid);
                         return this.sendReplyBox('<b><font color="'#24678d">' + user.name + ' </font></b>has <b><font color="#24678d">' + Core.profile.display('money', money) + ' </font></b>buck(s).');
                 }
