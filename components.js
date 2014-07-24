@@ -1032,9 +1032,9 @@ user.updateIdentity();
             CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
             trainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
             
-            this.sendReply('Reloading Casino...');
+            /*this.sendReply('Reloading Casino...');
             CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
-            dice = require(path.join(__dirname, './', 'casino.js'));
+            dice = require(path.join(__dirname, './', 'casino.js'));*/
 
             this.sendReply('Reloading Core...');
             CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
