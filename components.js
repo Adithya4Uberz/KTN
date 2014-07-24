@@ -295,9 +295,31 @@ var components = exports.components = {
         this.sendReply('Your about is now: "' + target + '"');
     },
     
-    richestuser: function (target, room, user) {
-        if (!this.canBroadcast()) return this.sendReplyBox('The richest user is currently <b><font color="#24678d">Piscean</font></b> with <b><font color="#24678d">20</font></b> bucks.');
-    },
+        badges: 'badge',
+        badge: function (target, room, user) {
+                if (!this.canBroadcast()) return;
+                if (target == '') target = user.userid;
+                target = target.toLowerCase();
+                target = target.trim();
+                var matched = false;
+                var admin = '<img src="http://i.imgur.com/lfPYzFG.png" title="is an Administrator">';
+                var dev = '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
+                var leader = '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
+                var mod = '<img src="http://i.imgur.com/z3W1EAh.png" title="is a Moderator">';
+                var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
+                var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="is an Artist">';
+                if (target === 'list' || target === 'help') {
+                        matched = true;
+                        this.sendReplyBox('<center><b>List of Badges:</b>   ' + admin + '   ' + dev + '   ' + leader + '   ' + mod + '   ' + driver + '   ' + artist + '</center><hr>Hovering your cursor over the badge reveals what the badge indicates.');
+                }
+                if (target === 'macrarazy') {
+                        matched = true;
+                        this.sendReplyBox('<center><b>macrarazy:</b>   ' + admin + '   ' + dev);
+                }
+                if (!matched) {
+                        this.sendReplyBox('<center><b>' + target + '</b> does not have a badge.');
+                }
+        },
     
     /*setbadges: 'badge',
     setbadge: 'badge',
@@ -447,6 +469,54 @@ var components = exports.components = {
         this.sendReply('You have successfully transferred ' + transferMoney + ' ' + b + ' to ' + targetUser.name + '. You now have ' + userMoney + ' bucks.');
         targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' bucks.');
     },
+
+        startdice: function (target, room, user) {
+                if (!this.canBroadcast()) return;
+
+                if (isNaN(target) || !target || target === 0) return this.sendReply('/startdice - Please use a real number.');
+
+                if (economy.dice[room.id]) return this.sendReply('/startdice - There is already a dice game running in this room.');
+
+                var target = parseInt(target);
+
+                if (user.money < target) return this.sendReply('/startdice - You cannot bet more bucks than you have.');
+
+                var b = 'bucks';
+
+                if (target === 1) b = 'buck';
+
+                economy.dice[room.id] = {
+                        bet: target,
+                        players: [],
+                        rolls: {},
+                }
+
+                this.add('|raw|<div class="infobox"><h2><center><font color=#24678d>' + user.name + ' has started a dice game for </font><font color=red>' + economy.dice[room.id].bet + ' </font><font color=#24678d>' + b + '.</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div> ');
+        },
+
+        joindice: function (target, room, user) {
+                if (!economy.dice[room.id]) return this.sendReply('/joindice - There is no running dice game in this room to join.');
+                if (user.money < economy.dice[room.id].bet || isNaN(Number(user.money))) return this.sendReply('/joindice - You cannot bet more bucks than you have.');
+                if (economy.dice[room.id].players.indexOf(user.userid) > -1) {
+                        this.sendReply('/joindice - You\'re already in this dice game.');
+                        return false;
+                }
+                room.addRaw('<b>' + user.name + ' has joined the game of dice.</b>');
+                economy.dice[room.id].players.push(user.userid);
+                if (economy.dice[room.id].players.length === 2) {
+                        room.addRaw('<b>The dice game has started!</b>');
+                        economy.dice.generateRolls(economy.dice[room.id].players, room);
+                        economy.dice.compareRolls(economy.dice[room.id].rolls, economy.dice[room.id].players, room);
+                }
+        },
+
+        enddice: function (target, room, user) {
+                if (!this.canBroadcast()) return;
+                if (!economy.dice[room.id]) return this.sendReply('/enddice - There is dice game running to end.');
+                room.addRaw('<b>' + user.name + ' has ended the dice game.</b>');
+        
+                delete economy.dice[room.id];
+        },
 
     tell: function (target, room, user) {
         if (!target) return;
