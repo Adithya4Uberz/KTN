@@ -1102,7 +1102,7 @@ var commands = exports.commands = {
 
 	declaregreen: 'declare',
 	declarered: 'declare',
-	declare: function(target, room, user, connection, cmd) {
+	declare: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
 
@@ -1122,13 +1122,13 @@ var commands = exports.commands = {
 
 	gdeclarered: 'gdeclare',
 	gdeclaregreen: 'gdeclare',
-	gdeclare: function(target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help globaldeclare');
+	gdeclare: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
 		if (!this.can('gdeclare')) return false;
 		
 		var staff = '';
 		staff = 'a ' + Config.groups[user.group].name;
-		if (user.group == '~') staff = 'an Administrator';
+		// if (user.group == '~') staff = 'an Administrator';
 		if (user.group == '&') staff = 'a Leader';
 		
 		if (cmd === 'gdeclare') {
