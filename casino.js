@@ -79,17 +79,7 @@ var cmds = {
         joindice: function (target, room, user) {
                 if (!dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
                 
-                var giveMoney = Number(dice[room.id].bet);
-                var money = Core.stdin('money.csv', Users.users[winner].userid);
-                var total = Number(money) + Number(giveMoney);
-                Core.stdout('money.csv', Users.users[winner].userid, total);
-                        
-                var takeMoney = Number(dice[room.id].bet);
-                var bucks = Core.stdin('money.csv', Users.users[loser].userid);
-                var amount = Number(bucks) - Number(takeMoney);
-                Core.stdout('money.csv', Users.users[loser].userid, amount);
-                        
-                if (user.money < dice[room.id].bet || isNaN(Number(user.money))) return this.sendReply('/joindice - You can not bet more bucks than you have.');
+                // if (user.money < dice[room.id].bet || isNaN(Number(user.money))) return this.sendReply('/joindice - You can not bet more bucks than you have.');
                 if (dice[room.id].players.indexOf(user.userid) > -1) {
                         this.sendReply('/joindice - You have already joined this dice!');
                         return false;
