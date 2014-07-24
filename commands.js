@@ -1180,14 +1180,14 @@ var commands = exports.commands = {
 	togglegdeclare: function (target, room, user) {
 		if (!this.can('roommod', null, room)) return;
 		if (target === 'off') {
-			delete room.blockGlobalDeclares;
+			delete Rooms.rooms[id].blockGlobalDeclares;
 			this.addModCommand("" + user.name + " toggled on global declares for this room.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.blockGlobalDeclares;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.blockGlobalDeclares = true;
+			Rooms.rooms[id].blockGlobalDeclares = true;
 			this.addModCommand("" + user.name + " toggled off global declares for this room."); 
 			if (room.chatRoomData) {
 				room.chatRoomData.blockGlobalDeclares = true;
@@ -1437,7 +1437,7 @@ var commands = exports.commands = {
 	},
 	
 	update: function (target, room, user) {
-        if (!this.can('reload')) return;
+		if (!this.can('reload')) return;
 
         try {
             this.sendReply('Reloading CommandParser...');
