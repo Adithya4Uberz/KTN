@@ -34,7 +34,7 @@ var dice = {
                         if (firstMoney > 1) firstBuck = 'bucks';
                         if (secondMoney > 1) secondBuck = 'bucks';
 
-                if (!rolls[Users.users[players[1]] === rolls[Users.users[players[0]]]]) {
+                if (!rolls[p1 === rolls[p0]]) {
                         room.addRaw('<b><font color="' + Core.profile.color + '">' p0.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[0]]] +'</font></b> ...');
                         room.addRaw('<b><font color="' + Core.profile.color + '">' p1.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[1]]] + '</font></b> ...');
                         room.addRaw('<b><font color="' + Core.profile.color + '">' + Tools.escapeHTML(winner) + '</font></b> <font color=#24678d>wins the dice game and ' + '<b><font color="red">' + firstMoney + '</font> ' + firstBuck + '</b>.</font>');
