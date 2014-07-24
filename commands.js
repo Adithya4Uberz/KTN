@@ -1076,7 +1076,7 @@ var commands = exports.commands = {
 			break;
 		default:
 			if (Config.groups.byId[target]) target = Config.groups.byId[target];
-			if (!Config.groups[roomType][target]) return this.parse('/help modchat');
+			// if (!Config.groups[roomType][target]) return this.parse('/help modchat');
 			if (Config.groups.bySymbol[target][roomType + 'Rank'] > 1 && !user.can('modchatall', room)) {
 				return this.sendReply("/modchat - Access denied for setting higher than " + Config.groups[roomType + 'ByRank'][1] + ".");
 			}
