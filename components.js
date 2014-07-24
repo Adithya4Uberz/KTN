@@ -230,32 +230,7 @@ var components = exports.components = {
 
                 var targetUser = this.targetUserOrSelf(target);
 
-                if (cmd === 'atm') {
-                        if (!target) {
-                                var data = fs.readFileSync('config/money.csv','utf8')
-                                var row = (''+data).split("\n");
-                                for (var i = row.length; i > -1; i--) {
-                                        if (!row[i]) continue;
-                                        var parts = row[i].split(",");
-                                        var userid = toUserid(parts[0]);
-                                if (user.userid == userid) {
-                                        var x = Number(parts[1]);
-                                        var money = x;
-                                        mMatch = true;
-                                        if (mMatch === true) {
-                                        break;
-                                        }
-                                }
-                        }
-                if (mMatch === true) {
-                        var p = 'bucks';
-                        if (money < 2) p = 'buck';
-                        total += '<b><font color=' + Core.profile.color + '>' + user.name + ' </font></b>has <font color=' + Core.profile.color + '' + money + ' ' + p + '.';
-                }
-                if (mMatch === false) {
-                        total += 'You have no bucks.';
-                        }
-                }
+                if (cmd === 'atm') return this.sendReplyBox('<b><font color="#24678d">' + targetUser + ' </font></b>has <b><font color="#24678d">' + Core.profile.money(userId) + ' </font></b>buck(s).');
 
                 if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
