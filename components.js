@@ -224,15 +224,15 @@ var components = exports.components = {
         profile: function (target, room, user, connection, cmd) {
                 if (!this.canBroadcast()) return;
 
-                var money = Core.profile.money(targetUser.id);
+                var money = Core.profile.money(userId);
                 var b = 'buck';
                 if (money > 1) b = 'bucks';
+
+                var targetUser = this.targetUserOrSelf(target);
 
                 if (cmd === 'atm') return this.sendReply('|raw| <b><font color"' + Core.profile.color + '">' + targetUser + ' </font></b>has <b><font color"red">' + money + '</font></b> ' + b + '.');
 
                 if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
-
-                var targetUser = this.targetUserOrSelf(target);
 
                 if (!targetUser) {
                         var userId = toId(target);
