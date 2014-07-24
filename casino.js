@@ -53,8 +53,9 @@ var dice = {
                         var amount = Number(bucks) - Number(takeMoney);
                         Core.stdout('money.csv', Users.users[loser].userid, amount);*/
                 }
-                else if (rolls[Users.users[players[0]]] == rolls[Users.users[players[1]]]) {
-                        return room.add('<b>It was a draw! Both users keep their money as a result.</b>');
+                else {
+                        if (rolls[Users.users[players[0]]] == rolls[Users.users[players[1]]]) return;
+                        this.add('<b>It was a draw! Both users keep their money as a result.</b>');
                 }
                 
                 delete dice[room.id];
