@@ -302,18 +302,19 @@ var components = exports.components = {
                 target = target.toLowerCase();
                 target = target.trim();
                 var matched = false;
-                var admin = '<img src="http://i.imgur.com/lfPYzFG.png" title="is an Administrator">';
-                var dev = '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
-                var owner = '<img src="http://www.smogon.com/media/forums/images/badges/sitestaff.png.v.W3Bw1cia4qYxYu9_y90uyw" title="is an Owner">';
-                var host = '<img src="http://www.smogon.com/media/forums/images/badges/simadmin.png.v.wVryzbSjSdZ_IFw429wNAg" title="is the Host">';
-                var leader = '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
-                var mod = '<img src="http://i.imgur.com/z3W1EAh.png" title="is a Moderator">';
-                var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
-                var tourd = '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
-                var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="is an Artist">';
+                var admin = '<img src="http://i.imgur.com/lfPYzFG.png" title="Administrator">';
+                var dev = '<img src="http://i.imgur.com/oyv3aga.png" title="Developer">';
+                var owner = '<img src="http://www.smogon.com/media/forums/images/badges/sitestaff.png.v.W3Bw1cia4qYxYu9_y90uyw" title="Server Owner">';
+                var host = '<img src="http://www.smogon.com/media/forums/images/badges/simadmin.png.v.wVryzbSjSdZ_IFw429wNAg" title="Server Host">';
+                var donnor = '<img src="http://www.smogon.com/media/forums/images/badges/cc.png.v.-9vSz3nZg_LA7Z3fg1_AsA" title="Donator">';
+                var leader = '<img src="http://i.imgur.com/5Dy544w.png" title="Leader">';
+                var mod = '<img src="http://i.imgur.com/z3W1EAh.png" title="Moderator">';
+                var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="Driver">';
+                var tourd = '<img src="http://i.imgur.com/yPAXWE9.png" title="Tournament Director">';
+                var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="Artist">';
                 if (target === 'list' || target === 'help' || !target) {
                         matched = true;
-                        this.sendReplyBox('<center><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
+                        this.sendReplyBox('<center><b><font size="3">List of obtainable badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
                 if (target === 'blakjack' || target === 'bj') {
                         matched = true;
@@ -352,7 +353,7 @@ var components = exports.components = {
                         this.sendReplyBox('<center><b><font size="3">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>');
                 }
                 if (!matched) {
-                        this.sendReplyBox('<center><font color="grey"><font size="1">Error: the requested user <i>' + target + '</i> is not badged.</font></font><br /><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
+                        this.sendReplyBox('<center><font color="grey"><font size="1">The requested user <i>' + target + '</i> is not badged.</font></font><hr><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
         },
     
