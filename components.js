@@ -352,7 +352,7 @@ var components = exports.components = {
                         this.sendReplyBox('<center><b><font size="3">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>');
                 }
                 if (!matched) {
-                        this.sendReplyBox('<center><b>' + targetUser.name + '</b> does not have a badge.');
+                        this.sendReplyBox('<center>Error: the requested user ' + targetUser.name + ' is not badged.<br /><b><font size="3">List of Badges:</font></b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
         },
     
