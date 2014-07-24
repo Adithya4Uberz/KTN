@@ -14,34 +14,41 @@ var dice = {
         compareRolls: function (rolls, players, room) {
                 var winner = '';
                 var loser = '';
-                if (rolls[Users.users[players[0]]] > rolls[Users.users[players[1]]]) {
-                        winner = Users.users[players[0]].userid;
-                        loser = Users.users[players[1]].userid;
+
+                var Users.users[players[0]] = p0;
+                var Users.users[players[1]] = p1;
+
+                if (rolls[p0] > rolls[p1]) {
+                        winner = p0.userid;
+                        loser = p1.userid;
                 }
                 else {
-                        winner = Users.users[players[1]].userid;
-                        loser = Users.users[players[0]].userid;
+                        winner = p1.userid;
+                        loser = p0.userid;
                 }
-                if (!rolls[Users.users[players[1]] === rolls[Users.users[players[0]]]]) {
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' Users.users[players[0]].name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[0]]] +'</font></b> ...');
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' Users.users[players[1]].name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[1]]] + '</font></b> ...');
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' + winner + '</font></b> <font color=#24678d>wins the dice game and ' + '<b><font color="red">' + dice[room.id].bet + '</font></b> buck(s).</font>');
-                        
-                        var firstMoney = dice[room.id].bet,
-                        secondMoney = dice[room.id].bet,
+
+                var firstMoney = dice[room.id].bet,
+                        secondMoney = firstMoney,
                         firstBuck = 'buck',
                         secondBuck = 'buck';
                         if (firstMoney > 1) firstBuck = 'bucks';
                         if (secondMoney > 1) secondBuck = 'bucks';
+
+                if (!rolls[Users.users[players[1]] === rolls[Users.users[players[0]]]]) {
+                        room.addRaw('<b><font color="' + Core.profile.color + '">' p0.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[0]]] +'</font></b> ...');
+                        room.addRaw('<b><font color="' + Core.profile.color + '">' p1.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[1]]] + '</font></b> ...');
+                        room.addRaw('<b><font color="' + Core.profile.color + '">' + Tools.escapeHTML(winner) + '</font></b> <font color=#24678d>wins the dice game and ' + '<b><font color="red">' + firstMoney + '</font> ' + firstBuck + '</b>.</font>');
                         
                         var wid = toId(winner),
                         lid = toId(loser);
                         
                         var winnerMoney = Number(Core.stdin('money', wid));
                         Core.stdout('money', wid), function () {
-                                var loserMoney = Number(Core.stdin('money', lid));
-                        Core.stdout('money', lid);
-                        }
+                                var loserMoney = Number(Core.stdin('money', lid);
+                                Core.stdout('money', lid), function () {
+                                        var winnerMoney = Number(Core.stdin('money', wid);
+                                });
+                        });
                         
                         /*var giveMoney = Number(dice[room.id].bet);
                         var money = Core.stdin('money.csv', Users.users[winner].userid);
@@ -54,8 +61,11 @@ var dice = {
                         Core.stdout('money.csv', Users.users[loser].userid, amount);*/
                 }
                 else {
-                        if (rolls[Users.users[players[0]]] = rolls[Users.users[players[1]]]) return;
-                        this.add('<b>It was a draw! Both users keep their money as a result.</b>');
+                        var draw = '';
+                        draw = rolls.[p0] = rolls[p1] && draw === true;
+                        
+                        if (draw === true) return;
+                        return this.add('<b>It was a draw! Both users keep their money as a result.</b>');
                 }
                 
                 delete dice[room.id];
@@ -78,8 +88,6 @@ var cmds = {
                 
                 var target = parseInt(target);
                 
-                // if (!user.money >= target) return this.sendReply('/startdice - It is not possible to bet more bucks than you have.');
-                
                 var b = 'bucks';
                 
                 if (target === 1) b = 'buck';
@@ -90,7 +98,7 @@ var cmds = {
                         rolls: {},
                 }
                 
-                this.add('|raw|<div class="infobox"><h2><center><font color=#24678d>' + user.name + ' has started a dice game for </font><font color=red>' + dice[room.id].bet  + ' </font><font color=#24678d>'+ b + '.</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div> ');
+                this.add('|raw|<div class="infobox"><h2><center><font color=#24678d>' + user.name + ' has started a dice game for </font><font color=red>' + firstMoney + ' </font><font color=#24678d>' + b + '.</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div> ');
         },
         
         joindice: function (target, room, user) {
