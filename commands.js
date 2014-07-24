@@ -1140,17 +1140,17 @@ var commands = exports.commands = {
 		
 		if (cmd === 'gdeclare') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		if (cmd === 'gdeclarered') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		else if (cmd === 'gdeclaregreen') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global'/* && !room.blockGlobalDeclares*/) Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		this.logModCommand(user.name + " globally declared " + target);
@@ -1177,7 +1177,7 @@ var commands = exports.commands = {
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
 	
-	togglegdeclare: function (target, room, user) {
+	/*togglegdeclare: function (target, room, user) {
 		if (!this.can('roommod', null, room)) return;
 		if (target === 'off') {
 			delete room.blockGlobalDeclares;
@@ -1194,7 +1194,7 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		}
-	},
+	},*/
 
 	wall: 'announce',
 	announce: function (target, room, user) {
