@@ -1138,19 +1138,19 @@ var commands = exports.commands = {
 		
 		if (!this.canTalk()) return;
 		
-		if (cmd === 'gdeclare'){
+		if (cmd === 'gdeclare') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		if (cmd === 'gdeclarered') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		else if (cmd === 'gdeclaregreen') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global' && !Rooms.rooms[id].blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
+				if (id !== 'global' && !room.blockGlobalDeclares) Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from ' + staff + '<br /></i></font size>' + Tools.escapeHTML(target) + '</b></div>');
 			}
 		}
 		this.logModCommand(user.name + " globally declared " + target);
@@ -1180,14 +1180,14 @@ var commands = exports.commands = {
 	togglegdeclare: function (target, room, user) {
 		if (!this.can('roommod', null, room)) return;
 		if (target === 'off') {
-			delete Rooms.rooms[id].blockGlobalDeclares;
+			delete room.blockGlobalDeclares;
 			this.addModCommand("" + user.name + " toggled on global declares for this room.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.blockGlobalDeclares;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			Rooms.rooms[id].blockGlobalDeclares = true;
+			room.blockGlobalDeclares = true;
 			this.addModCommand("" + user.name + " toggled off global declares for this room."); 
 			if (room.chatRoomData) {
 				room.chatRoomData.blockGlobalDeclares = true;
