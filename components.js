@@ -307,17 +307,30 @@ var components = exports.components = {
                 var leader = '<img src="http://i.imgur.com/5Dy544w.png" title="is a Leader">';
                 var mod = '<img src="http://i.imgur.com/z3W1EAh.png" title="is a Moderator">';
                 var driver = '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Driver">';
+                var tourd = '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
                 var artist = '<img src="http://www.smogon.com/forums/styles/default/xenforo/badges/artist.png" title="is an Artist">';
                 if (target === 'list' || target === 'help') {
                         matched = true;
-                        this.sendReplyBox('<center><b>List of Badges:</b>   ' + admin + '   ' + dev + '   ' + leader + '   ' + mod + '   ' + driver + '   ' + artist + '</center><hr>Hovering your cursor over the badge reveals what the badge indicates.');
+                        this.sendReplyBox('<center><b>List of Badges:</b>  ' + admin + '  ' + dev + '  ' + leader + '  ' + mod + '  ' + driver + '  ' + tourd + '  ' + artist + '<hr>Hovering your cursor over the badge reveals what the badge indicates.</center>');
                 }
-                if (target === 'macrarazy') {
+                if (target === 'macrarazy' || target === 'macra') {
                         matched = true;
-                        this.sendReplyBox('<center><b>macrarazy:</b>   ' + admin + '   ' + dev);
+                        this.sendReplyBox('<center><b><font size="2">macrarazy:</font></b>  ' + admin + '  ' + dev + '</center>');
+                }
+                if (target === 'naten2006' || target === 'naten' || target === 'nathan') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="2">naten2006:</font></b>  ' + admin + '  ' + artist + '  ' + owner + '</center>');
+                }
+                if (target === 'brittlewind' || target === 'bw' || target === 'bwind') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="2">BrittleWind:</font></b>  ' + admin + '  ' + artist + '  ' + '</center>');
+                }
+                if (target === 'receptionist147' || target === 'recep' || target === 'recept' || target === 'receptionist') {
+                        matched = true;
+                        this.sendReplyBox('<center><b><font size="2">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>')
                 }
                 if (!matched) {
-                        this.sendReplyBox('<center><b>' + target + '</b> does not have a badge.');
+                        this.sendReplyBox('<center><b>' + targetUser.name + '</b> does not have a badge.');
                 }
         },
     
