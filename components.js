@@ -77,7 +77,7 @@ var components = exports.components = {
                 delete Users.get(awayName);
                 user.forceRename(awayName, undefined, true);
 
-                if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now ' + t2.toLowerCase() + '. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+                if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + Tools.escapeHTML(target) + ")" : ""));
 
                 user.isAway = true;
                 }
@@ -122,7 +122,6 @@ var components = exports.components = {
                         '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
                         '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
                         '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
-                        '<center><b>Wait, what?!</b> Yes! A <i>limited offer</i> allows you to get 5 bucks for <b>FREE</b> if you were recently promoted to Operator (±) or higher! <font color=grey>[Offer ends on 7/25/2014 which is 25th of July, 2014]</center>'
                 );
         },
 
@@ -172,7 +171,7 @@ var components = exports.components = {
                 buffer.operators = buffer.operators.join(', ');
                 buffer.voices = buffer.voices.join(', ');
 
-                this.popupReply('Administrators:\n____________________\n' + buffer.admins + '\n\nLeaders:\n____________________\n' + buffer.leaders + '\n\nModerators:\n____________________\n' + buffer.mods + '\n\nDrivers:\n____________________\n' + buffer.drivers + '\n\nOperators:\n____________________\n' + buffer.operators + '\n\nVoices:\n____________________\n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
+                this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n--------------------\n' + buffer.leaders + '\n\nModerators:\n--------------------\n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nOperators:\n--------------------\n' + buffer.operators + '\n\nVoices:\n--------------------\n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
         },
 
         regdate: function (target, room, user, connection) {
