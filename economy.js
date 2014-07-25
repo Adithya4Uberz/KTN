@@ -101,31 +101,31 @@ var cmds = {
                 this.add('|raw|<div class="infobox"><h2><center><font color=#24678d>' + user.name + ' has started a dice game for </font><font color=red>' + firstMoney + ' </font><font color=#24678d>' + b + '.</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div> ');
         },
         
-        joindice: function (target, room, user) {
-                if (!dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
-                
-                if (!user.money >= dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
-                if (dice[room.id].players.indexOf(user.userid) > -1) {
-                        this.sendReply('/joindice - You have already joined this dice!');
-                        return false;
-                }
-                room.addRaw('<b>' + user.name + ' has joined the game of dice.</b>');
-                dice[room.id].players.push(user.userid);
-                if (dice[room.id].players.length === 2) {
-                        room.addRaw('<b>The dice game has started!</b>');
-                        dice.generateRolls(dice[room.id].players, room);
-                        dice.compareRolls(dice[room.id].rolls, dice[room.id].players, room);
-                        return 'gg';
-                }
-        },
-        
-        enddice: function (target, room, user) {
-                if (!this.canBroadcast()) return;
-                if (!dice[room.id]) return this.sendReply('/enddice - No dice is currently running to end.');
-                room.addRaw('<b>' + user.name + ' has ended the game of dice.</b>');
-                
-                delete dice[room.id];
-        }
+	joindice: function (target, room, user) {
+		if (!dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
+		
+		if (!user.money >= dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
+		if (dice[room.id].players.indexOf(user.userid) > -1) {
+			this.sendReply('/joindice - You have already joined this dice!');
+			return false;
+		}
+		room.addRaw('<b>' + user.name + ' has joined the game of dice.</b>');
+		dice[room.id].players.push(user.userid);
+		if (dice[room.id].players.length === 2) {
+			room.addRaw('<b>The dice game has started!</b>');
+			dice.generateRolls(dice[room.id].players, room);
+			dice.compareRolls(dice[room.id].rolls, dice[room.id].players, room);
+			return 'gg';
+		}
+	},
+	
+	enddice: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!dice[room.id]) return this.sendReply('/enddice - No dice is currently running to end.');
+		room.addRaw('<b>' + user.name + ' has ended the game of dice.</b>');
+
+		delete dice[room.id];
+	}
 
 };
 
