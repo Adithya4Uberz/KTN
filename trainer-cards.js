@@ -60,8 +60,8 @@ var trainerCards = {
 	kafkablack: function(target, room, user) {
 		if (!this.canBroadcast()) return false;
 		return this.sendReplyBox('<center><img src="http://i.imgur.com/bvCvPmd.gif" width="267" height="221"><br />' +
-			'<font size="3"><b><font color="CCCC33">Kafka</font><b></font><br />' +
-			'<blink>Ace: Shimmy</blink></b><br />' +
+			'<font size="3"><b><font color="CCCC33">Kafka</font></b></font><br />' +
+			'<b><blink>Ace: Shimmy</blink></b><br />' +
 			'<b>Stop, oh, and wiggle with it. YEAHHH!</b></center>');
         },
 
