@@ -103,8 +103,10 @@ var cmds = {
         
 	joindice: function (target, room, user) {
 		if (!dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
+
+		var userMoney = Number(Core.stdin('money', user.userid));
 		
-		if (!user.money >= dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
+		if (userMoney < dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
 		if (dice[room.id].players.indexOf(user.userid) > -1) {
 			this.sendReply('/joindice - You have already joined this dice!');
 			return false;
