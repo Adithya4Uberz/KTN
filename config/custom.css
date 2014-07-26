@@ -704,3 +704,8 @@ text-decoration: none;
 background: url(http://img2.wikia.nocookie.net/__cb20120809201208/nintendo/en/images/4/47/Lotad_Icon.png);
 left: -5px;
 }
+.infobox {
+border: 1px solid #6688AA;
+padding: 2px 4px;
+background: url("http://i.imgur.com/ldpBTQy.png");
+}
