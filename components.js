@@ -1121,7 +1121,6 @@ var components = exports.components = {
 			this.sendReply('Reloading Casino...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './casino.js'));
 			dice = require(path.join(__dirname, './', 'casino.js'));
-		}
 
 		return this.sendReply('|raw|<font color="green">Casino has been reloaded.</font>');
 		} catch (e) {
