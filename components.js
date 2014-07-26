@@ -1114,6 +1114,21 @@ var components = exports.components = {
 	}
     },
 
+	creload: function (target, room, user) {
+		if (!this.can('creload')) return;
+		
+		try {
+			this.sendReply('Reloading Casino...');
+			CommandParser.uncacheTree(path.join(__dirname, './', './casino.js'));
+			dice = require(path.join(__dirname, './', 'casino.js'));
+		}
+
+		return this.sendReply('|raw|<font color="green">Casino has been reloaded.</font>');
+		} catch (e) {
+		return this.sendReply('|raw|<font color="red">Something failed while trying to reload Casino:</font> \n' + e.stack);
+		}
+	},
+
 	db: 'database',
 	database: function (target, room, user) {
 		if (!this.can('db')) return;
