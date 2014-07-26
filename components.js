@@ -121,7 +121,7 @@ var components = exports.components = {
                         '<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
                         '<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
                         '<li>Maintain your Top 3 position in the Tournament ladder for at least 3 days.</li>' +
-                        '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>' +
+                        '<li>Contribute to our Server\'s <a href="https://github.com/Lotus-Team/BlakJack-Boilerplate/"><b>code</b></a>, <a href="http://107.155.72.217:15000/custom.css"><b>CSS</b></a> and/or <a href="http://lotus-server.weebly.com/"><b>website</b></a>.</li>'
                 );
         },
 
