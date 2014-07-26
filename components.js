@@ -298,7 +298,7 @@ var components = exports.components = {
 	badge: function (target, room, user) {
 		// this is Evasi0n's version
 		if (!this.canBroadcast()) return;
-		if (!target) target = user.userid;
+		if (target == '') target = user.userid;
 		target = target.toLowerCase();
 		target = target.trim();
 		var matched = false;
