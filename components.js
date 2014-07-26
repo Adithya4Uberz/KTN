@@ -574,12 +574,12 @@ var components = exports.components = {
 		if (!Poll[room.id].question) return this.sendReply('There is no poll currently going on in this room.');
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help vote');
-		if (Poll[room.id].optionList.indexOf(target.toLowerCase()) === -1) return this.sendReply('\'<b>' + Tools.escapeHTML(target) + '</b>\' is not an option for the current poll.');
+		if (Poll[room.id].optionList.indexOf(target.toLowerCase()) === -1) return this.sendReply('\'<b>' + target + '</b>\' is not an option for the current poll.');
 
 		var ips = JSON.stringify(user.ips);
 		Poll[room.id].options[ips] = target.toLowerCase();
 
-		return this.sendReply('You are now voting for <b>' + Tools.escapeHTML(target) + '</b>.');
+		return this.sendReply('You are now voting for <b>' + target + '</b>.');
 	},
 
 	votes: function (target, room, user) {
@@ -1166,7 +1166,7 @@ var components = exports.components = {
 			var log = fs.readFileSync(('config/' + target + '.csv'), 'utf8');
 			return user.send('|popup|' + log);
 		} catch (e) {
-			return user.send('|popup|Something bad happen:\n\n ' + e.stack);
+			return user.send('|popup|Something bad happened:\n\n ' + e.stack);
 		}
 	},
 
@@ -1215,19 +1215,19 @@ var components = exports.components = {
 				Core.stdout('control-panel', 'color', parts[1], function () {
 				Core.profile.color = Core.stdin('control-panel', 'color');
 			});
-			self.sendReply('Color is now ' + parts[1]);
+			self.sendReply('Color is now "' + parts[1] + '".');
 			},
 			avatar: function () {
 				Core.stdout('control-panel', 'avatar', parts[1], function () {
 				Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
 			});
-			self.sendReply('Avatar URL is now ' + parts[1]);
+			self.sendReply('Avatar URL is now "' + parts[1] + '".');
 			},
 			toursize: function () {
 				Core.stdout('control-panel', 'toursize', parts[1], function () {
 				Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
 			});
-			self.sendReply('Tournament Size to earn money is now ' + parts[1]);
+			self.sendReply('Tournament size to earn money is now "' + parts[1] + '".');
 			},
 			money: function () {
 				if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
@@ -1236,19 +1236,19 @@ var components = exports.components = {
 				});
 				if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
 			});
-			self.sendReply('Earning money amount is now ' + parts[1]);
+			self.sendReply('Earning money amount is now "' + parts[1] + '".');
 			},
 			winner: function () {
 				Core.stdout('control-panel', 'winner', parts[1], function () {
 				Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
 			});
-			self.sendReply('Winner Elo Bonus is now ' + parts[1]);
+			self.sendReply('Winner Elo Bonus is now "' + parts[1] + '".');
 			},
 			runnerup: function () {
 				Core.stdout('control-panel', 'runnerup', parts[1], function () {
 				Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
 			});
-			self.sendReply('RunnerUp Elo Bonus is now ' + parts[1]);
+			self.sendReply('RunnerUp Elo Bonus is now "' + parts[1] + '".');
 			}
 		};
 
