@@ -65,7 +65,7 @@ var components = exports.components = {
 		t2 = 'Eating';
 		break;
 		default:
-		t = 'Ⓐⓦⓐⓨ'
+		t = 'Ⓐⓦⓐⓨ';
 		t2 = 'Away';
 		break;
 		}
