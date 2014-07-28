@@ -584,6 +584,7 @@ var components = exports.components = {
 
 	votes: function (target, room, user) {
 		if (!this.canBroadcast()) return;
+		if (!Poll[room.id].question) return this.sendReply('There is no poll currently going on in this room.');
 		this.sendReplyBox('NUMBER OF VOTES: <b>' + Object.keys(Poll[room.id].options).length + '</b>');
 	},
 
