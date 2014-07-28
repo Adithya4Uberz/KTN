@@ -7,7 +7,7 @@ Features
 ------------------------------------------------------------------------
 
 * Single Process Hack for improve performance.
-* Up-to-date with [Pokemon Showdown][1]'s latest features.
+* **Not** up-to-date with [Pokemon Showdown][1]'s latest features.
 * Money (bucks) system for winning tournaments.
 * Polls for voting
 * Profile command to check to see when the user's last online, their money, etc.
@@ -20,8 +20,8 @@ Getting Started
 To get started with this boilerplate, just download this as a zip or clone it and install a [Pokemon Showdown server][1] as you usually do.
 If you forgot how to do this, here is a quick reference:
 
-  git clone https://github.com/CreaturePhil/Showdown-Boilerplate.git showdown-boilerplate
-  cd showdown-boilerplate
+  git clone https://github.com/Kill-The-Noise/BlakJack-Boilerplate.git blakjack-boilerplate
+  cd blakjack-boilerplate
   npm install
 
 Once you done that, create __usergroups.csv__, __about.csv__, __elo.csv__, __money.csv__, __lastSeen.csv__, and __tourWins.csv__ files in the _config_ folder.
