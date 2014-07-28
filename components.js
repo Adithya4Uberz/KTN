@@ -561,7 +561,7 @@ var components = exports.components = {
 		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
 		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-		tells[toId(this.targetUsername)].push(Date().toLocaleString() + "|raw|- <b>" + user.getIdentity() + "</b> said: \"" + message + "\"";
+		tells[toId(this.targetUsername)].push(Date().toLocaleString() + "|raw|- <b>" + user.getIdentity() + "</b> said: \"" + message + "\"");
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
