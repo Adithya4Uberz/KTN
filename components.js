@@ -32,65 +32,64 @@ var components = exports.components = {
 		var t = 'Ⓐⓦⓐⓨ';
 		var t2 = 'Away';
 		switch (cmd) {
-		case 'busy':
-		t = 'Ⓑⓤⓢⓨ';
-		t2 = 'Busy';
-		break;
-		case 'sleeping':
-		t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
-		t2 = 'Sleeping';
-		break;
-		case 'sleep':
-		t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
-		t2 = 'Sleeping';
-		break;
-		case 'gaming':
-		t = 'Ⓖⓐⓜⓘⓝⓖ';
-		t2 = 'Gaming';
-		break;
-		case 'working':
-		t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
-		t2 = 'Working';
-		break;
-		case 'work':
-		t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
-		t2 = 'Working';
-		break;
-		case 'coding':
-		t = 'Ⓒⓞⓓⓘⓝⓖ';
-		t2 = 'Coding';
-		break;
-		case 'eating':
-		t = 'Ⓔⓐⓣⓘⓝⓖ';
-		t2 = 'Eating';
-		break;
-		default:
-		t = 'Ⓐⓦⓐⓨ';
-		t2 = 'Away';
-		break;
+			case 'busy':
+			t = 'Ⓑⓤⓢⓨ';
+			t2 = 'Busy';
+			break;
+			case 'sleeping':
+			t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+			t2 = 'Sleeping';
+			break;
+			case 'sleep':
+			t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+			t2 = 'Sleeping';
+			break;
+			case 'gaming':
+			t = 'Ⓖⓐⓜⓘⓝⓖ';
+			t2 = 'Gaming';
+			break;
+			case 'working':
+			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+			t2 = 'Working';
+			break;
+			case 'work':
+			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+			t2 = 'Working';
+			break;
+			case 'coding':
+			t = 'Ⓒⓞⓓⓘⓝⓖ';
+			t2 = 'Coding';
+			break;
+			case 'eating':
+			t = 'Ⓔⓐⓣⓘⓝⓖ';
+			t2 = 'Eating';
+			break;
+			default:
+			t = 'Ⓐⓦⓐⓨ';
+			t2 = 'Away';
+			break;
 		}
 
 		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
 		if (!user.isAway) {
-		user.originalName = user.name;
-		var awayName = user.name + ' - ' + t;
-		delete Users.get(awayName);
-		user.forceRename(awayName, undefined, true);
+			user.originalName = user.name;
+			var awayName = user.name + ' - ' + t;
+			delete Users.get(awayName);
+			user.forceRename(awayName, undefined, true);
 
-		if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + Tools.escapeHTML(target) + ")" : ""));
+			if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + Tools.escapeHTML(target) + ")" : ""));
 
-		user.isAway = true;
-		}
-		else {
-			return this.sendReply('You are already set as a form of away, type /back if you are now back.');
-		}
+			user.isAway = true;
+			} else {
+				return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+			}
 
 		user.updateIdentity();
 	},
 
 	back: function (target, room, user, connection) {
 		if (user.isAway) {
-		if (awayName === user.originalName) {
+		if (user.name !== awayName) {
 			user.isAway = false;
 				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
 			}
