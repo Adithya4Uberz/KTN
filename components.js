@@ -579,12 +579,12 @@ var components = exports.components = {
 		var ips = JSON.stringify(user.ips);
 		Poll[room.id].options[ips] = target.toLowerCase();
 
-		return this.sendReply('You are now voting for <b>' + target + '</b>.');
+		return this.sendReply('|raw|You are now voting for <b>' + target + '</b>.');
 	},
 
 	votes: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReply('NUMBER OF VOTES: ' + Object.keys(Poll[room.id].options).length);
+		this.sendReplyBox('NUMBER OF VOTES: <b>' + Object.keys(Poll[room.id].options).length + '</b>');
 	},
 
 	pr: 'pollremind',
