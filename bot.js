@@ -305,7 +305,9 @@ var commands = {
     },
 
     penislength: function (target, room, user) {
-        this.sendReply('8.5 inches from the base. Perv.');
+        var length = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        length[Math.floor(Math.random() * 12)];
+        this.sendReply(length + ' inches from the base. Perv.');
     },
 
     seen: function (target, room, user, connection) {
@@ -348,6 +350,7 @@ var commands = {
 
             target = toId(target);
 
+            if (target === 'macrarazy') message = 'A coder known for his errors, dumbness, bragging and later on his attitude. He was admin and coded for various servers.';
             if (target === 'creaturephil') message = 'An experienced **coder** for pokemon showdown. He has coded for over 5 servers such as kill the noise, moxie, aerdeith, nova, etc. Please follow him on github: https://github.com/CreaturePhil';
             if (target === config.userid()) message = 'That\'s me.';
             if (target === 'zarel') message = 'Pokemon Showdown Creator';
@@ -387,7 +390,11 @@ var commands = {
             if (!target) return;
             var message = reply[Math.floor(Math.random() * reply.length)];
 
-            this.sendPm(message);
+            if (user.group >= '+') {
+                 this.sendReply(message);
+            } else {
+                 this.sendPm(message);
+            }
         };
     })(),
 
@@ -399,7 +406,7 @@ var commands = {
             self = this,
             counter = 1;
 
-        if (parts.length < 2 || Tools.getFormat(parts[0]).effectType !== 'Format' || !/[0-9]/.test(parts[1])) return this.sendPm('Correct Syntax: !maketournament [tier], [time/amount of players]');
+        if (parts.length < 2 || Tools.getFormat(parts[0]).effectType !== 'Format' || !/[0-9]/.test(parts[1])) return this.sendPm('Correct Syntax: .maketournament [tier], [time/amount of players]');
 
         if (parts[1].indexOf('minute') >= 0) {
             var time = Number(parts[1].split('minute')[0]);
@@ -413,7 +420,7 @@ var commands = {
                     if (counter === time) {
                         if (Tournaments.tournaments[room.id].generator.users.size < 2) {
                             self.parse('/tour end');
-                            return self.sendReply('**The tournament was canceled because of lack of players.**');
+                            return self.sendReply('**The tournament was cancelled because of lack of players.**');
                         }
                         return self.parse('/tour start');
                     }
@@ -466,7 +473,7 @@ var commands = {
             setTimeout(function () {
                 if (Poll[_room.id].question) self.parse('/endpoll');
 
-                self.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+                self.parse('/tierpoll');
                 setTimeout(function () {
                     self.parse('/endpoll');
                     Bot.commands.maketournament.call(self, (Poll[_room.id].topOption + ', 2 minute'), _room, _user);
@@ -492,7 +499,7 @@ var commands = {
         Users.get(Bot.config.name).joinRoom(Rooms.get(target.toLowerCase()));
         var botDelay = (Math.floor(Math.random() * 6) * 1000)
         setTimeout(function() {
-            connection.sendTo(room, Bot.config.name + ' has join ' +  target + ' room.');
+            connection.sendTo(room, Bot.config.name + ' has joined ' +  target + ' room.');
         }, botDelay);
     },
 
