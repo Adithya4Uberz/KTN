@@ -7,7 +7,7 @@ Features
 ------------------------------------------------------------------------
 
 * Single Process Hack for improve performance.
-* **Not** up-to-date with [Pokemon Showdown][1]'s latest features.
+* __Not__ up-to-date with [Pokemon Showdown][1]'s latest features.
 * Money (bucks) system for winning tournaments.
 * Polls for voting
 * Profile command to check to see when the user's last online, their money, etc.
@@ -15,9 +15,11 @@ Features
 * Built-in bot for moderation and fun
 * Emoticons in chat
 
+  [1]: https://github.com/Zarel/Pokemon-Showdown
+
 Getting Started
 ------------------------------------------------------------------------
-To get started with this boilerplate, just download this as a zip or clone it and install a [Pokemon Showdown server][1] as you usually do.
+To get started with this boilerplate, just download this as a zip or clone it and install a [Pokemon Showdown server][2] as you usually do.
 If you forgot how to do this, here is a quick reference:
 
   git clone https://github.com/Kill-The-Noise/BlakJack-Boilerplate.git blakjack-boilerplate
@@ -50,9 +52,11 @@ Once you get your server up and running, you can manage certain settings with th
 
 ![Control Panel](http://i.imgur.com/ImBbK5x.png "Control Panel")
 
+  [2]: https://github.com/Zarel/Pokemon-Showdown/blob/master/README.md#installing
+
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][7].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][3].
 
-  [7]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [3]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
