@@ -90,10 +90,10 @@ var components = exports.components = {
 
 	back: function (target, room, user, connection) {
 		if (user.isAway) {
-		/*if (user.name === user.originalName) {
+		if (awayName === user.originalName) {
 			user.isAway = false;
 				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
-			}*/
+			}
 
 		var newName = user.originalName;
 
