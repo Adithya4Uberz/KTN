@@ -14,68 +14,38 @@ var dice = {
         compareRolls: function (rolls, players, room) {
                 var winner = '';
                 var loser = '';
+                if (rolls[Users.users[players[0]]] > rolls[Users.users[players[1]]]) {
+                    winner = Users.users[players[0]].userid;
+                    loser = Users.users[players[1]].userid;
+                } else {
+                    winner = Users.users[players[1]].userid;
+                    loser = Users.users[players[0]].userid;
+                }
+                if (!rolls[Users.users[players[1]] === rolls[Users.users[players[0]]]]) {
+                    room.addRaw(Users.users[players[0]].name + ' rolled a <font color=red>' + rolls[Users.users[players[0]]] + '</font>');
+                    room.addRaw(Users.users[players[1]].name + ' rolled a <font color=red>' + rolls[Users.users[players[1]]] + '</font>');
+                    room.addRaw('<font color=#24678d> ' + winner + ' wins the dice game and ' + '<font color=red>' + dice[room.id].bet + '</font> bucks.</font>');
 
-                var Users.users[players[0]] = p0;
-                var Users.users[players[1]] = p1;
+                    var giveMoney = Number(dice[room.id].bet);
+                    var money = Core.stdin('money.csv', Users.users[winner].userid);
+                    var total = Number(money) + Number(giveMoney);
+                    Core.stdout('money.csv', Users.users[winner].userid, total);
 
-                if (rolls[p0] > rolls[p1]) {
-                        winner = p0.userid;
-                        loser = p1.userid;
+                    var takeMoney = Number(dice[room.id].bet);
+                    var bucks = Core.stdin('money.csv', Users.users[loser].userid);
+                    var amount = Number(bucks) - Number(takeMoney);
+                    Core.stdout('money.csv', Users.users[loser].userid, amount);
+                } else {
+                    return room.add('It was a draw, both frens keep their money');
                 }
-                else {
-                        winner = p1.userid;
-                        loser = p0.userid;
+                delete this[room.id];
+            },
+            generateRolls: function (players, room) {
+                var facez = [1, 2, 3, 4, 5, 6];
+                for (var i = 0; i < players.length; i++) {
+                    this[room.id].rolls[Users.users[players[i]]] = facez[Math.floor(Math.random() * 6)];
                 }
-
-                var firstMoney = dice[room.id].bet,
-                        secondMoney = firstMoney,
-                        firstBuck = 'buck',
-                        secondBuck = 'buck';
-                        if (firstMoney > 1) firstBuck = 'bucks';
-                        if (secondMoney > 1) secondBuck = 'bucks';
-
-                if (!rolls[p1 === rolls[p0]]) {
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' p0.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[0]]] +'</font></b> ...');
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' p1.name + '</font></b> rolled a <b><font color="red">' + rolls[Users.users[players[1]]] + '</font></b> ...');
-                        room.addRaw('<b><font color="' + Core.profile.color + '">' + Tools.escapeHTML(winner) + '</font></b> <font color=#24678d>wins the dice game and ' + '<b><font color="red">' + firstMoney + '</font> ' + firstBuck + '</b>.</font>');
-                        
-                        var wid = toId(winner),
-                        lid = toId(loser);
-                        
-                        var winnerMoney = Number(Core.stdin('money', wid));
-                        Core.stdout('money', wid), function () {
-                                var loserMoney = Number(Core.stdin('money', lid);
-                                Core.stdout('money', lid), function () {
-                                        var winnerMoney = Number(Core.stdin('money', wid);
-                                });
-                        });
-                        
-                        /*var giveMoney = Number(dice[room.id].bet);
-                        var money = Core.stdin('money.csv', Users.users[winner].userid);
-                        var total = Number(money) + Number(giveMoney);
-                        Core.stdout('money.csv', Users.users[winner].userid, total);
-                        
-                        var takeMoney = Number(dice[room.id].bet);
-                        var bucks = Core.stdin('money.csv', Users.users[loser].userid);
-                        var amount = Number(bucks) - Number(takeMoney);
-                        Core.stdout('money.csv', Users.users[loser].userid, amount);*/
-                }
-                else {
-                        var draw = '';
-                        draw = rolls.[p0] = rolls[p1] && draw === true;
-                        
-                        if (draw === true) return;
-                        return this.add('<b>It was a draw! Both users keep their money as a result.</b>');
-                }
-                
-                delete dice[room.id];
-        },
-        generateRolls: function (players, room) {
-                var facez = [1,2,3,4,5,6];
-                for (var i=0; i<players.length; i++) {
-                        dice[room.id].rolls[Users.users[players[i]]] = facez[Math.floor(Math.random()*6)];
-                }
-        }
+            }
 
 };
 
