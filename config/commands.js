@@ -1438,8 +1438,7 @@ var commands = exports.commands = {
 	htmlbox: function (target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
 		if (!this.can('declare', room)) return;
-		if (!this.canHTML(target)) return;
-		if (!this.canBroadcast('!htmlbox')) return;
+		if (!this.canBroadcast()) return;
 
 		this.sendReplyBox(target);
 	},
