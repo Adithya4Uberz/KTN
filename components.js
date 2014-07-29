@@ -21,14 +21,16 @@ var components = exports.components = {
 
 	eating: 'away',
 	gaming: 'away',
-	sleep: 'away',
-	work: 'away',
 	coding: 'away',
-	working: 'away',
-	sleeping: 'away',
-	busy: 'away',
+    	sleep: 'away',
+	work: 'away',
+    	working: 'away',
+    	sleeping: 'away',
+    	busy: 'away',    
 	afk: 'away',
-	away: function (target, room, user, connection, cmd) {
+	away: function(target, room, user, connection, cmd) {
+		if (!this.can('away')) return false;
+		// unicode away message idea by Siiilver
 		var t = 'Ⓐⓦⓐⓨ';
 		var t2 = 'Away';
 		switch (cmd) {
@@ -48,6 +50,10 @@ var components = exports.components = {
 			t = 'Ⓖⓐⓜⓘⓝⓖ';
 			t2 = 'Gaming';
 			break;
+			case 'coding':
+			t = 'Ⓒⓞⓓⓘⓝⓖ';
+			t2 = 'Coding';
+			break;
 			case 'working':
 			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
 			t2 = 'Working';
@@ -56,56 +62,59 @@ var components = exports.components = {
 			t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
 			t2 = 'Working';
 			break;
-			case 'coding':
-			t = 'Ⓒⓞⓓⓘⓝⓖ';
-			t2 = 'Coding';
-			break;
 			case 'eating':
 			t = 'Ⓔⓐⓣⓘⓝⓖ';
 			t2 = 'Eating';
 			break;
 			default:
-			t = 'Ⓐⓦⓐⓨ';
+			t = 'Ⓐⓦⓐⓨ'
 			t2 = 'Away';
 			break;
 		}
 
 		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+
 		if (!user.isAway) {
 			user.originalName = user.name;
-			var awayName = user.name + ' - ' + t;
+			var awayName = user.name + ' - '+t;
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 
-			if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + Tools.escapeHTML(target) + ")" : ""));
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
 
 			user.isAway = true;
-			} else {
-				return this.sendReply('You are already set as a form of away, type /back if you are now back.');
-			}
+		}
+		else {
+			return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+		}
 
 		user.updateIdentity();
 	},
 
-	back: function (target, room, user, connection) {
+	back: function(target, room, user, connection) {
+		if (!this.can('away')) return false;
+
 		if (user.isAway) {
-		if (user.name !== awayName) {
-			user.isAway = false;
+			if (user.name === user.originalName) {
+				user.isAway = false; 
 				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
 			}
 
-		var newName = user.originalName;
+			var newName = user.originalName;
 
-		delete Users.get(newName);
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(newName);
 
-		user.forceRename(newName, undefined, true);
+			user.forceRename(newName, undefined, true);
 
-		user.authenticated = true;
+			//user will be authenticated
+			user.authenticated = true;
 
-		if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer ' + t2.toLowerCase() + '.');
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
 
-		user.originalName = '';
-		user.isAway = false;
+			user.originalName = '';
+			user.isAway = false;
 		}
 		else {
 			return this.sendReply('You are not set as away.');
@@ -332,6 +341,10 @@ var components = exports.components = {
 			matched = true;
 			this.sendReplyBox('<center><b><font size="3">naten2006:</font></b>  ' + admin + '  ' + owner + '  ' + artist + '</center>');
 		}
+		if (target === 'receptionist147' || target === 'recep' || target === 'recept' || target === 'receptionist') {
+			matched = true;
+			this.sendReplyBox('<center><b><font size="3">Receptionist147:</font></b>  ' + admin + '  ' + tourd + '</center>');
+		}
 		if (target === 'freelancermac' || target === 'mac') {
 			matched = true;
 			this.sendReplyBox('<center><b><font size="3">Freelancer Mac:</font></b>  ' + leader + '  ' + donnor + '</center>');
@@ -347,10 +360,6 @@ var components = exports.components = {
 		if (target === 'piscean' || target === 'fishy' || target === 'fish') {
 			matched = true;
 			this.sendReplyBox('<center><b><font size="3">Piscean:</font></b>  ' + leader + '</center>');
-		}
-		if (target === 'receptionist147' || target === 'recep' || target === 'recept' || target === 'receptionist') {
-			matched = true;
-			this.sendReplyBox('<center><b><font size="3">Receptionist147:</font></b>  ' + leader + '  ' + tourd + '</center>');
 		}
 		if (target === 'kafkablack' || target === 'kafka') {
 			matched = true;
@@ -560,7 +569,7 @@ var components = exports.components = {
 		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
 		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-		tells[toId(this.targetUsername)].push(Date().toLocaleString() + "|raw|- <b>" + user.getIdentity() + "</b> said: \"" + message + "\"");
+		user.add(tells[toId(this.targetUsername)].push(Date().toLocaleString() + "- " + user.getIdentity() + " said: \"" + message + "\""));
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
