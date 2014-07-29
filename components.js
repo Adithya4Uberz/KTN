@@ -471,7 +471,52 @@ var components = exports.components = {
 		this.sendReply(targetUser.name + '\'s badgeset is now: ' badges);
 		},
 	},*/
+	
+	/*complaint: 'complain',
+	complain: function (target, room, user) {
+		if (!target) return this.parse('/help complaint');
+		this.sendReplyBox('Thanks for your input. We\'ll review your feedback soon. The complaint you submitted was: ' + target);
+		this.logComplaint(target);
+	},
 
+	complaintslist: 'complaintlist',
+	complaintlist: function (target, room, user, connection) {
+		if (!this.can('declare')) return false;
+		var lines = 0;
+		if (!target.match('[^0-9]')) { 
+			lines = parseInt(target || 15, 10);
+			if (lines > 100) lines = 100;
+		}
+		var filename = 'logs/complaint.txt';
+		var command = 'tail -' + lines + ' ' + filename;
+		var grepLimit = 100;
+		if (!lines || lines < 0) { // searching for a word instead
+			if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
+			command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]') + "'";
+		}
+
+		require('child_process').exec(command, function(error, stdout, stderr) {
+			if (error && stderr) {
+				connection.popup('/complaintlist erred - the complaints list does not support Windows');
+				console.log('/complaintlog error: ' + error);
+				return false;
+			}
+			if (lines) {
+				if (!stdout) {
+					connection.popup('The complaints list is empty.');
+				} else {
+					connection.popup('Displaying the last ' + lines + ' lines of complaints:\n\n' + stdout);
+				}
+			} else {
+				if (!stdout) {
+					connection.popup('No complaints containing "' + target + '" were found.');
+				} else {
+					connection.popup('Displaying the last ' + grepLimit + ' logged actions containing "' + target + '":\n\n' + stdout);
+				}
+			}
+		});
+	},*/
+	
 	tourladder: 'tournamentladder',
 	tournamentladder: function (target, room, user) {
 		if (!this.canBroadcast()) return;
