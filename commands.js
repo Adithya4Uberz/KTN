@@ -472,6 +472,10 @@ var commands = exports.commands = {
 		if (targetUser) targetUser.updateIdentity();
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
+	
+	roomdeauth: function (target, room, user) {
+		return this.parse('/roomdemote ' + target + ', deauth');
+	},
 
 	roomauth: function (target, room, user, connection) {
 		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
