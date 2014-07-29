@@ -81,7 +81,7 @@ var components = exports.components = {
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 
-			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + escapeHTML(target) + ")" : ""));
 
 			user.isAway = true;
 		}
@@ -111,7 +111,7 @@ var components = exports.components = {
 			//user will be authenticated
 			user.authenticated = true;
 
-			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
+			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
 
 			user.originalName = '';
 			user.isAway = false;
@@ -569,7 +569,7 @@ var components = exports.components = {
 		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
 		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-		user.add(tells[toId(this.targetUsername)].push(Date().toLocaleString() + "- " + user.getIdentity() + " said: \"" + message + "\""));
+		tells[toId(this.targetUsername)].push(Date().toLocaleString() + "- " + user.getIdentity() + " said: \"" + message + "\"");
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
