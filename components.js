@@ -941,14 +941,14 @@ var components = exports.components = {
 			var _room = Rooms.rooms[rooms[(rooms.length - len) - 1]];
 			if (_room.type === 'chat') {
 				if (_room.isOfficial) {
-					official.push(('<a href="/' + _room.id + '" class="ilink">' + _room.id + '</a> |'));
+					official.push(('<a href="/' + _room.id + '" class="ilink">' + _room.title + '</a> |'));
 					continue;
 				}
 				if (_room.isPrivate) {
-					privateRoom.push(('<a href="/' + _room.id + '" class="ilink">' + _room.id + '</a> |'));
+					privateRoom.push(('<a href="/' + _room.id + '" class="ilink">' + _room.title + '</a> |'));
 					continue;
 				}
-				nonOfficial.push(('<a href="/' + _room.id + '" class="ilink">' + _room.id + '</a> |'));
+				nonOfficial.push(('<a href="/' + _room.id + '" class="ilink">' + _room.title + '</a> |'));
 	    		}
 		}
 
