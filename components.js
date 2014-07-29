@@ -1145,10 +1145,6 @@ var components = exports.components = {
 			CommandParser.uncacheTree(path.join(__dirname, './', './trainer-cards.js'));
 			trainerCards = require(path.join(__dirname, './', './trainer-cards.js'));
 
-			/*this.sendReply('Reloading Casino...');
-			CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
-			dice = require(path.join(__dirname, './', 'casino.js'));*/
-
 			this.sendReply('Reloading Core...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
 			Core = require(path.join(__dirname, './', './core.js')).core;
@@ -1163,7 +1159,7 @@ var components = exports.components = {
 
 			return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
 		} catch (e) {
-			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
+			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /update after fixing)</b>:</font> \n' + e.stack);
 		}
 	},
 
@@ -1177,7 +1173,7 @@ var components = exports.components = {
 
 			return this.sendReply('|raw|<font color="green">Casino files have been reloaded.</font>');
 		} catch (e) {
-			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
+			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /cupdate after fixing)</b>:</font> \n' + e.stack);
 		}
 	},
 
