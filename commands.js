@@ -646,6 +646,18 @@ var commands = exports.commands = {
 		}
 		this.privateModCommand("(" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", ") + ")");
 	},
+	
+	breaklink: 'unlink',
+	unlink: function (target, room, user) {
+		if (!this.can('unmute')) return false;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		var alts = targetUser.getAlts();
+		if (!targetUser) return this.sendReply('/unlink - No user specified.'); 
+		if (alts.get) room.add('|unlink|' + alts);
+		this.send('|unlink|' + toId(targetUser.userid) + '');
+		this.privateModCommand(targetUser.name + '\'s links have been unlinked.');
+	},
 
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
