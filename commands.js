@@ -1507,15 +1507,15 @@ var commands = exports.commands = {
 		}
 	},
 
-	cupdate: function (target, room, user) {
-		if (!this.can('cupdate')) return;
+	eupdate: function (target, room, user) {
+		if (!this.can('eupdate')) return;
 
 		try {
-			this.sendReply('Reloading Casino...');
-			CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
-			dice = require(path.join(__dirname, './', 'casino.js'));
+			this.sendReply('Reloading Economy...');
+			CommandParser.uncacheTree(path.join(__dirname, './', 'economy.js'));
+			economy = require(path.join(__dirname, './', 'economy.js'));
 
-			return this.sendReply('|raw|<font color="green">Casino files have been reloaded.</font>');
+			return this.sendReply('|raw|<font color="green">Economy files have been reloaded.</font>');
 		} catch (e) {
 			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
 		}
