@@ -714,8 +714,8 @@ var Tournament = (function () {
         }
 
         var tourSize = this.generator.users.size;
-        if (this.room.isOfficial && tourSize >= Core.tournaments.tourSize) {
-            var firstMoney = Math.round(tourSize / Core.tournaments.amountEarn),
+        if (this.room.isOfficial && tourSize >= 4) {
+            var firstMoney = Math.round(tourSize - 2),
             secondMoney = Math.round(firstMoney / 2),
             firstBuck = 'buck',
             secondBuck = 'buck';
