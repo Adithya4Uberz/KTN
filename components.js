@@ -910,10 +910,10 @@ var components = exports.components = {
 		targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' bucks.');
 	},
 	
-	startdice: function(target, room, user) {
+	startdice: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		if (isNaN(target) || !target || target == 0) return this.sendReply('/startdice - You can not bet less than 1 buck.');
-		if (casino.dice[room.id]) return this.sendReply('/startdice - A dice is already running in the room.');
+		if (dice[room.id]) return this.sendReply('/startdice - A dice is already running in the room.');
 		
 		var target = parseInt(target);
 		
@@ -921,7 +921,7 @@ var components = exports.components = {
 		
 		if (target === 1) b = 'buck';
 		
-		casino.dice[room.id] = {
+		dice[room.id] = {
 			bet: target,
 			players: [],
 			rolls: {},
@@ -930,32 +930,32 @@ var components = exports.components = {
 		this.add('|raw|<div class="infobox"><h2><center><font color=#24678d>' + user.name + ' has started a dice game for </font><font color=red>' + firstMoney + ' </font><font color=#24678d>' + b + '.</font><br /> <button name="send" value="/joindice">Click to join.</button></center></h2></div> ');
 	},
 	
-	joindice: function(target, room, user) {
-		if (!casino.dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
+	joindice: function (target, room, user) {
+		if (!dice[room.id]) return this.sendReply('/joindice - There is no dice currently running in this room.');
 		
 		var userMoney = Number(Core.stdin('money', user.userid));
 		
-		if (userMoney < casino.dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
-		if (casino.dice[room.id].players.indexOf(user.userid) > -1) {
+		if (userMoney < dice[room.id].bet) return this.sendReply('/joindice - You can not bet more bucks than you have.');
+		if (dice[room.id].players.indexOf(user.userid) > -1) {
 			this.sendReply('/joindice - You have already joined this dice!');
 			return false;
 		}
 		room.addRaw('<b>' + user.name + ' has joined the game of dice.</b>');
-		casino.dice[room.id].players.push(user.userid);
-		if (casino.dice[room.id].players.length === 2) {
+		dice[room.id].players.push(user.userid);
+		if (dice[room.id].players.length === 2) {
 			room.addRaw('<b>The dice game has started!</b>');
-			casino.dice.generateRolls(casino.dice[room.id].players, room);
-			casino.dice.compareRolls(casino.dice[room.id].rolls, casino.dice[room.id].players, room);
+			dice.generateRolls(dice[room.id].players, room);
+			dice.compareRolls(dice[room.id].rolls, dice[room.id].players, room);
 			return 'gg';
 		}
 	},
 	
-	enddice: function(target, room, user) {
+	enddice: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		if (!casino.dice[room.id]) return this.sendReply('/enddice - No dice is currently running to end.');
+		if (!dice[room.id]) return this.sendReply('/enddice - No dice is currently running to end.');
 		room.addRaw('<b>' + user.name + ' has ended the game of dice.</b>');
 		
-		delete casino.dice[room.id];
+		delete dice[room.id];
 	},
 
 	show: function (target, room, user) {
