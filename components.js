@@ -1035,7 +1035,7 @@ var components = exports.components = {
 		if (!this.canTalk()) return;
 
 		var options = Poll.splint(target);
-		if (options.length < 5) return this.parse('/help poll');
+		if (options.length < 2) return this.parse('/help poll');
 
 		var question = options.shift();
 
