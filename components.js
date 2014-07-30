@@ -1035,11 +1035,11 @@ var components = exports.components = {
 		if (!this.canTalk()) return;
 
 		var options = Poll.splint(target);
-		if (options.length < 3) return this.parse('/help poll');
+		if (options.length < 5) return this.parse('/help poll');
 
 		var question = options.shift();
 
-		options = options.join(',').toLowerCase().split(',');
+		options = options.join(',').split(',');
 
 		Poll[room.id].question = question;
 		Poll[room.id].optionList = options;
