@@ -935,10 +935,11 @@ var components = exports.components = {
 
 	kick: function (target, room, user) {
 		if (!target) return this.parse('/help kick');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		
 		target = this.splitTarget(target);
-		var targetUser = Users.get(targetUser);
-		if (!targetUser) return this.sendReply('User ' + targetUser + ' not found.');
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		// if (targetUser.group >= user.group) return this.sendReply('/kick - Access denied.')
 		
 		if (target.length > 75) {
@@ -946,7 +947,7 @@ var components = exports.components = {
 		}
 		if (!this.can('kick', targetUser, room)) return false;
 		
-		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(targetUser + ' is not in this room.');
+		// if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(targetUser + ' is not in this room.');
 		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
 		targetUser.leaveRoom(room);
 		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
