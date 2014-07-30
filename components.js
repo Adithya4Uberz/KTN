@@ -937,8 +937,8 @@ var components = exports.components = {
 		if (!target) return this.parse('/help kick');
 		
 		target = this.splitTarget(target);
-		var targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply('User ' + target + ' not found.');
+		var targetUser = Users.get(targetUser);
+		if (!targetUser) return this.sendReply('User ' + targetUser + ' not found.');
 		// if (targetUser.group >= user.group) return this.sendReply('/kick - Access denied.')
 		
 		if (target.length > 75) {
@@ -946,7 +946,7 @@ var components = exports.components = {
 		}
 		if (!this.can('kick', targetUser, room)) return false;
 		
-		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(targetUser + ' is not in this room.');
 		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
 		targetUser.leaveRoom(room);
 		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
