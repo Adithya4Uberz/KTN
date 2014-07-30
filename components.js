@@ -1214,7 +1214,7 @@ var components = exports.components = {
 		try {
 			this.sendReply('Reloading Economy...');
 			CommandParser.uncacheTree(path.join(__dirname, './', 'economy.js'));
-			dice = require(path.join(__dirname, './', 'economy.js'));
+			economy = require(path.join(__dirname, './', 'economy.js'));
 
 			return this.sendReply('|raw|<font color="green">Economy files have been reloaded.</font>');
 		} catch (e) {
