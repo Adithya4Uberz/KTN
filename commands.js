@@ -548,7 +548,18 @@ var commands = exports.commands = {
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
 	
-	/*lockroom: function(target, room, user) {
+	lockroom: function (target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("Only unofficial chatrooms can be locked.");
+		}
+		if (room.auth[user.userid] != '#' || user.group != '~') {
+			return this.sendReply("/lockroom - Access denied.");
+		}
+		this(!user.joinRoom(room.id || room, connection));
+		this.addModCommand(user.name + " has locked the room.");
+	},
+	
+	/*lockroom: function (target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
 		}
@@ -560,7 +571,7 @@ var commands = exports.commands = {
 		this.addModCommand(user.name + ' has locked the room.');
 	},
 
-	unlockroom: function(target, room, user) {
+	unlockroom: function (target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be unlocked.");
 		}
@@ -653,10 +664,10 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var alts = targetUser.getAlts();
-		if (!targetUser) return this.sendReply('/unlink - No user specified.'); 
+		if (!target) return this.sendReply('/unlink - No user specified.'); 
 		if (alts.get) room.add('|unlink|' + alts);
 		this.send('|unlink|' + toId(targetUser.userid) + '');
-		this.privateModCommand(targetUser.name + '\'s links have been unlinked.');
+		this.privateModCommand('(' + targetUser.name + '\'s links have been unlinked.)');
 	},
 
 	autojoin: function (target, room, user, connection) {
