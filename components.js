@@ -29,7 +29,6 @@ var components = exports.components = {
     	busy: 'away',    
 	afk: 'away',
 	away: function (target, room, user, connection, cmd) {
-		if (!this.can('away')) return false;
 		// unicode away message idea by Siiilver
 		var t = 'Ⓐⓦⓐⓨ';
 		var t2 = 'Away';
@@ -71,6 +70,14 @@ var components = exports.components = {
 			t2 = 'Away';
 			break;
 		}
+		
+		target = this.splitTarget(target);
+		
+		const MAX_REASON_LENGTH = 50;
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+		if (!this.can('away', target)) return false;
 
 		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
 
