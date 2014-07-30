@@ -29,6 +29,7 @@ var components = exports.components = {
     	busy: 'away',    
 	afk: 'away',
 	away: function (target, room, user, connection, cmd) {
+		if (!this.canTalk()) return this.sendReply('You are unable to talk.');
 		// unicode away message idea by Siiilver
 		var t = 'Ⓐⓦⓐⓨ';
 		var t2 = 'Away';
@@ -71,12 +72,6 @@ var components = exports.components = {
 			break;
 		}
 		
-		const MAX_REASON_LENGTH = 50;
-		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
-		}
-		if (!this.can('away', target)) return false;
-
 		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
 
 		if (!user.isAway) {
@@ -86,7 +81,7 @@ var components = exports.components = {
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 
-			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? " (" + escapeHTML(target) + ")" : ""));
+			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? ' (' + escapeHTML(target) + ')' : ''));
 
 			user.isAway = true;
 		}
@@ -939,18 +934,23 @@ var components = exports.components = {
 	},
 
 	kick: function (target, room, user) {
-		if (!this.can('kick')) return;
 		if (!target) return this.parse('/help kick');
-
+		
+		target = this.splitTarget(target);
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply('User ' + target + ' not found.');
 		// if (targetUser.group >= user.group) return this.sendReply('/kick - Access denied.')
-
+		
+		if (target.length > 75) {
+			return this.sendReply("The reason is too long. It cannot exceed 75 characters.");
+		}
+		if (!this.can('kick', targetUser, room)) return false;
+		
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
-		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
+		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.' + (target ? ' (' + target + ')' : '')););
 		targetUser.leaveRoom(room);
-		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
-		this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.title);
+		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? ' (' + target + ')' : '')););
+		this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.title + (target ? ' (' + target + ')' : ''));););
 	},
 
 	masspm: 'pmall',
