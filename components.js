@@ -28,7 +28,7 @@ var components = exports.components = {
     	sleeping: 'away',
     	busy: 'away',    
 	afk: 'away',
-	away: function(target, room, user, connection, cmd) {
+	away: function (target, room, user, connection, cmd) {
 		if (!this.can('away')) return false;
 		// unicode away message idea by Siiilver
 		var t = 'Ⓐⓦⓐⓨ';
@@ -92,7 +92,7 @@ var components = exports.components = {
 		user.updateIdentity();
 	},
 
-	back: function(target, room, user, connection) {
+	back: function (target, room, user, connection) {
 		if (!this.can('away')) return false;
 
 		if (user.isAway) {
@@ -111,7 +111,7 @@ var components = exports.components = {
 			//user will be authenticated
 			user.authenticated = true;
 
-			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
+			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is now back.');
 
 			user.originalName = '';
 			user.isAway = false;
@@ -125,7 +125,7 @@ var components = exports.components = {
 
 	earnbucks: 'earnmoney',
 	earnmoney: function (target, room, user) {
-	if (!this.canBroadcast()) return;
+		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<b><font color=green>You can earn bucks by:</font></b><li>Competing in various Tournaments throughout the Server\'s official rooms.<br />' +
 			'<li>Gambling in the Casino by joining in bucks to play for more. (luck based so don\'t blame anyone for what happens; currently not available)</li>' +
 			'<li>Follow <a href="https://github.com/macrarazy/"><b>macrarazy</b></a> and <a href="https://github.com/BlakJack/"><b>BlakJack</b></a> on GitHub unless <a href="https://github.com/register/"><b>you don\'t have a GitHub account</b></a>.</li>' +
