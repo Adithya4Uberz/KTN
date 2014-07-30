@@ -234,7 +234,7 @@ var components = exports.components = {
 
 		var targetUser = this.targetUserOrSelf(target);
 
-		var money = Core.profile.money(targetUser.userId);
+		var money = Core.profile.money(targetUser.id);
 		var b = 'buck';
 		if (money > 1) b = 'bucks';
 
