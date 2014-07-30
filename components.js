@@ -71,8 +71,6 @@ var components = exports.components = {
 			break;
 		}
 		
-		target = this.splitTarget(target);
-		
 		const MAX_REASON_LENGTH = 50;
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
