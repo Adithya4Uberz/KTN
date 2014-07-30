@@ -1726,6 +1726,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ & ~");
 		}
+		if (target === "%" || target === 'unlink' || target === 'breaklink') {
+			matched = true;
+			this.sendReply("/unlink [username] - Unlinks the user\'s links. Requires: % @ & ~")
+		}
 		if (target === "%" || target === 'warn' || target === 'k') {
 			matched = true;
 			this.sendReply("/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: % @ & ~");
