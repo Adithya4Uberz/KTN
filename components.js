@@ -1208,17 +1208,17 @@ var components = exports.components = {
 		}
 	},
 
-	creload: function (target, room, user) {
-		if (!this.can('creload')) return;
+	ereload: function (target, room, user) {
+		if (!this.can('ereload')) return;
 
 		try {
-			this.sendReply('Reloading Casino...');
-			CommandParser.uncacheTree(path.join(__dirname, './', 'casino.js'));
-			dice = require(path.join(__dirname, './', 'casino.js'));
+			this.sendReply('Reloading Economy...');
+			CommandParser.uncacheTree(path.join(__dirname, './', 'economy.js'));
+			dice = require(path.join(__dirname, './', 'economy.js'));
 
-			return this.sendReply('|raw|<font color="green">Casino files have been reloaded.</font>');
+			return this.sendReply('|raw|<font color="green">Economy files have been reloaded.</font>');
 		} catch (e) {
-			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /cupdate after fixing)</b>:</font> \n' + e.stack);
+			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /eupdate after fixing)</b>:</font> \n' + e.stack);
 		}
 	},
 
