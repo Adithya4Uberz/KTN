@@ -724,7 +724,7 @@ var Tournament = (function () {
 
             // annouces the winner/runnerUp
             this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</strong>');
-            if (runnerUp = true) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
+            if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
 
             var wid = toId(winner), // winner's userid
                 rid = toId(runnerUp); // runnerUp's userid
