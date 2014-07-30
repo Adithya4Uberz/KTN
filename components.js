@@ -1039,7 +1039,7 @@ var components = exports.components = {
 
 		var question = options.shift();
 
-		options = options.join(',').split(',');
+		options = options.join(',').toLowerCase().split(',');
 
 		Poll[room.id].question = question;
 		Poll[room.id].optionList = options;
