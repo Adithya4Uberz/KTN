@@ -548,17 +548,6 @@ var commands = exports.commands = {
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
 	
-	lockroom: function (target, room, user) {
-		if (!room.auth) {
-			return this.sendReply("Only unofficial chatrooms can be locked.");
-		}
-		if (room.auth[user.userid] != '#' || user.group != '~') {
-			return this.sendReply("/lockroom - Access denied.");
-		}
-		this(!user.joinRoom(room.id || room, connection));
-		this.addModCommand(user.name + " has locked the room.");
-	},
-	
 	/*lockroom: function (target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
@@ -657,18 +646,6 @@ var commands = exports.commands = {
 		}
 		this.privateModCommand("(" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", ") + ")");
 	},
-	
-	breaklink: 'unlink',
-	unlink: function (target, room, user) {
-		if (!this.can('unmute')) return false;
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		var alts = targetUser.getAlts();
-		if (!target) return this.sendReply('/unlink - No user specified.'); 
-		if (alts.get) room.add('|unlink|' + alts);
-		this.send('|unlink|' + toId(targetUser.userid) + '');
-		this.privateModCommand('(' + targetUser.name + '\'s links have been unlinked.)');
-	},
 
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
@@ -718,8 +695,19 @@ var commands = exports.commands = {
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
+	breaklink: 'unlink',
+	unlink: function (target, room, user) {
+		if (!this.can('unmute')) return false;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		var alts = targetUser.getAlts();
+		if (!target) return this.parse('/help unlink'); 
+		if (alts.get) room.add('|unlink|' + alts);
+		this.send('|unlink|' + toId(targetUser.userid) + '');
+		this.privateModCommand('(' + targetUser.name + '\'s links have been unlinked.)');
+	},
+	
+	w: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
