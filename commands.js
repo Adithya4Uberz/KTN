@@ -1238,6 +1238,24 @@ var commands = exports.commands = {
 		this.logModCommand(user.name + " globally declared (chat level) " + target);
 	},
 	
+	sp: 'sendpopup',
+	spop: 'sendpopup',
+	spopup: 'sendpopup',
+	sendpopup: function(target, room, user) {
+		if (!this.can('sendpopup')) return false;
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply('/help sendpopup');
+		if (!target) return this.sendReply('/help sendpopup');
+
+		targetUser.popup(target);
+		this.sendReply(targetUser.name + ' got the popup message as: "' + target + '".');
+
+		this.logModCommand(user.name + ' sent a popup message to ' + targetUser.name + '.');
+	},
+	
 	/*togglegdeclare: function (target, room, user) {
 		if (!this.can('roommod', null, room)) return;
 		if (target === 'off') {
