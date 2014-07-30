@@ -701,9 +701,8 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var alts = targetUser.getAlts();
-		if (!target) return this.parse('/help unlink'); 
-		if (alts.get) room.add('|unlink|' + alts);
-		this.send('|unlink|' + toId(targetUser.userid) + '');
+		if (!target) return this.parse('/help unlink');
+		this.send('|unlink|' + this.getLastIdOf(targetUser));
 		this.privateModCommand('(' + targetUser.name + '\'s links have been unlinked.)');
 	},
 	
