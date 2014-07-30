@@ -757,7 +757,7 @@ var commands = exports.commands = {
 	mute: function (target, room, user) {
 		if (!target) return this.parse('/help mute');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
-
+		
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
@@ -778,6 +778,8 @@ var commands = exports.commands = {
 		var alts = targetUser.getAlts();
 		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also muted: " + alts.join(", ") + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		
+		if (user.group = '±') return this.parse('/opmute ' + targetUser + ', ' + target);
 
 		targetUser.mute(room.id, 7 * 60 * 1000);
 	},
