@@ -715,18 +715,16 @@ var Tournament = (function () {
 
         var tourSize = this.generator.users.size;
         if (this.room.isOfficial && tourSize >= 4) {
-            var firstMoney = Math.round(tourSize - 2),
-            secondMoney = Math.round(firstMoney / 2),
+            var firstMoney = Math.round(tourSize / 4),
+            secondMoney = Math.round(firstMoney / 1),
             firstBuck = 'buck',
             secondBuck = 'buck';
             if (firstMoney > 1) firstBuck = 'bucks';
             if (secondMoney > 1) secondBuck = 'bucks';
-            
-            var noRunUp = !runnerUp;
 
             // annouces the winner/runnerUp
             this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</strong>');
-            if (!noRunUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
+            if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
 
             var wid = toId(winner), // winner's userid
                 rid = toId(runnerUp); // runnerUp's userid
