@@ -947,10 +947,10 @@ var components = exports.components = {
 		if (!this.can('kick', targetUser, room)) return false;
 		
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
-		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.' + (target ? ' (' + target + ')' : '')););
+		targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
 		targetUser.leaveRoom(room);
-		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? ' (' + target + ')' : '')););
-		this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.title + (target ? ' (' + target + ')' : ''));););
+		room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? ' (' + target + ')' : ''));
+		this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.title + '' + (target ? ' (' + target + ')' : ''));
 	},
 
 	masspm: 'pmall',
