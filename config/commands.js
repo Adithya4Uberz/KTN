@@ -1728,7 +1728,7 @@ var commands = exports.commands = {
 		}
 		if (target === "%" || target === 'unlink' || target === 'breaklink') {
 			matched = true;
-			this.sendReply("/unlink [username] - Unlinks the user\'s links. Requires: % @ & ~")
+			this.sendReply("/unlink [username] - Unlinks the user\'s links. Requires: % @ & ~");
 		}
 		if (target === "%" || target === 'warn' || target === 'k') {
 			matched = true;
@@ -1737,6 +1737,10 @@ var commands = exports.commands = {
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
 			this.sendReply("/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ & ~");
+		}
+		if (target === '±' || target === 'opmute' || target === 'opm') {
+			matched = true;
+			this.sendReply("/opmute OR /opm [username], [reason] - Mutes a user with reason for 7 minutes. Requires: ±");
 		}
 		if (target === '%' || target === 'hourmute' || target === 'hm') {
 			matched = true;
