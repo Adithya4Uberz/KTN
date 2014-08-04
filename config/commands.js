@@ -1,6 +1,6 @@
 /**
  * Commands
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokemon Showdown - https://pokemonshowdown.com/
  *
  * These are commands. For instance, you can define the command 'whois'
  * here, then use it by typing /whois into Pokemon Showdown.
@@ -227,138 +227,6 @@ var commands = exports.commands = {
 		if (!atLeastOne) this.sendReply("No results found.");
 	},
 
-	spam: 'spamroom',
-	spamroom: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
-		this.splitTarget(target);
-
-		if (!this.targetUser) {
-			return this.sendReply("The user '" + this.targetUsername + "' does not exist.");
-		}
-		if (!this.can('mute', this.targetUser)) {
-			return false;
-		}
-
-		var targets = Spamroom.addUser(this.targetUser);
-		if (targets.length === 0) {
-			return this.sendReply("That user's messages are already being redirected to the spamroom.");
-		}
-		this.privateModCommand("(" + user.name + " has added to the spamroom user list: " + targets.join(", ") + ")");
-	},
-
-	unspam: 'unspamroom',
-	unspamroom: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
-		this.splitTarget(target);
-
-		if (!this.can('mute')) {
-			return false;
-		}
-
-		var targets = Spamroom.removeUser(this.targetUser || this.targetUsername);
-		if (targets.length === 0) {
-			return this.sendReply("That user is not in the spamroom list.");
-		}
-		this.privateModCommand("(" + user.name + " has removed from the spamroom user list: " + targets.join(", ") + ")");
-	},
-
-	customavatars: 'customavatar',
-	customavatar: (function () {
-		const script = (function () {/*
-			FILENAME=`mktemp`
-			function cleanup {
-				rm -f $FILENAME
-			}
-			trap cleanup EXIT
-
-			set -xe
-
-			timeout 10 wget "$1" -nv -O $FILENAME
-
-			FRAMES=`identify $FILENAME | wc -l`
-			if [ $FRAMES -gt 1 ]; then
-				EXT=".gif"
-			else
-				EXT=".png"
-			fi
-
-			timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
-		*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-
-		var pendingAdds = {};
-		return function (target) {
-			var parts = target.split(',');
-			var cmd = parts[0].trim().toLowerCase();
-
-			if (cmd in {'':1, show:1, view:1, display:1}) {
-				var message = "";
-				for (var a in Config.customAvatars)
-					message += "<strong>" + Tools.escapeHTML(a) + ":</strong> " + Tools.escapeHTML(Config.customAvatars[a]) + "<br />";
-				return this.sendReplyBox(message);
-			}
-
-			if (!this.can('customavatar')) return false;
-
-			switch (cmd) {
-				case 'set':
-					var userid = toId(parts[1]);
-					var user = Users.getExact(userid);
-					var avatar = parts.slice(2).join(',').trim();
-
-					if (!userid) return this.sendReply("You didn't specify a user.");
-					if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
-
-					var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
-					pendingAdds[hash] = {userid: userid, avatar: avatar};
-					parts[1] = hash;
-
-					if (!user) {
-						this.sendReply("Warning: " + userid + " is not online.");
-						this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
-						return;
-					}
-					// Fallthrough
-
-				case 'forceset':
-					var hash = parts[1].trim();
-					if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
-
-					var userid = pendingAdds[hash].userid;
-					var avatar = pendingAdds[hash].avatar;
-					delete pendingAdds[hash];
-
-					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], (function (e, out, err) {
-						if (e) {
-							this.sendReply(userid + "'s custom avatar failed to be set. Script output:");
-							(out + err).split('\n').forEach(this.sendReply.bind(this));
-							return;
-						}
-
-						reloadCustomAvatars();
-						this.sendReply(userid + "'s custom avatar has been set.");
-					}).bind(this));
-					break;
-
-				case 'delete':
-					var userid = toId(parts[1]);
-					if (!Config.customAvatars[userid]) return this.sendReply(userid + " does not have a custom avatar.");
-
-					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
-						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
-					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
-						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
-
-						delete Config.customAvatars[userid];
-						this.sendReply(userid + "'s custom avatar removed successfully");
-					}).bind(this));
-					break;
-
-				default:
-					return this.sendReply("Invalid command. Valid commands are `/customavatar set, user, avatar` and `/customavatar delete, user`.");
-			}
-		};
-	})(),
-
 	/*********************************************************
 	 * Shortcuts
 	 *********************************************************/
@@ -373,26 +241,6 @@ var commands = exports.commands = {
 			return this.sendReply("Room " + roomid + " not found.");
 		}
 		return this.parse('/msg ' + this.targetUsername + ', /invite ' + roomid);
-	},
-	
-	/*********************************************************
-	 * Fun commands
-	 *********************************************************/
-
-	poke: function(target, room, user){
-		if(!target) return this.sendReply('/poke needs a target.');
-		return this.parse('/me pokes ' + target + '.');
-	},
-
-	slap: function(target, room, user){
-		if(!target) return this.sendReply('/slap needs a target.');
-		return this.parse('/me slaps ' + target + ' in the face with a slipper!');
-	},
-
-	s: 'spank',
-	spank: function(target, room, user){
-		if(!target) return this.sendReply('/spank needs a target.');
-		return this.parse('/me spanks ' + target + '!');
 	},
 
 	/*********************************************************
@@ -473,7 +321,7 @@ var commands = exports.commands = {
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound Based</font>"] = "";
+				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
 				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
 
@@ -787,6 +635,7 @@ var commands = exports.commands = {
 	},
 
 	weak: 'weakness',
+	resist: 'weakness',
 	weakness: function (target, room, user){
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
@@ -808,20 +657,37 @@ var commands = exports.commands = {
 		}
 
 		var weaknesses = [];
+		var resistances = [];
+		var immunities = [];
 		Object.keys(Tools.data.TypeChart).forEach(function (type) {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod === 1) weaknesses.push(type);
-				if (typeMod === 2) weaknesses.push("<b>" + type + "</b>");
+				switch (typeMod) {
+				case 1:
+					weaknesses.push(type);
+					break;
+				case 2:
+					weaknesses.push("<b>" + type + "</b>");
+					break;
+				case -1:
+					resistances.push(type);
+					break;
+				case -2:
+					resistances.push("<b>" + type + "</b>");
+					break;
+				}
+			} else {
+				immunities.push(type);
 			}
 		});
-
-		if (!weaknesses.length) {
-			this.sendReplyBox("" + target + " has no weaknesses.");
-		} else {
-			this.sendReplyBox("" + target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
-		}
+ 
+		var buffer = []
+		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':')
+		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-resist\">Resistances</span>: ' + (resistances.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));
+		this.sendReplyBox(buffer.join('<br>'));
 	},
 
 	eff: 'effectiveness',
@@ -879,6 +745,30 @@ var commands = exports.commands = {
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
+	
+	/*********************************************************
+	 * Custom commands
+	 *********************************************************/
+
+	poke: function(target, room, user){
+		if(!target) return this.sendReply('/poke needs a target.');
+		return this.parse('/me pokes ' + target + '.');
+	},
+
+	slap: function(target, room, user){
+		if(!target) return this.sendReply('/slap needs a target.');
+		return this.parse('/me slaps ' + target + ' in the face with a slipper!');
+	},
+
+	s: 'spank',
+	spank: function(target, room, user){
+		if(!target) return this.sendReply('/spank needs a target.');
+		return this.parse('/me spanks ' + target + '!');
+	},
+	
+	/*********************************************************
+	 * General configuration commands
+	 *********************************************************/
 
 	uptime: (function (){
 		function formatUptime(uptime) {
@@ -949,7 +839,8 @@ var commands = exports.commands = {
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"New to competitive pokemon?<br />" +
+			"New to competitive Pokemon?<br />" +
+			"<font size=1><font color=grey><font face=Lucida Console><i>Or if you want to see the room's intro use /roomintro</i></font></font></font><br />" +
 			"- <a href=\"http://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pokémon Showdown</a><br />" +
 			"- <a href=\"http://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pokémon</a><br />" +
 			"- <a href=\"http://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
@@ -1442,6 +1333,138 @@ var commands = exports.commands = {
 
 		this.sendReplyBox(target);
 	},
+	
+	spam: 'spamroom',
+	spamroom: function (target, room, user) {
+		if (!target) return this.sendReply("Please specify a user.");
+		this.splitTarget(target);
+
+		if (!this.targetUser) {
+			return this.sendReply("The user '" + this.targetUsername + "' does not exist.");
+		}
+		if (!this.can('mute', this.targetUser)) {
+			return false;
+		}
+
+		var targets = Spamroom.addUser(this.targetUser);
+		if (targets.length === 0) {
+			return this.sendReply("That user's messages are already being redirected to the spamroom.");
+		}
+		this.privateModCommand("(" + user.name + " has added to the spamroom user list: " + targets.join(", ") + ")");
+	},
+
+	unspam: 'unspamroom',
+	unspamroom: function (target, room, user) {
+		if (!target) return this.sendReply("Please specify a user.");
+		this.splitTarget(target);
+
+		if (!this.can('mute')) {
+			return false;
+		}
+
+		var targets = Spamroom.removeUser(this.targetUser || this.targetUsername);
+		if (targets.length === 0) {
+			return this.sendReply("That user is not in the spamroom list.");
+		}
+		this.privateModCommand("(" + user.name + " has removed from the spamroom user list: " + targets.join(", ") + ")");
+	},
+
+	customavatars: 'customavatar',
+	customavatar: (function () {
+		const script = (function () {/*
+			FILENAME=`mktemp`
+			function cleanup {
+				rm -f $FILENAME
+			}
+			trap cleanup EXIT
+
+			set -xe
+
+			timeout 10 wget "$1" -nv -O $FILENAME
+
+			FRAMES=`identify $FILENAME | wc -l`
+			if [ $FRAMES -gt 1 ]; then
+				EXT=".gif"
+			else
+				EXT=".png"
+			fi
+
+			timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+		*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+
+		var pendingAdds = {};
+		return function (target) {
+			var parts = target.split(',');
+			var cmd = parts[0].trim().toLowerCase();
+
+			if (cmd in {'':1, show:1, view:1, display:1}) {
+				var message = "";
+				for (var a in Config.customAvatars)
+					message += "<strong>" + Tools.escapeHTML(a) + ":</strong> " + Tools.escapeHTML(Config.customAvatars[a]) + "<br />";
+				return this.sendReplyBox(message);
+			}
+
+			if (!this.can('customavatar')) return false;
+
+			switch (cmd) {
+				case 'set':
+					var userid = toId(parts[1]);
+					var user = Users.getExact(userid);
+					var avatar = parts.slice(2).join(',').trim();
+
+					if (!userid) return this.sendReply("You didn't specify a user.");
+					if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a set custom avatar.");
+
+					var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
+					pendingAdds[hash] = {userid: userid, avatar: avatar};
+					parts[1] = hash;
+
+					if (!user) {
+						this.sendReply("Warning: " + userid + " is not online.");
+						this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
+						return;
+					}
+					// Fallthrough
+
+				case 'forceset':
+					var hash = parts[1].trim();
+					if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
+
+					var userid = pendingAdds[hash].userid;
+					var avatar = pendingAdds[hash].avatar;
+					delete pendingAdds[hash];
+
+					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], (function (e, out, err) {
+						if (e) {
+							this.sendReply(userid + "'s custom avatar failed to be set. Script output:");
+							(out + err).split('\n').forEach(this.sendReply.bind(this));
+							return;
+						}
+
+						reloadCustomAvatars();
+						this.sendReply(userid + "'s custom avatar has been set.");
+					}).bind(this));
+					break;
+
+				case 'delete':
+					var userid = toId(parts[1]);
+					if (!Config.customAvatars[userid]) return this.sendReply(userid + " does not have a set custom avatar.");
+
+					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
+						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
+					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
+						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
+
+						delete Config.customAvatars[userid];
+						this.sendReply(userid + "'s custom avatar was successfully removed.");
+					}).bind(this));
+					break;
+
+				default:
+					return this.sendReply("Invalid command. Valid commands are '/customavatar set, [user], avatar URL' and '/customavatar delete, [user]'.");
+			}
+		};
+	})(),
 
 	a: function (target, room, user) {
 		if (!this.can('rawpacket')) return false;
