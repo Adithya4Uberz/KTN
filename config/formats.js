@@ -184,33 +184,12 @@ exports.Formats = [
 		}
 	},
 	
-	/*name: "Lotad's Dad"
-	section: "Themed Metagames"
-	
-	gameType: 'triples',
-		maxForcedLevel: 5,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		validateTeam: function (team, format) {
-			for (var i = 0; i < team.length; i++) {
-				if (Tools.getTemplate(team[i]).species === 'Lotad') return;
-			}
-			return ['Your team must have Lotad.'];
-		},
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (!template.evos || template.evos.length === 0) {
-				return [set.species + " is banned as it cannot evolve."];
-			}
-		}
-	},*/
-	
 	// Monotype
 	///////////////////////////////////////////////////////////////////
 	
 	{
 		name: "Random Monotype",
 		section: "Monotype",
-		// column: 2,
 
 		team: 'randommonotype',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
