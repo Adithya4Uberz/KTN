@@ -1045,6 +1045,7 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"<br />" +
 			"The room founder can also use:<br />" +
 			"- /roomowner <em>username</em>: appoint a room owner<br />" +
 			"- /roomdesc <em>message</em> - sets a description for the room<br />" +
