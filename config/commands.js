@@ -751,18 +751,18 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	poke: function (target, room, user) {
-		if (!target) return this.sendReply('/help poke');
+		if (!target) return this.sendReply('/poke [target] - Pokes the target.');
 		return this.parse('/me pokes ' + target + ' with a backrubber.');
 	},
 
 	slap: function (target, room, user) {
-		if (!target) return this.sendReply('/help slap');
+		if (!target) return this.sendReply('/slap [target] - Slaps the target.');
 		return this.parse('/me slaps ' + target + ' in the face with a slipper!');
 	},
 
 	s: 'spank',
 	spank: function (target, room, user) {
-		if (!target) return this.sendReply('/help spank');
+		if (!target) return this.sendReply('/spank [target] - Spanks the target.');
 		return this.parse('/me spanks ' + target + '!');
 	},
 	
