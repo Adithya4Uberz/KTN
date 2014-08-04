@@ -1539,12 +1539,12 @@ var commands = exports.commands = {
 			this.sendReply("/whois - Get details on yourself: alts, group, IP address, and rooms.");
 			this.sendReply("/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms.");
 		}
-		/*if (target === 'all' || target === 'poke' || target === 'slap' || target === 'spank') {
+		if (target === 'all' || target === 'poke' || target === 'slap' || target === 'spank') {
 			matched = true;
 			if (target === 'poke') this.sendReply("/poke [username] - Pokes a target user.");
 			if (target === 'slap') this.sendReply("/slap [username] - Slaps a target user.");
 			else if (target === 'spank') this.sendReply("/spank [username] - Spanks a target user.");
-		}*/
+		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
 			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.");
