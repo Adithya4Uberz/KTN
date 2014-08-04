@@ -81,7 +81,8 @@ var components = exports.components = {
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 
-			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? ' (' + escapeHTML(target) + ')' : ''));
+			var a = user.group;
+			if (a === '%' || a === '@' || a === '&' || a === '~') this.add('|raw|-- <b><font color="#088cc7">' + user.originalName + '</font color></b> is now ' + t2.toLowerCase() + '. ' + (target ? ' (' + escapeHTML(target) + ')' : ''));
 
 			user.isAway = true;
 		}
@@ -103,15 +104,16 @@ var components = exports.components = {
 
 			var newName = user.originalName;
 
-			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			// delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(newName);
 
 			user.forceRename(newName, undefined, true);
 
-			//user will be authenticated
+			// user will be authenticated
 			user.authenticated = true;
 
-			if (user.can('unmute')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is now back.');
+			var a = user.group;
+			if (a === '%' || a === '@' || a === '&' || a === '~') this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is now back.');
 
 			user.originalName = '';
 			user.isAway = false;
