@@ -57,7 +57,7 @@
 
 //global.Tools = require('./tools.js');
 
-var Battles = {};
+/*var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
@@ -1452,9 +1452,9 @@ var Battle = (function () {
 	// - random(n) returns an integer in [0, n)
 	// - random(m, n) returns an integer in [m, n)
 
-	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.*/
 
-	Battle.prototype.random = function (m, n) {
+	/*Battle.prototype.random = function (m, n) {
 		this.seed = this.nextFrame(); // Advance the RNG
 		var result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		m = Math.floor(m);
@@ -1936,7 +1936,7 @@ var Battle = (function () {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect) {
+	/*Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -2935,7 +2935,7 @@ var Battle = (function () {
 	/**
 	 * Returns whether a proposed target for a move is valid.
 	 */
-	Battle.prototype.validTargetLoc = function (targetLoc, source, targetType) {
+	/*Battle.prototype.validTargetLoc = function (targetLoc, source, targetType) {
 		var numSlots = source.side.active.length;
 		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
@@ -3422,7 +3422,7 @@ var Battle = (function () {
 				currentPriority--;
 			} */
 
-			this.runDecision(decision);
+			/*this.runDecision(decision);
 
 			if (this.currentRequest) {
 				return;
@@ -3448,7 +3448,7 @@ var Battle = (function () {
 	 * You probably want the OverrideDecision event (which doesn't
 	 * change priority order).
 	 */
-	Battle.prototype.changeDecision = function (pokemon, decision) {
+	/*Battle.prototype.changeDecision = function (pokemon, decision) {
 		this.cancelDecision(pokemon);
 		if (!decision.pokemon) decision.pokemon = pokemon;
 		this.addQueue(decision);
@@ -3457,9 +3457,9 @@ var Battle = (function () {
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	Battle.prototype.choose = function (sideid, choice, rqid) {
-		var side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
+	/*Battle.prototype.choose = function (sideid, choice, rqid) {
+		/*var side = null;
+		/*if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		// This condition should be impossible because the sideid comes
 		// from our forked process and if the player id were invalid, we would
 		// not have even got to this function.
@@ -3524,7 +3524,7 @@ var Battle = (function () {
 	 *
 	 * Choice validation is also done here.
 	 */
-	Battle.prototype.parseChoice = function (choices, side) {
+	/*Battle.prototype.parseChoice = function (choices, side) {
 		var prevSwitches = {};
 		if (!side.currentRequest) return true;
 
@@ -3963,4 +3963,4 @@ var Battle = (function () {
 
 exports.BattlePokemon = BattlePokemon;
 exports.BattleSide = BattleSide;
-exports.Battle = Battle;
+exports.Battle = Battle;*/
