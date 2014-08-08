@@ -364,9 +364,9 @@ var commands = exports.commands = {
 	},
 	
 	roomowner: function (target, room, user) {
-		if (!room.chatRoomData) {
+		/*if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
-		}
+		}*/
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 
