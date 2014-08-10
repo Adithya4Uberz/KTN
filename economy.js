@@ -49,7 +49,7 @@ var economy = {
 				}
 			}
 		}
-	},
+	};
 	
 	cmds: {
 		startdice: function (target, room, user) {
