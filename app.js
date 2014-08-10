@@ -469,3 +469,5 @@ global.Poll = require('./core.js').core.poll();
 global.SysopAccess = require('./core.js').sysopAccess();
 
 global.trainerCards = require('./trainer-cards.js');
+
+global.ChatPlugins = require('./chat-plugins').chatPlugins();
