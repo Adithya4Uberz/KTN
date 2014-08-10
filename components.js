@@ -1206,7 +1206,7 @@ var components = exports.components = {
 			CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
 			Components = require(path.join(__dirname, './', './components.js'));
 
-			this.sendReply('Reloading SysopAccess...');
+			this.sendReply('Reloading Sysop Access...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
 			SysopAccess = require(path.join(__dirname, './', './core.js'));
 
@@ -1227,6 +1227,20 @@ var components = exports.components = {
 			return this.sendReply('|raw|<font color="green">Economy files have been reloaded.</font>');
 		} catch (e) {
 			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /eupdate after fixing)</b>:</font> \n' + e.stack);
+		}
+	},
+	
+	ureload: function (target, room, user) {
+		if (!this.can('ureload')) return;
+
+		try {
+			this.sendReply('Reloading Users...');
+			CommandParser.uncacheTree(path.join(__dirname, './', 'users.js'));
+			economy = require(path.join(__dirname, './', 'users.js'));
+
+			return this.sendReply('|raw|<font color="green">User files have been reloaded.</font>');
+		} catch (e) {
+			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /uupdate after fixing)</b>:</font> \n' + e.stack);
 		}
 	},
 
