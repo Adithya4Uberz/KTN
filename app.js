@@ -468,6 +468,4 @@ global.Poll = require('./core.js').core.poll();
 
 global.SysopAccess = require('./core.js').sysopAccess();
 
-global.economy = require('./economy.js');
-
 global.trainerCards = require('./trainer-cards.js');
