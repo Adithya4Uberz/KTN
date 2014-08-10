@@ -1546,7 +1546,7 @@ var commands = exports.commands = {
 			
 			// this.sendReply('Reloading Chat Plugins...');
 			// CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins'));
-			// chatPlugins = require(path.join(__dirname, './', './chat-plugins'));
+			// ChatPlugins = require(path.join(__dirname, './', './chat-plugins'));
 
 			this.sendReply('Reloading Sysop Access...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
@@ -1578,7 +1578,7 @@ var commands = exports.commands = {
 		try {
 			this.sendReply('Reloading Users...');
 			CommandParser.uncacheTree(path.join(__dirname, './', 'users.js'));
-			users = require(path.join(__dirname, './', 'users.js'));
+			Users = require(path.join(__dirname, './', 'users.js'));
 
 			return this.sendReply('|raw|<font color="green">User files have been reloaded.</font>');
 		} catch (e) {
