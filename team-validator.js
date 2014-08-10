@@ -7,7 +7,7 @@
  * @license MIT license
  */
 
-if (!process.send) {
+/*if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
 
@@ -34,7 +34,7 @@ if (!process.send) {
 		ValidatorProcess.prototype.active = true;
 		ValidatorProcess.processes = [];
 		ValidatorProcess.spawn = function () {
-			var num = Config.validatorprocesses || 1;
+			var num = Config.validatorProcesses || 1;
 			for (var i = 0; i < num; ++i) {
 				this.processes.push(new ValidatorProcess());
 			}
@@ -77,10 +77,19 @@ if (!process.send) {
 	ValidatorProcess.spawn();
 
 	exports.ValidatorProcess = ValidatorProcess;
-	exports.pendingValidations = pendingValidations;
+	exports.pendingValidations = pendingValidations;*/
 
 	exports.validateTeam = function (format, team, callback) {
-		ValidatorProcess.send(format, team, callback);
+		var parsedTeam = Tools.fastUnpackTeam(team);
+		var problems = this.validateTeamSync(format, parsedTeam);
+		if (problems && problems.length)
+			setImmediate(callback.bind(null, false, problems.join('\n')));
+		else {
+			var packedTeam = Tools.packTeam(parsedTeam);
+			if (packedTeam === team)
+				packedTeam = '';
+			setImmediate(callback.bind(null, true, packedTeam));
+		}
 	};
 
 	var synchronousValidators = {};
@@ -96,15 +105,13 @@ if (!process.send) {
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].checkLearnset(move, template, lsetData);
 	};
-} else {
+/*} else {
 	require('sugar');
 	global.Config = require('./config/config.js');
 
-	if (Config.crashguard) {
-		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'A team validator process');
-		});
-	}
+	process.on('uncaughtException', function (err) {
+		require('./crashlogger.js')(err, 'A team validator process');
+	});*/
 
 	/**
 	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -114,17 +121,17 @@ if (!process.send) {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 */
-	global.toId = function (text) {
+	/*global.toId = function (text) {
 		if (text && text.id) text = text.id;
 		else if (text && text.userid) text = text.userid;
 
 		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-	};
+	};*/
 
 	/**
 	 * Validates a username or Pokemon nickname
 	 */
-	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
+	/*var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 	global.toName = function (name) {
 		name = string(name);
 		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
@@ -132,11 +139,11 @@ if (!process.send) {
 			name = name.substr(1);
 		}
 		if (name.length > 18) name = name.substr(0, 18);
-		if (Config.namefilter) {
-			name = Config.namefilter(name);
+		if (Config.nameFilter) {
+			name = Config.nameFilter(name);
 		}
 		return name.trim();
-	};
+	};*/
 
 	/**
 	 * Safely ensures the passed variable is a string
@@ -144,7 +151,7 @@ if (!process.send) {
 	 * If we're expecting a string and being given anything that isn't a string
 	 * or a number, it's safe to assume it's an error, and return ''
 	 */
-	global.string = function (str) {
+	/*global.string = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
 		return '';
 	};
@@ -178,17 +185,16 @@ if (!process.send) {
 			respond(id, true, packedTeam);
 		}
 	});
-}
+}*/
 
 var Validator = (function () {
 	function Validator(format) {
-		this.format = Tools.getFormat(format);
-		this.tools = Tools.mod(this.format);
+		this.format = format;
 	}
 
 	Validator.prototype.validateTeam = function (team) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		tools.getBanlistTable(format);
@@ -257,8 +263,8 @@ var Validator = (function () {
 	};
 
 	Validator.prototype.validateSet = function (set, teamHas) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		if (!set) {
@@ -460,32 +466,32 @@ var Validator = (function () {
 					if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
 					if (eventData) {
 						if (eventData.nature && eventData.nature !== set.nature) {
-							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
+							problems.push(name + " must have a " + eventData.nature + " nature because it comes from a specific event.");
 						}
 						if (eventData.shiny) {
 							set.shiny = true;
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
-							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
+							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it comes from a specific event.");
 						}
 						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
-							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
+							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it comes from a specific event.");
 						}
 						if (eventData.gender) {
 							set.gender = eventData.gender;
 						}
 						if (eventData.level && set.level < eventData.level) {
-							problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
+							problems.push(name + " must be at least level " + eventData.level + " because it comes from a specific event.");
 						}
 					}
 					isHidden = false;
 				}
 			}
-			if (isHidden && lsetData.sourcesBefore) {
-				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
+			if (isHidden && lsetData.sourcesBefore < 5) {
+				if (!lsetData.sources) {
 					problems.push(name + " has a hidden ability - it can't have moves only learned before gen 5.");
-				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !{'Nidoran-M':1, 'Nidorino':1, 'Nidoking':1, 'Volbeat':1}[template.species]) {
+				} else if (template.gender) {
 					var compatibleSource = false;
 					for (var i = 0, len = lsetData.sources.length; i < len; i++) {
 						if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0, 2) === '5D' && set.level >= 10)) {
@@ -500,7 +506,7 @@ var Validator = (function () {
 			}
 			if (banlistTable['illegal'] && set.level < template.evoLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-				problems.push(name + " must be at least level " + template.evoLevel + " to be evolved.");
+				problems.push(name + " must be at least level " + template.evoLevel + ".");
 			}
 			if (!lsetData.sources && lsetData.sourcesBefore <= 3 && tools.getAbility(set.ability).gen === 4 && !template.prevo && tools.gen <= 5) {
 				problems.push(name + " has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
@@ -548,7 +554,7 @@ var Validator = (function () {
 	};
 
 	Validator.prototype.checkLearnset = function (move, template, lsetData) {
-		var tools = this.tools;
+		var tools = Tools.mod(Tools.getFormat(format));
 
 		move = toId(move);
 		template = tools.getTemplate(template);
@@ -592,7 +598,7 @@ var Validator = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// Stabmons hack to avoid copying all of validateSet to formats.
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && template.types.indexOf(tools.getMove(move).type) > -1) return false;
+			if (format.id === 'stabmons' && template.types.indexOf(tools.getMove(move).type) > -1) return false;
 			// Alphabet Cup hack to do the same
 			if (alphabetCupLetter && alphabetCupLetter === Tools.getMove(move).id.slice(0, 1) && Tools.getMove(move).id !== 'sketch') return false;
 			if (template.learnset) {
@@ -611,7 +617,7 @@ var Validator = (function () {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0), 10) > tools.gen) continue;
-						if (tools.gen < 6 && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+						if (isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 							// check if the Pokemon's hidden ability was available
 							incompatibleHidden = true;
 							continue;
@@ -688,9 +694,6 @@ var Validator = (function () {
 							} else if (learned.charAt(1) === 'S') {
 								sources.push(learned + ' ' + template.id);
 							} else {
-								// DW Pokemon are at level 10 or at the evolution level
-								var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
-								if (set.level < minLevel) continue;
 								sources.push(learned);
 							}
 						}
