@@ -756,7 +756,7 @@ var commands = exports.commands = {
 		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
-		if (!this.can('redirect', targetUser, room) || !this.can('redirect', targetUser, targetRoom)) return false;
+		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
@@ -766,7 +766,7 @@ var commands = exports.commands = {
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
 			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
-		if (targetUser.joinRoom(target) === false) return this.sendReply("User " + targetUser.name + " could not be joined to room " + target + ". They could be banned from the room.");
+		if (targetUser.joinRoom(targetRoom.id) === false) return this.sendReply("User " + targetUser.name + " could not be joined to room " + target + ". They could be banned from the room.");
 		var roomName = (targetRoom.isPrivate)? "a private room" : "room " + targetRoom.title;
 		this.addModCommand("" + targetUser.name + " was redirected to " + roomName + " by " + user.name + ".");
 		targetUser.leaveRoom(room);
@@ -776,8 +776,7 @@ var commands = exports.commands = {
 	mute: function (target, room, user) {
 		if (!target) return this.parse('/help mute');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
-		if (user.can('opmute') && !user.can('mute')) return this.sendReply("Try using /opmute [username], [reason] instead.");
-		
+
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
@@ -829,7 +828,7 @@ var commands = exports.commands = {
 		targetUser.mute(room.id, 60 * 60 * 1000, true);
 	},
 	
-	om: 'opmute',
+	opm: 'opmute',
 	opmute: function (target, room, user) {
 		if (!target) return this.parse('/help opmute');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
@@ -864,7 +863,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
-		if (!this.can('warn', targetUser, room)) return false;
+		if (!this.can('mute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
 			return this.sendReply("" + targetUser.name + " is not muted.");
@@ -894,7 +893,7 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users.\n\n" + target + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (" + Users.getGroupsThatCan('lock', user).join(", ") + ") to discuss it.");
+		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users.\n\n" + target + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it.");
 
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
@@ -920,7 +919,7 @@ var commands = exports.commands = {
 			this.sendReply("User '" + target + "' is not locked.");
 		}
 	},
-	
+
 	lockdt: 'lockdetails',
 	lockdetails: function (target, room, user) {
 		if (!this.can('lock')) return false;
@@ -966,7 +965,7 @@ var commands = exports.commands = {
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 		targetUser.ban();
 	},
-
+	
 	pban: 'permaban',
 	permban: 'permaban',
 	permaban: function(target, room, user) {
