@@ -1234,7 +1234,7 @@ var components = exports.components = {
 		}
 	},
 	
-	ureload: function (target, room, user) {
+	/*ureload: function (target, room, user) {
 		if (!this.can('ureload')) return;
 
 		try {
@@ -1246,7 +1246,7 @@ var components = exports.components = {
 		} catch (e) {
 			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files <b>(use /uupdate after fixing)</b>:</font> \n' + e.stack);
 		}
-	},
+	},*/
 
 	db: 'database',
 	database: function (target, room, user) {
