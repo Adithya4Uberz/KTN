@@ -1546,7 +1546,7 @@ var commands = exports.commands = {
 			
 			this.sendReply('Reloading Chat Plugins...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins.js'));
-			chatPlugins = require(path.join(__dirname, './', './chat-plugins.js'));
+			// chatPlugins = require(path.join(__dirname, './', './chat-plugins.js'));
 
 			this.sendReply('Reloading SysopAccess...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
