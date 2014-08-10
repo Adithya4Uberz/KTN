@@ -1207,8 +1207,8 @@ var components = exports.components = {
 			Components = require(path.join(__dirname, './', './components.js'));
 			
 			this.sendReply('Reloading Chat Plugins...');
-			CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins.js'));
-			// chatPlugins = require(path.join(__dirname, './', './chat-plugins.js'));
+			CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins'));
+			chatPlugins = require(path.join(__dirname, './', './chat-plugins'));
 
 			this.sendReply('Reloading Sysop Access...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
@@ -1240,7 +1240,7 @@ var components = exports.components = {
 		try {
 			this.sendReply('Reloading Users...');
 			CommandParser.uncacheTree(path.join(__dirname, './', 'users.js'));
-			// economy = require(path.join(__dirname, './', 'users.js'));
+			users = require(path.join(__dirname, './', 'users.js'));
 
 			return this.sendReply('|raw|<font color="green">User files have been reloaded.</font>');
 		} catch (e) {
