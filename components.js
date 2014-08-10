@@ -1205,6 +1205,10 @@ var components = exports.components = {
 			this.sendReply('Reloading Components...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
 			Components = require(path.join(__dirname, './', './components.js'));
+			
+			this.sendReply('Reloading Chat Plugins...');
+			CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins.js'));
+			chatPlugins = require(path.join(__dirname, './', './chat-plugins.js'));
 
 			this.sendReply('Reloading Sysop Access...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
