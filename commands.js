@@ -1548,7 +1548,7 @@ var commands = exports.commands = {
 			CommandParser.uncacheTree(path.join(__dirname, './', './chat-plugins.js'));
 			// chatPlugins = require(path.join(__dirname, './', './chat-plugins.js'));
 
-			this.sendReply('Reloading SysopAccess...');
+			this.sendReply('Reloading Sysop Access...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
 			SysopAccess = require(path.join(__dirname, './', './core.js'));
 
@@ -1567,6 +1567,20 @@ var commands = exports.commands = {
 			economy = require(path.join(__dirname, './', 'economy.js'));
 
 			return this.sendReply('|raw|<font color="green">Economy files have been reloaded.</font>');
+		} catch (e) {
+			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
+		}
+	},
+	
+	uupdate: function (target, room, user) {
+		if (!this.can('uupdate')) return;
+
+		try {
+			this.sendReply('Reloading Users...');
+			CommandParser.uncacheTree(path.join(__dirname, './', 'users.js'));
+			// economy = require(path.join(__dirname, './', 'users.js'));
+
+			return this.sendReply('|raw|<font color="green">User files have been reloaded.</font>');
 		} catch (e) {
 			return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
 		}
