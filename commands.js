@@ -1200,17 +1200,17 @@ var commands = exports.commands = {
 		
 		if (cmd === 'gdeclare') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><font size=1><i>Global declare by ' + user.name + '<br /></i></font><b>' + target + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><font size=1><i>Global declare by <b>' + user.name + '</b><br /></i></font><b>' + target + '</b></div>');
 			}
 		}
 		if (cmd === 'gdeclarered') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><font size=1><i>Global declare by ' + user.name + '<br /></i></font><b>' + target + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><font size=1><i>Global declare by <b>' + user.name + '</b><br /></i></font><b>' + target + '</b></div>');
 			}
 		}
 		else if (cmd === 'gdeclaregreen') {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><font size=1><i>Global declare by ' + user.name + '<br /></i></font><b>' + target + '</b></div>');
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><font size=1><i>Global declare by <b>' + user.name + '</b><br /></i></font><b>' + target + '</b></div>');
 			}
 		}
 		this.logModCommand(user.name + " globally declared " + target);
