@@ -517,13 +517,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['OU', 'Same Type Clause'],
-		banlist: ['Talonflame']
-	},
-	{
 		name: "Tier Shift",
 		section: "Other Metagames",
 
