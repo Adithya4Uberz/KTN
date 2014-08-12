@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -81,16 +88,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
-	},
-	{
-		name: "LC (suspect test)",
-		section: "XY Singles",
-
-		searchShow: false,
-		maxLevel: 5,
-		ruleset: ['LC'],
-		banlist: ['Misdreavus', 'Fletchling']
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Misdreavus']
 	},
 	{
 		name: "LC UU",
@@ -519,6 +517,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "OU Monotype",
+		section: "Other Metagames",
+
+		ruleset: ['OU', 'Same Type Clause'],
+		banlist: ['Talonflame']
+	},
+	{
 		name: "Tier Shift",
 		section: "Other Metagames",
 
@@ -653,6 +658,18 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
+	},
+	
+	{
+		name: "No Ability",
+		section: "Other Metagames",
+		
+		mod: 'noability',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Ignore Illegal Abilities'],
+		validateSet: function (pokemon) {
+			pokemon.ability = 'None';
+		}
 	},
 
 	// BW2 Singles
