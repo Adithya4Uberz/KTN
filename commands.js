@@ -347,12 +347,12 @@ var commands = exports.commands = {
 	
 	roomfounder: function (target, room, user) {
 		if (!room.chatRoomData) {
-			return this.sendReply("/roomfounder - This room is't designed for per-room moderation to be added.");
+			return this.sendReply("/roomfounder - This room isn't designed for per-room moderation to be added.");
 		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
-		if (!this.can('makeroom')) return false;
+		if (!this.can('promote')) return false;
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 		var name = targetUser.name;
 		room.auth[targetUser.userid] = '#';
@@ -360,19 +360,43 @@ var commands = exports.commands = {
 		this.addModCommand('' + name + ' was appointed to Room Founder by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
 		room.chatRoomData.founder = room.founder;
+		room.hasFounder = true;
 		Rooms.global.writeChatRoomData();
 	},
 	
+	roomdefounder: 'deroomfounder',
+	deroomfounder: function (target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("/roomdefounder - This room isn't designed for per-room moderation");
+		}
+		var target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
+
+		if (userid != room.founder) return this.sendReply("User '" + name + "' is not a Room Founder.");
+		if (!room.hasFounder || !this.can('roomowner', null, room)) return false;
+
+		delete room.auth[userid];
+		room.hasFounder = false;
+		this.sendReply("(" + name + " is no longer Room Owner.)");
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	
 	roomowner: function (target, room, user) {
-		/*if (!room.chatRoomData) {
+		if (!room.hasFounder) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
-		}*/
+		}
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
 
-		if (!room.founder) return this.sendReply('The room needs a room founder before it can have a room owner.');
+		if (!room.hasFounder) return this.sendReply('The room needs a room founder before it can have a room owner.');
 		if (room.founder != user.userid && !this.can('makeroom')) return this.sendReply('/roomowner - Access denied.');
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
@@ -396,7 +420,7 @@ var commands = exports.commands = {
 		var userid = toId(name);
 		if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
 
-		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
+		if (room.auth[userid] !== '#') return this.sendReply("User '" + name + "' is not a Room Owner.");
 		if (!room.founder || user.userid != room.founder && !this.can('makeroom', null, room)) return false;
 
 		delete room.auth[userid];
