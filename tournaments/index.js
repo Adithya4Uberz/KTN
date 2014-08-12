@@ -1,12 +1,12 @@
 require('es6-shim');
-
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
-
 var TournamentGenerators = {
-	roundrobin: require('./generator-round-robin.js').RoundRobin,
-	elimination: require('./generator-elimination.js').Elimination
+roundrobin: require('./generator-round-robin.js').RoundRobin,
+elimination: require('./generator-elimination.js').Elimination
 };
+
+var Tournament;
 
 exports.tournaments = {};
 
@@ -22,7 +22,7 @@ function createTournamentGenerator(generator, args, output) {
 		return;
 	}
 	args.unshift(null);
-	return new (Generator.bind.apply(Generator, args));
+	return new (Generator.bind.apply(Generator, args))();
 }
 function createTournament(room, format, generator, isRated, args, output) {
 	if (room.type !== 'chat') {
@@ -48,7 +48,7 @@ function createTournament(room, format, generator, isRated, args, output) {
 		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
+	return (exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated));
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
@@ -66,7 +66,7 @@ function getTournament(name, output) {
 	}
 }
 
-var Tournament = (function () {
+Tournament = (function () {
 	function Tournament(room, format, generator, isRated) {
 		this.room = room;
 		this.format = toId(format);
@@ -171,10 +171,10 @@ var Tournament = (function () {
 			if (this.isBracketInvalidated) {
 				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
 					if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
-					this.bracketUpdateTimer = setTimeout((function () {
+					this.bracketUpdateTimer = setTimeout(function () {
 						this.bracketUpdateTimer = null;
 						this.update();
-					}).bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+					}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
 				} else {
 					this.lastBracketUpdate = Date.now();
 
@@ -370,7 +370,7 @@ var Tournament = (function () {
 	Tournament.prototype.getAvailableMatches = function () {
 		var matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') {
-			this.room.add("Unexpected error from getAvailableMatches(): " + error + ". Please report this to an admin.");
+			this.room.add("Unexpected error from getAvailableMatches(): " + matches + ". Please report this to an admin.");
 			return;
 		}
 
@@ -482,7 +482,7 @@ var Tournament = (function () {
 			output.sendReply('|tournament|error|NotStarted');
 			return false;
 		}
-		if (!(timeout > 0) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT) {
+		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || isNaN(timeout)) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
@@ -497,7 +497,11 @@ var Tournament = (function () {
 		this.runAutoDisqualify();
 		return true;
 	};
-	Tournament.prototype.runAutoDisqualify = function () {
+	Tournament.prototype.runAutoDisqualify = function (output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return false;
+		}
 		this.lastActionTimes.forEach(function (time, user) {
 			var availableMatches = 0;
 			this.availableMatches.get(user).forEach(function (isAvailable) {
@@ -532,7 +536,7 @@ var Tournament = (function () {
 		}
 
 		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
-			output.sendReply('|tournament|error|InvalidMatch')
+			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
 
@@ -604,7 +608,8 @@ var Tournament = (function () {
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
 
-		// Prevent double accepts
+		// Prevent double accepts and users that have been disqualified while between these two functions
+		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
@@ -629,29 +634,15 @@ var Tournament = (function () {
 		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
-        var from = Users.get(room.p1),
-            to = Users.get(room.p2),
-            fromElo = Number(Core.stdin('elo', toId(from))),
-            toElo = Number(Core.stdin('elo', toId(to))), arr;
+		var from = Users.get(room.p1);
+		var to = Users.get(room.p2);
 
-        var result = 'draw';
-        if (from === winner) {
-            result = 'win';
-            if (this.room.isOfficial && this.generator.users.size >= Core.tournaments.tourSize) {
-                arr = Core.calculateElo(fromElo, toElo);
-                Core.stdout('elo', toId(from), arr[0], function () {
-                    Core.stdout('elo', toId(to), arr[1]);
-                });
-            }
-        } else if (to === winner) {
-            result = 'loss';
-            if (this.room.isOfficial && this.generator.users.size >= Core.tournaments.tourSize) {
-                arr = Core.calculateElo(toElo, fromElo);
-                Core.stdout('elo', toId(to), arr[0], function () {
-                    Core.stdout('elo', toId(from), arr[1]);
-                });
-            }
-        }
+		var result = 'draw';
+		if (from === winner) {
+			result = 'win';
+		} else if (to === winner) {
+			result = 'loss';
+		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
 			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
@@ -668,10 +659,10 @@ var Tournament = (function () {
 			return;
 		}
 
-		var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
-		if (typeof isTournamentEnded === 'string') {
+		var error = this.generator.setMatchResult([from, to], result, room.battle.score);
+		if (error) {
 			// Should never happen
-			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
+			this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
 			return;
 		}
 
@@ -698,64 +689,64 @@ var Tournament = (function () {
 			generator: this.generator.name,
 			bracketData: this.getBracketData()
 		}));
-
-        var data = {
-            results: this.generator.getResults().map(usersToNames),
-            bracketData: this.getBracketData()
-        }, runnerUp = false, winner;
-        data = data['results'].toString();
-
-        if (data.indexOf(',') >= 0) {
-            data = data.split(',');
-            winner = data[0];
-            if (data[1]) runnerUp = data[1];
-        } else {
-            winner = data;
-        }
-
-        var tourSize = this.generator.users.size;
-        if (this.room.isOfficial && tourSize >= 4) {
-            var firstMoney = Math.round(tourSize / 4),
-            secondMoney = Math.round(firstMoney / 1),
-            firstBuck = 'buck',
-            secondBuck = 'buck';
-            if (firstMoney > 1) firstBuck = 'bucks';
-            if (secondMoney > 1) secondBuck = 'bucks';
-
-            // annouces the winner/runnerUp
-            this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</strong>');
-            if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
-
-            var wid = toId(winner), // winner's userid
-                rid = toId(runnerUp); // runnerUp's userid
-
-            // file i/o
-            var winnerMoney = Number(Core.stdin('money', wid));
-            var tourWin = Number(Core.stdin('tourWins', wid));
-            Core.stdout('money', wid, (winnerMoney + firstMoney), function () {
-                var winnerElo = Number(Core.stdin('elo', wid));
-                if (winnerElo === 0) winnerElo = 1000;
-                if (runnerUp) {
-                    var runnerUpMoney = Number(Core.stdin('money', rid)),
-                        runnerUpElo = Number(Core.stdin('elo', rid));
-                    if (runnerUpElo === 0) runnerUpElo = 1000;
-                    Core.stdout('money', rid, (runnerUpMoney + secondMoney), function () {
-                        Core.stdout('tourWins', wid, (tourWin + 1), function () {
-                            Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo), function () {
-                                Core.stdout('elo', rid, (runnerUpElo + Core.tournaments.runnerUpElo));
-                            });
-                        });
-                    });
-                } else {
-                    Core.stdout('tourWins', wid, (tourWin + 1), function () {
-                        Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo));
-                    });
-                }
-            });
-        }
 		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
 	};
+	
+	var data = {
+		results: this.generator.getResults().map(usersToNames),
+		bracketData: this.getBracketData()
+	}, runnerUp = false, winner;
+	data = data['results'].toString();
+	
+	if (data.indexOf(',') >= 0) {
+		data = data.split(',');
+		winner = data[0];
+		if (data[1]) runnerUp = data[1];
+	} else {
+		winner = data;
+	}
+	
+	var tourSize = this.generator.users.size;
+	if (this.room.isOfficial && tourSize >= 4) {
+		var firstMoney = Math.round(tourSize / 4),
+		secondMoney = Math.round(firstMoney / 1),
+		firstBuck = 'buck',
+		secondBuck = 'buck';
+		if (firstMoney > 1) firstBuck = 'bucks';
+		if (secondMoney > 1) secondBuck = 'bucks';
+		
+		// annouces the winner/runnerUp
+		this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</strong>');
+		if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondMoney + '</font> ' + secondBuck + ' for being a finalist of the tournament!</strong>');
+		
+		var wid = toId(winner), // winner's userid
+		rid = toId(runnerUp); // runnerUp's userid
+		
+		// file i/o
+		var winnerMoney = Number(Core.stdin('money', wid));
+		var tourWin = Number(Core.stdin('tourWins', wid));
+		Core.stdout('money', wid, (winnerMoney + firstMoney), function () {
+			var winnerElo = Number(Core.stdin('elo', wid));
+			if (winnerElo === 0) winnerElo = 1000;
+			if (runnerUp) {
+				var runnerUpMoney = Number(Core.stdin('money', rid)),
+				runnerUpElo = Number(Core.stdin('elo', rid));
+				if (runnerUpElo === 0) runnerUpElo = 1000;
+				Core.stdout('money', rid, (runnerUpMoney + secondMoney), function () {
+					Core.stdout('tourWins', wid, (tourWin + 1), function () {
+						Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo), function () {
+							Core.stdout('elo', rid, (runnerUpElo + Core.tournaments.runnerUpElo));
+						});
+					});
+				});
+			} else {
+				Core.stdout('tourWins', wid, (tourWin + 1), function () {
+					Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo));
+				});
+			}
+		});
+	}
 
 	return Tournament;
 })();
@@ -839,25 +830,7 @@ var commands = {
 			}
 		},
 		runautodq: function (tournament) {
-			tournament.runAutoDisqualify();
-		},
-		remind: function (tournament, user) {
-			var users = tournament.generator.getAvailableMatches().toString().split(',');
-			var offlineUsers = new Array();
-			for (var u in users) {
-				targetUser = Users.get(users[u]);
-				if (!targetUser) { 
-					offlineUsers.push(users[u]);
-					continue;
-				} else if (!targetUser.connected) {
-					offlineUsers.push(targetUser.userid);
-					continue;
-				} else {
-					targetUser.popup('You have a tournament battle in the room "'+tournament.room.title+'". If you do not start soon, you may be disqualified.');
-				}
-			}
-			tournament.room.addRaw('<b>Players have been reminded of their tournament battles by '+user.name+'.</b>');
-			if (offlineUsers.length > 0 && offlineUsers != '') tournament.room.addRaw('<b>The following users are currently offline: '+offlineUsers+'.</b>');
+			tournament.runAutoDisqualify(this);
 		},
 		end: 'delete',
 		stop: 'delete',
@@ -896,17 +869,44 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
 			"- runautodq: Manually run the automatic disqualifier.<br />" +
 			"- getusers: Lists the users in the current tournament.<br />" +
+			"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
+	} else if (cmd === 'on' || cmd === 'enable') {
+		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (room.toursEnabled) {
+			return this.sendReply("Tournaments are already enabled.");
+		}
+		room.toursEnabled = true;
+		if (room.chatRoomData) {
+			room.chatRoomData.toursEnabled = true;
+			Rooms.global.writeChatRoomData();
+		}
+		return this.sendReply("Tournaments enabled.");
+	} else if (cmd === 'off' || cmd === 'disable') {
+		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (!room.toursEnabled) {
+			return this.sendReply("Tournaments are already disabled.");
+		}
+		delete room.toursEnabled;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.toursEnabled;
+			Rooms.global.writeChatRoomData();
+		}
+		return this.sendReply("Tournaments disabled.");
 	} else if (cmd === 'create' || cmd === 'new') {
-		if (!user.can('tournaments', room)) {
-			return this.sendReply(cmd + " -  Access denied.");
+		if (room.toursEnabled) {
+			if (!this.can('tournaments', null, room)) return;
+		} else {
+			if (!user.can('tournamentsmanagement', null, room)) {
+				return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
+			}
 		}
 		if (params.length < 2) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		createTournament(room, params.shift(), params.shift(), Config.isTournamentsRated, params, this);
+		createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament) {
@@ -919,14 +919,20 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.creation[cmd]) {
-			if (!user.can('tournaments', room)) {
-				return this.sendReply(cmd + " -  Access denied.");
+			if (room.toursEnabled) {
+				if (!user.can('tournaments', null, room)) {
+					return this.sendReply(cmd + " -  Access denied.");
+				}
+			} else {
+				if (!user.can('tournamentsmanagement'), null, room) {
+					return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
+				}
 			}
 			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', room)) {
+			if (!user.can('tournamentsmoderation', null, room)) {
 				return this.sendReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
