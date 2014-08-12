@@ -210,6 +210,9 @@ var commands = exports.commands = {
 
 			output += '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 		}
+		if (!targetUser.connected || targetUser.isAway) {
+			this.sendReply('|raw|This user is ' + ((!targetUser.connected) ? '<font color = "red"><b>offline</b></font>.' : '<font color = "orange"><b>away</b></font>.'));
+		}
 		this.sendReply('|raw|' + output);
 	},
 
