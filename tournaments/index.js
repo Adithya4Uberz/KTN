@@ -636,12 +636,29 @@ Tournament = (function () {
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
 		var to = Users.get(room.p2);
+		
+		        var from = Users.get(room.p1),
+            to = Users.get(room.p2),
+            fromElo = Number(Core.stdin('elo', toId(from))),
+            toElo = Number(Core.stdin('elo', toId(to))), arr;
 
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
+			if (this.room.isOfficial && this.generator.users.size >= 4) {
+				arr = Core.calculateElo(fromElo, toElo);
+				Core.stdout('elo', toId(from), arr[0], function () {
+					Core.stdout('elo', toId(to), arr[1]);
+				});
+			}
 		} else if (to === winner) {
 			result = 'loss';
+			if (this.room.isOfficial && this.generator.users.size >= 4) {
+				arr = Core.calculateElo(toElo, fromElo);
+				Core.stdout('elo', toId(to), arr[0], function () {
+					Core.stdout('elo', toId(from), arr[1]);
+				});
+			}
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
@@ -831,6 +848,24 @@ var commands = {
 		},
 		runautodq: function (tournament) {
 			tournament.runAutoDisqualify(this);
+		},
+		remind: function (tournament, user) {
+			var users = tournament.generator.getAvailableMatches().toString().split(',');
+			var offlineUsers = new Array();
+			for (var u in users) {
+				targetUser = Users.get(users[u]);
+				if (!targetUser) { 
+					offlineUsers.push(users[u]);
+					continue;
+				} else if (!targetUser.connected) {
+					offlineUsers.push(targetUser.userid);
+					continue;
+				} else {
+					targetUser.popup('You have a tournament battle in the room "'+tournament.room.title+'". If you do not start soon, you may be disqualified.');
+				}
+			}
+			tournament.room.addRaw('<b>Players have been reminded of their tournament battles by '+user.name+'.</b>');
+			if (offlineUsers.length > 0 && offlineUsers != '') tournament.room.addRaw('<b>The following users are currently offline: '+offlineUsers+'.</b>');
 		},
 		end: 'delete',
 		stop: 'delete',
