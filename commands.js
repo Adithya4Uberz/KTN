@@ -1314,6 +1314,10 @@ var commands = exports.commands = {
 
 		return '/announce ' + target;
 	},
+	
+	abc: function (target, room, user) {
+		user.popup('abc');
+	},
 
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
