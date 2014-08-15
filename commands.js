@@ -22,6 +22,42 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
 	},
+	
+    reload: function (target, room, user) {
+        if (!this.can('reload')) return;
+
+        try {
+            this.sendReply('Reloading CommandParser...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'command-parser.js'));
+            CommandParser = require(path.join(__dirname, './', 'command-parser.js'));
+
+            this.sendReply('Reloading Bot...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'bot.js'));
+            Bot = require(path.join(__dirname, './', 'bot.js'));
+
+            this.sendReply('Reloading Tournaments...');
+            var runningTournaments = Tournaments.tournaments;
+            CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/index.js'));
+            Tournaments = require(path.join(__dirname, './', './tournaments/index.js'));
+            Tournaments.tournaments = runningTournaments;
+            
+            this.sendReply('Reloading Core...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            Core = require(path.join(__dirname, './', './core.js')).core;
+
+            this.sendReply('Reloading Components...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
+            Components = require(path.join(__dirname, './', './components.js'));
+
+            this.sendReply('Reloading SysopAccess...');
+            CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
+            SysopAccess = require(path.join(__dirname, './', './core.js'));
+
+            return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
+        } catch (e) {
+            return this.sendReply('|raw|<font color="red">Something failed while trying to reload files:</font> \n' + e.stack);
+        }
+    },
 
 	me: function (target, room, user, connection) {
 		// By default, /me allows a blank message
@@ -1075,6 +1111,7 @@ var commands = exports.commands = {
 	 * Moderating: Other
 	 *********************************************************/
 
+	mn: 'modnote',
 	modnote: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help modnote');
 		if (target.length > MAX_REASON_LENGTH) {
@@ -1476,8 +1513,8 @@ var commands = exports.commands = {
 				CommandParser = require('./command-parser.js');
 
 				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments/middleend.js');
-				Tournaments = require('./tournaments/middleend.js');
+				CommandParser.uncacheTree('./tournaments');
+				Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 
 				return this.sendReply("Chat commands have been hot-patched.");
@@ -1491,8 +1528,8 @@ var commands = exports.commands = {
 
 			/*try {
 				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments/middleend.js');
-				Tournaments = require('./tournaments/middleend.js');
+				CommandParser.uncacheTree('./tournaments');
+				Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} catch (e) {

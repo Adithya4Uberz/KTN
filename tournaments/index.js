@@ -497,7 +497,11 @@ var Tournament = (function () {
 		this.runAutoDisqualify();
 		return true;
 	};
-	Tournament.prototype.runAutoDisqualify = function () {
+	Tournament.prototype.runAutoDisqualify = function (output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return false;
+		}
 		this.lastActionTimes.forEach(function (time, user) {
 			var availableMatches = 0;
 			this.availableMatches.get(user).forEach(function (isAvailable) {
@@ -604,7 +608,8 @@ var Tournament = (function () {
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
 
-		// Prevent double accepts
+		// Prevent double accepts and users that have been disqualified while between these two functions
+		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
@@ -668,10 +673,10 @@ var Tournament = (function () {
 			return;
 		}
 
-		var isTournamentEnded = this.generator.setMatchResult([from, to], result, room.battle.score);
-		if (typeof isTournamentEnded === 'string') {
+		var error = this.generator.setMatchResult([from, to], result, room.battle.score);
+		if (error) {
 			// Should never happen
-			this.room.add("Unexpected " + isTournamentEnded + " from setMatchResult() in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
+			this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
 			return;
 		}
 
@@ -839,7 +844,7 @@ var commands = {
 			}
 		},
 		runautodq: function (tournament) {
-			tournament.runAutoDisqualify();
+			tournament.runAutoDisqualify(this);
 		},
 		remind: function (tournament, user) {
 			var users = tournament.generator.getAvailableMatches().toString().split(',');

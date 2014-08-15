@@ -412,14 +412,22 @@ var Elimination = (function () {
 			newRoot.addChild(new TreeNode(null, {user: loser}));
 			this.tree.tree = newRoot;
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2
 		if (match.onLoseNode) {
 			match.onLoseNode.getValue().user = loser;
 			var userA = match.onLoseNode.getParent().getChildAt(0).getValue().user;
 			var userB = match.onLoseNode.getParent().getChildAt(1).getValue().user;
 			if (userA && userB) {
 				match.onLoseNode.getParent().getValue().state = 'available';
+<<<<<<< HEAD
 				
+=======
+
+>>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2
 				var error = '';
 				if (this.users.get(userA).isDisqualified)
 					error = this.setMatchResult([userA, userB], 'loss');
@@ -432,6 +440,10 @@ var Elimination = (function () {
 		}
 	};
 	
+	Elimination.prototype.isTournamentEnded = function () {
+		return this.tree.tree.getValue().state === 'finished';
+	};
+
 	Elimination.prototype.isTournamentEnded = function () {
 		return this.tree.tree.getValue().state === 'finished';
 	};
