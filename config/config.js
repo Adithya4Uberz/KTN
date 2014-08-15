@@ -1,18 +1,10 @@
 // The server port - the port to run Pokemon Showdown under
-<<<<<<< HEAD:config/config.js
 exports.port = 15000;
-=======
-exports.port = 17000;
->>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2:config/config-example.js
 
 // The server id - the id specified in the server registration.
 //   This should be set properly especially when there are more than one
 //   pokemon showdown server running from the same IP
-<<<<<<< HEAD:config/config.js
 exports.serverId = 'lotus';
-=======
-exports.serverId = 'mega';
->>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2:config/config-example.js
 
 // proxyIps - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
@@ -291,15 +283,9 @@ exports.groups = {
 			forcerename: true,
 			ip: true,
 			modchat: true,
-<<<<<<< HEAD:config/config.js
 			tournamentsmoderation: true,
 			tournaments: true,
 			roompromote: '+ '
-=======
-			roompromote: '+ ',
-			scavengers: true,
-			tournamentsmoderation: true
->>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2:config/config-example.js
 		},
 		'%': {
 			id: 'driver',
@@ -339,10 +325,7 @@ exports.groups = {
 			inherit: ' ',
 			broadcast: true,
 			joinbattle: true,
-<<<<<<< HEAD:config/config.js
 			tournamentsmoderation: true,
-=======
->>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2:config/config-example.js
 			tournaments: true
 		},
 		' ': {

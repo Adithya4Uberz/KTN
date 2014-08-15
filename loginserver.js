@@ -10,10 +10,10 @@
 const LOGIN_SERVER_TIMEOUT = 15000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-var http = require("http");
-var url = require('url');
+module.exports = (function () {
+	var http = require("http");
+	var url = require('url');
 
-var LoginServer = module.exports = (function () {
 	function LoginServer(uri) {
 		console.log('Creating LoginServer object for ' + uri + '...');
 		this.uri = uri;
@@ -226,8 +226,3 @@ var LoginServer = module.exports = (function () {
 
 	return LoginServer;
 })();
-
-watchFile('./config/custom.css', function (curr, prev) {
-	LoginServer.request('invalidatecss', {}, function () {});
-});
-LoginServer.request('invalidatecss', {}, function () {});

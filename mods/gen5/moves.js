@@ -609,10 +609,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 20
 	},
-	scald: {
-		inherit: true,
-		thawsTarget: false
-	},
 	secretpower: {
 		inherit: true,
 		secondary: {

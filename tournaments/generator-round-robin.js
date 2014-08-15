@@ -199,10 +199,6 @@ var RoundRobin = (function () {
 		return this.isBracketFrozen && this.pendingMatches === 0;
 	}
 
-	RoundRobin.prototype.isTournamentEnded = function () {
-		return this.isBracketFrozen && this.pendingMatches === 0;
-	}
-
 	RoundRobin.prototype.getResults = function () {
 		if (!this.isTournamentEnded())
 			return 'TournamentNotEnded';

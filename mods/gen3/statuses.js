@@ -23,14 +23,6 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
-	trapped: {
-		inherit: true,
-		noCopy: false
-	},
-	trapper: {
-		inherit: true,
-		noCopy: false
-	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {

@@ -118,7 +118,7 @@ global.reloadCustomAvatars = function () {
 	Config.customAvatars = newCustomAvatars;
 }
 
-var watchFile = global.watchFile = function () {
+var watchFile = function () {
 	try {
 		return fs.watchFile.apply(fs, arguments);
 	} catch (e) {
@@ -360,6 +360,11 @@ global.string = function (str) {
 
 global.LoginServer = require('./loginserver.js');
 
+watchFile('./config/custom.css', function (curr, prev) {
+	LoginServer.request('invalidatecss', {}, function () {});
+});
+LoginServer.request('invalidatecss', {}, function () {});
+
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
@@ -462,10 +467,7 @@ global.Components = require('./components.js');
 global.Poll = require('./core.js').core.poll();
 
 global.SysopAccess = require('./core.js').sysopAccess();
-<<<<<<< HEAD
 
 global.trainerCards = require('./trainer-cards.js');
 
 global.ChatPlugins = require('./chat-plugins').chatPlugins();
-=======
->>>>>>> 38d0778a7dbd4ea96d28637ad59a53e5cf36bfc2
