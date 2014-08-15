@@ -572,7 +572,7 @@ var commands = exports.commands = {
 		connection.popup('Founder: '+founder+'\nOwners: \n'+owners+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nOperators: \n'+operators+'\nVoices: \n'+voices);
 	},
 	
-	/*lockroom: function (target, room, user) {
+	lockroom: function (target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("Only unofficial chatrooms can be locked.");
 		}
@@ -580,7 +580,6 @@ var commands = exports.commands = {
 			return this.sendReply('/lockroom - Access denied.');
 		}
 		room.lockedRoom = true;
-		this.parse('/modchat ~');
 		this.addModCommand(user.name + ' has locked the room.');
 	},
 
@@ -592,9 +591,8 @@ var commands = exports.commands = {
 			return this.sendReply('/unlockroom - Access denied.');
 		}
 		room.lockedRoom = false;
-		this.parse('/modchat off');
 		this.addModCommand(user.name + ' has unlocked the room.');
-	}*/
+	}
 
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
@@ -695,11 +693,11 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
 		}
-		/*if (targetRoom.lockedRoom === true) {
-			var userGroup = user.group;
-			if (!Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[targetRoom.modchat].rank) return false;
-			connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' is currently locked from joining.");
-		}*/
+		if (targetRoom.lockedRoom === true) {
+			if (user.group != '%' || user.group != '@' || user.group != '&' || user.group != '~' || room.auth[user.userid] != '+' || room.auth[user.userid] != '±' || room.auth[user.userid] != '%' || room.auth[user.userid] != '@' || room.auth[user.userid] != '#') {
+				connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' is currently locked from joining.");
+			}
+		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
 		}
@@ -800,6 +798,7 @@ var commands = exports.commands = {
 	mute: function (target, room, user) {
 		if (!target) return this.parse('/help mute');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if (user.group === '±' || room.auth[user.userid] === '±') return this.parse("/opmute " + targets[0] + ", " + targets[1]);
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
