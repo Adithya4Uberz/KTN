@@ -603,21 +603,36 @@ var components = exports.components = {
 		targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' bucks.');
 	},
 
-	tell: function (target, room, user) {
-		if (!target) return;
-		var message = this.splitTarget(target);
-		if (!message) return this.sendReply("You forgot the comma.");
-		if (user.locked) return this.sendReply("You cannot use this command while locked.");
+	tell: function(target, room, user) {
+		if (user.locked) return this.sendReply('You cannot use this command while locked.');
+		if (user.forceRenamed) return this.sendReply('You cannot use this command while under a name that you have been forcerenamed to.');
+		if (!target) return this.sendReply('/tell [username], [message] - Sends a message to the user which they see when they next speak');
 
-		message = this.canTalk(message, null);
-		if (!message) return this.parse('/help tell');
+		var targets = target.split(',');
+		if (!targets[1]) return this.parse('/help tell');
+		var targetUser = toId(targets[0]);
 
-		if (!global.tells) global.tells = {};
-		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
-		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+		if (targetUser.length > 18) {
+			return this.sendReply('The name of user "' + this.targetUsername + '" is too long.');
+		}
 
-		tells[toId(this.targetUsername)].push(Date().toLocaleString() + "- " + user.getIdentity() + " said: \"" + message + "\"");
-		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
+		if (!tells[targetUser]) tells[targetUser] = [];
+		if (tells[targetUser].length === 5) return this.sendReply('User ' + targetUser + ' has too many tells queued.');
+
+		var target = targets[1].trim();
+
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+
+		var date = Date();
+		var message = '|raw|' + date.substring(0, date.indexOf('GMT') - 1) + ' - <b>' + user.getIdentity() + '</b> said: ' + targets[1].trim();
+		if (message.length > 500) return this.sendReply('Your tell exceeded the maximum length.');
+		tells[targetUser].add(message);
+
+		return this.sendReply('Message "' + targets[1].trim() + '" sent to ' + targetUser + '.');
 	},
 
 	viewtells: 'showtells',
